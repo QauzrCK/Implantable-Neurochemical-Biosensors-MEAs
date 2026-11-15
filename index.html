@@ -4,19 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ระบบสำรวจไบโอเซนเซอร์ทางเคมีไฟฟ้าและวงจร CMOS สำหรับการตรวจวัดสารสื่อประสาทในสมอง</title>
-  <!-- โหลดฟอนต์ Noto Sans Thai, Inter และ JetBrains Mono -->
+  <!-- โหลดฟอนต์ Prompt (300/400/500), Inter และ JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <!-- โหลด Tailwind CSS และ Chart.js -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Noto Sans Thai"', '"Inter"', 'sans-serif'],
+            sans: ['"Prompt"', '"Inter"', 'sans-serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
@@ -32,110 +33,63 @@
       }
     };
   </script>
-  <style>
-    body {
-      background-color: #f8fafc;
-      color: #334155;
-      font-family: 'Noto Sans Thai', 'Inter', sans-serif;
-    }
-    .font-mono-tech {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .clinical-card {
-      background-color: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
-    }
-    .formula-pill {
-      background-color: #f1f5f9;
-      color: #0f766e;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 0.125rem 0.4rem;
-      border-radius: 0.375rem;
-      font-size: 0.85em;
-      border: 1px solid #e2e8f0;
-    }
-    .formula-pill-indigo {
-      background-color: #eef2ff;
-      color: #4f46e5;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 0.125rem 0.4rem;
-      border-radius: 0.375rem;
-      font-size: 0.85em;
-      border: 1px solid #c7d2fe;
-    }
-    .chart-box {
-      position: relative;
-      width: 100%;
-      height: 300px;
-    }
-    @media (min-width: 768px) {
-      .chart-box {
-        height: 325px;
-      }
-    }
-    .chart-box-sm {
-      position: relative;
-      width: 100%;
-      height: 215px;
-    }
-    input[type="range"] {
-      accent-color: #0d9488;
-      cursor: pointer;
-    }
-    /* แถบเลื่อนสำหรับตารางบนหน้าจอขนาดเล็ก */
-    .custom-scrollbar::-webkit-scrollbar {
-      height: 6px;
-      width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #f1f5f9;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 9999px;
-    }
-  </style>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body class="antialiased overflow-x-hidden selection:bg-teal-500/20 selection:text-teal-900">
+  <!-- แถบแสดงความคืบหน้าการอ่าน -->
+  <div id="reading-progress" aria-hidden="true"></div>
 
-  <!-- แถบส่วนหัวและเมนูนำทางแบบยึดติดด้านบน (Sticky Header & Navigation Bar) -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col gap-3">
+  <!-- แถบส่วนหัวและเมนูนำทางแบบยึดติดด้านบน (Slim Sticky Header) -->
+  <header class="site-header sticky top-0 z-50 backdrop-blur-md border-b shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-col gap-2">
       <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
-        <div class="flex items-start sm:items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0d9488] to-[#0284c7] flex items-center justify-center text-white font-bold text-lg shadow-sm shrink-0">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0d9488] to-[#0284c7] flex items-center justify-center text-white font-medium text-base shadow-sm shrink-0">
             ⚡
           </div>
-          <div>
-            <div class="flex flex-wrap items-center gap-1.5 mb-1">
-              <span class="px-2.5 py-0.5 rounded-full bg-teal-50 border border-teal-200 text-[#0f766e] text-[11px] font-semibold">
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-1.5 mb-0.5">
+              <span data-i18n="header.badge" class="px-2 py-0.5 rounded-full bg-teal-50 border border-teal-200 text-[#0f766e] text-[11px] font-medium">
                 รายงานสังเคราะห์ทางวิศวกรรมชีวการแพทย์และอิเล็กทรอนิกส์ (Biomedical EE Synthesis)
               </span>
-              <span class="px-2.5 py-0.5 rounded-full bg-[#f1f5f9] border border-slate-200 text-[#475569] font-mono-tech text-[11px] font-medium">
+              <span class="hidden sm:inline-block px-2 py-0.5 rounded-full bg-[#f1f5f9] border border-slate-200 text-[#475569] font-mono-tech text-[11px]">
                 Light Clinical Precision Edition
               </span>
             </div>
-            <h1 class="text-base sm:text-lg font-bold text-[#0f172a] leading-snug">
+            <h1 data-i18n="header.title" class="text-sm sm:text-base font-medium text-[#0f172a] leading-snug truncate">
               ไบโอเซนเซอร์ทางเคมีไฟฟ้าและไมโครอิเล็กโทรดอาร์เรย์แบบฝังในสมอง (Implantable Neurochemical Biosensors &amp; MEAs)
             </h1>
-            <p class="text-xs text-[#64748b] mt-0.5 leading-relaxed">
+            <p data-i18n-html="header.subtitle" class="hidden md:block text-xs text-[#64748b] leading-relaxed truncate">
               การออกแบบร่วมกันระหว่างขั้วไฟฟ้าขนาดไมโคร/นาโน วงจร Analog Front-End สัญญาณรบกวนระดับพิโคแอมแปร์ (<span class="font-mono-tech text-[#0f766e] font-medium">10⁻¹² A</span>) และการถอดรหัสสัญญาณทางเคมีไฟฟ้าแบบเรียลไทม์
             </p>
           </div>
         </div>
+
+        <!-- ปุ่มสลับภาษา ไทย / English และ Light / Dark Mode -->
+        <div class="flex items-center gap-2 self-start lg:self-center shrink-0">
+          <div class="inline-flex items-center rounded-xl p-1 bg-[#f1f5f9] border border-slate-200" role="group" aria-label="Language Switcher">
+            <button id="lang-btn-th" type="button" onclick="setLanguage('th')" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[#0d9488] text-white shadow-xs transition">
+              🇹🇭 ไทย
+            </button>
+            <button id="lang-btn-en" type="button" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-lg text-xs font-normal text-[#334155] hover:text-[#0f172a] transition">
+              🇺🇸 EN
+            </button>
+          </div>
+          <button id="theme-toggle-btn" type="button" onclick="toggleTheme()" class="w-8 h-8 rounded-xl bg-[#f1f5f9] border border-slate-200 flex items-center justify-center text-sm hover:border-[#0d9488] transition" aria-label="Toggle Light/Dark Mode" title="Switch to Dark Mode">
+            🌙
+          </button>
+        </div>
       </div>
 
       <!-- แถบแท็บนำทาง 7 โมดูล -->
-      <nav aria-label="เมนูนำทางหลัก" class="flex flex-wrap items-center gap-1.5 text-xs font-medium pt-1 border-t border-slate-100">
-        <a href="#module-1" class="nav-pill px-3 py-1.5 rounded-lg bg-[#0d9488] text-white shadow-xs transition">1. ภาพรวมและข้อจำกัด</a>
-        <a href="#module-2" class="nav-pill px-3 py-1.5 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">2. ฟิสิกส์ FSCV</a>
-        <a href="#module-3" class="nav-pill px-3 py-1.5 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">3. วัสดุขั้วไฟฟ้า</a>
-        <a href="#module-4" class="nav-pill px-3 py-1.5 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">4. วงจร CMOS AFE</a>
-        <a href="#module-5" class="nav-pill px-3 py-1.5 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">5. คลินิก &amp; DBS</a>
-        <a href="#module-6" class="nav-pill px-3 py-1.5 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">6. การใช้งานจริง (IRL)</a>
-        <a href="#module-7" class="nav-pill px-3 py-1.5 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">7. บทความวิจัย</a>
+      <nav aria-label="เมนูนำทางหลัก" class="flex flex-wrap items-center gap-1.5 text-xs pt-1 border-t border-slate-100">
+        <a href="#module-1" data-i18n="nav.m1" class="nav-pill px-3 py-1 rounded-lg bg-[#0d9488] text-white shadow-xs transition font-medium">1. ภาพรวมและข้อจำกัด</a>
+        <a href="#module-2" data-i18n="nav.m2" class="nav-pill px-3 py-1 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">2. ฟิสิกส์ FSCV</a>
+        <a href="#module-3" data-i18n="nav.m3" class="nav-pill px-3 py-1 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">3. วัสดุขั้วไฟฟ้า</a>
+        <a href="#module-4" data-i18n="nav.m4" class="nav-pill px-3 py-1 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">4. วงจร CMOS AFE</a>
+        <a href="#module-5" data-i18n="nav.m5" class="nav-pill px-3 py-1 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">5. คลินิก &amp; DBS</a>
+        <a href="#module-6" data-i18n="nav.m6" class="nav-pill px-3 py-1 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">6. การใช้งานจริง (IRL)</a>
+        <a href="#module-7" data-i18n="nav.m7" class="nav-pill px-3 py-1 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">7. บทความวิจัย</a>
       </nav>
     </div>
   </header>
@@ -149,12 +103,12 @@
       <div class="clinical-card p-6 sm:p-8 space-y-6">
         <div class="max-w-4xl space-y-3">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-[#0f766e] text-xs font-semibold">
-            <span>🧠 โมดูลที่ 1 · ภาพรวมระบบและข้อจำกัดสู่คลินิก (System Overview &amp; Translational Bottlenecks)</span>
+            <span data-i18n="m1.badge">🧠 โมดูลที่ 1 · ภาพรวมระบบและข้อจำกัดสู่คลินิก (System Overview &amp; Translational Bottlenecks)</span>
           </div>
-          <h2 class="text-xl sm:text-2xl font-bold text-[#0f172a] leading-tight">
+          <h2 data-i18n="m1.title" class="text-xl sm:text-2xl font-bold text-[#0f172a] leading-tight">
             การออกแบบร่วมระหว่างวัสดุศาสตร์ วงจรรวมแอนะล็อก และประสาทวิทยาศาสตร์เชิงคำนวณ
           </h2>
-          <p class="text-sm text-[#334155] leading-relaxed">
+          <p data-i18n-html="m1.intro" class="read-body prose-comfort text-[#334155]">
             การตรวจวัดการเปลี่ยนแปลงของสารสื่อประสาทในสมองแบบเรียลไทม์ต้องผสานการทำงานของระบบย่อย 3 ส่วนหลัก ได้แก่
             <strong class="text-[#0f172a]">1) ขั้วไฟฟ้าขนาดไมโคร/นาโนที่ฝังในเนื้อเยื่อได้</strong> (เส้นใยคาร์บอน CFMEs ขนาด <span class="formula-pill">7 µm</span>, ท่อนาโนคาร์บอน CNTs, กราฟีน, เพชรเจือโบรอน BDD, พอลิเมอร์นำไฟฟ้า PEDOT และอนุภาคนาโนทองคำ AuNPs)
             <strong class="text-[#0f172a]">2) วงจร CMOS Potentiostat สัญญาณรบกวนต่ำ</strong> ที่กวาดศักย์ไฟฟ้าความเร็วสูงและแยกกระแสรีดอกซ์ระดับพิโคแอมแปร์ (<span class="formula-pill-indigo">10⁻¹² A</span>) ออกจากกระแสประจุพื้นหลังขนาดใหญ่ <span class="px-2 py-0.5 rounded bg-[#fef3c7] text-[#d97706] font-mono-tech text-xs font-semibold">300–400 nA</span> และ
@@ -165,37 +119,37 @@
         <!-- 4 Hero KPI Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="bg-[#f8fafc] border border-slate-200 rounded-xl p-4 hover:border-[#0d9488] transition">
-            <div class="text-xs font-semibold text-[#64748b]">ขนาดขั้วไฟฟ้ามาตรฐาน (Electrode Footprint)</div>
+            <div data-i18n="m1.kpi1.label" class="text-xs font-semibold text-[#64748b]">ขนาดขั้วไฟฟ้ามาตรฐาน (Electrode Footprint)</div>
             <div class="font-mono-tech text-2xl font-bold text-[#0d9488] mt-1">7 µm CFME</div>
-            <div class="text-xs font-medium text-[#0f766e] mt-0.5">ปลายเปิด ~100 µm</div>
-            <p class="text-xs text-[#334155] mt-2 leading-relaxed">
+            <div data-i18n="m1.kpi1.sub" class="text-xs font-medium text-[#0f766e] mt-0.5">ปลายเปิด ~100 µm</div>
+            <p data-i18n="m1.kpi1.desc" class="text-xs text-[#334155] mt-2 leading-relaxed">
               เส้นผ่านศูนย์กลางขั้วไฟฟ้าคาร์บอนไฟเบอร์มาตรฐาน ลดการทำลายเนื้อเยื่อและหลอดเลือดเทียบกับ Microdialysis (~200–300 µm) และ BOLD fMRI ขนาด 4 mm
             </p>
           </div>
 
           <div class="bg-[#f8fafc] border border-slate-200 rounded-xl p-4 hover:border-[#d97706] transition">
-            <div class="text-xs font-semibold text-[#64748b]">กระแสสัญญาณเทียบพื้นหลัง (Signal vs. Background)</div>
+            <div data-i18n="m1.kpi2.label" class="text-xs font-semibold text-[#64748b]">กระแสสัญญาณเทียบพื้นหลัง (Signal vs. Background)</div>
             <div class="font-mono-tech text-xl sm:text-2xl font-bold text-[#d97706] mt-1">&lt; 10 nA vs. 300–400 nA</div>
             <div class="text-xs font-medium text-amber-800 bg-[#fef3c7] inline-block px-2 py-0.5 rounded mt-1">I_redox vs. I_BG</div>
-            <p class="text-xs text-[#334155] mt-2 leading-relaxed">
+            <p data-i18n-html="m1.kpi2.desc" class="text-xs text-[#334155] mt-2 leading-relaxed">
               กระแสฟาราเดอิกจากสารสื่อประสาท (<span class="font-mono-tech">I_redox</span>) ซ่อนอยู่ใต้กระแสประจุพื้นหลัง (<span class="font-mono-tech">I_BG</span>) ขนาดใหญ่กว่า 30–40 เท่า
             </p>
           </div>
 
           <div class="bg-[#f8fafc] border border-slate-200 rounded-xl p-4 hover:border-[#4f46e5] transition">
-            <div class="text-xs font-semibold text-[#64748b]">สัญญาณรบกวนวงจร CMOS AFE</div>
+            <div data-i18n="m1.kpi3.label" class="text-xs font-semibold text-[#64748b]">สัญญาณรบกวนวงจร CMOS AFE</div>
             <div class="font-mono-tech text-xl sm:text-2xl font-bold text-[#4f46e5] mt-1">26.5 / 39.2 pA<sub>rms</sub></div>
             <div class="text-xs font-medium text-[#4f46e5] mt-0.5">Open Input vs. 1 nF Load (5 kHz)</div>
-            <p class="text-xs text-[#334155] mt-2 leading-relaxed">
+            <p data-i18n-html="m1.kpi3.desc" class="text-xs text-[#334155] mt-2 leading-relaxed">
               สัญญาณรบกวนอ้างอิงขาเข้าของวงจร CMOS AFE (Hall et al. 2022) ที่แบนด์วิดท์ 5 kHz ด้วยกำลังงานเฉลี่ยเพียง <span class="font-mono-tech">3.74 µW</span>
             </p>
           </div>
 
           <div class="bg-[#f8fafc] border border-slate-200 rounded-xl p-4 hover:border-[#0284c7] transition">
-            <div class="text-xs font-semibold text-[#64748b]">ความต่างค่ามอดูลัสเชิงกล (Young's Modulus)</div>
+            <div data-i18n="m1.kpi4.label" class="text-xs font-semibold text-[#64748b]">ความต่างค่ามอดูลัสเชิงกล (Young's Modulus)</div>
             <div class="font-mono-tech text-xl sm:text-2xl font-bold text-[#0284c7] mt-1">&lt; 30 kPa vs. &gt; 1 GPa</div>
-            <div class="text-xs font-medium text-[#0284c7] mt-0.5">เนื้อเยื่อสมอง vs. ซิลิคอน/โลหะแข็ง</div>
-            <p class="text-xs text-[#334155] mt-2 leading-relaxed">
+            <div data-i18n="m1.kpi4.sub" class="text-xs font-medium text-[#0284c7] mt-0.5">เนื้อเยื่อสมอง vs. ซิลิคอน/โลหะแข็ง</div>
+            <p data-i18n-html="m1.kpi4.desc" class="text-xs text-[#334155] mt-2 leading-relaxed">
               ค่า Young's Modulus ของเนื้อเยื่อสมองเทียบกับโพรบซิลิคอน/โลหะแข็งที่ต่างกันกว่า <span class="font-mono-tech">10⁵–10⁶</span> เท่า ทำให้เกิดแผลเป็นเกลีย
             </p>
           </div>
@@ -204,8 +158,8 @@
         <!-- Interactive 4-Pillar Translational Bottleneck Switcher -->
         <div class="pt-6 border-t border-slate-200 space-y-4">
           <div>
-            <h3 class="text-base font-bold text-[#0f172a]">🔍 ตัวสลับสำรวจ 4 เสาหลักข้อจำกัดสู่คลินิกและแนวทางแก้ไขทางวิศวกรรม</h3>
-            <p class="text-xs text-[#64748b]">คลิกเลือกแต่ละเสาหลักด้านล่างเพื่อเปรียบเทียบกลไกปัญหาและนวัตกรรมการแก้ไขที่ได้รับการพิสูจน์แล้ว</p>
+            <h3 data-i18n="m1.bn.title" class="text-base font-bold text-[#0f172a]">🔍 ตัวสลับสำรวจ 4 เสาหลักข้อจำกัดสู่คลินิกและแนวทางแก้ไขทางวิศวกรรม</h3>
+            <p data-i18n="m1.bn.sub" class="text-xs text-[#64748b]">คลิกเลือกแต่ละเสาหลักด้านล่างเพื่อเปรียบเทียบกลไกปัญหาและนวัตกรรมการแก้ไขที่ได้รับการพิสูจน์แล้ว</p>
           </div>
 
           <div id="bottleneck-tabs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5"></div>
@@ -217,11 +171,11 @@
     <!-- ===================================================================== -->
     <!-- โมดูลที่ 2: เทคนิคเคมีไฟฟ้าและเครื่องจำลองฟิสิกส์ FSCV                 -->
     <!-- ===================================================================== -->
-    <section id="module-2" class="scroll-mt-32 space-y-6">
+    <section id="module-2" class="scroll-mt-32 space-y-6 module-divider">
       <div class="max-w-4xl space-y-2">
-        <span class="text-xs font-bold uppercase tracking-wider text-[#0284c7]">โมดูลที่ 2 · เทคนิคทางเคมีไฟฟ้าและฟิสิกส์ของสัญญาณ</span>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#0f172a]">เทคนิคเคมีไฟฟ้าและความท้าทาย Phasic–Tonic พร้อมเครื่องจำลองฟิสิกส์ FSCV</h2>
-        <p class="text-sm text-[#334155] leading-relaxed">
+        <span data-i18n="m2.tag" class="text-xs font-bold uppercase tracking-wider text-[#0284c7]">โมดูลที่ 2 · เทคนิคทางเคมีไฟฟ้าและฟิสิกส์ของสัญญาณ</span>
+        <h2 data-i18n="m2.title" class="text-xl sm:text-2xl font-bold text-[#0f172a]">เทคนิคเคมีไฟฟ้าและความท้าทาย Phasic–Tonic พร้อมเครื่องจำลองฟิสิกส์ FSCV</h2>
+        <p data-i18n-html="m2.intro" class="read-body prose-comfort text-[#334155]">
           ในเทคนิค <span class="formula-pill">Fast-Scan Cyclic Voltammetry (FSCV)</span> การกวาดศักย์ไฟฟ้ารูปสามเหลี่ยม (<span class="font-mono-tech text-[#0f172a]">-0.4 V → +1.3 V → -0.4 V vs. Ag/AgCl</span>) ที่ความถี่ <span class="font-mono-tech">10 Hz</span> ทำให้โดปามีนเกิดปฏิกิริยาออกซิเดชันเป็น Dopamine-o-quinone (~<span class="font-mono-tech">+0.60 V</span>) และรีดักชันกลับ (~<span class="font-mono-tech">-0.20 V</span>) โดยกระแสพีคฟาราเดอิกแปรผันตาม <span class="formula-pill">i_p ∝ √v</span> (สมการ Randles–Ševčík) ขณะที่กระแสประจุพื้นหลังแปรผันตรงตาม <span class="px-2 py-0.5 rounded bg-[#fef3c7] text-[#d97706] font-mono-tech text-xs font-semibold">I_BG = C_dl · v</span>
         </p>
       </div>
@@ -231,27 +185,27 @@
         <div class="lg:col-span-4 clinical-card p-6 flex flex-col justify-between space-y-5">
           <div class="space-y-4">
             <div class="flex items-center justify-between">
-              <h3 class="text-base font-bold text-[#0f172a]">🎛️ ตัวควบคุมพารามิเตอร์ FSCV</h3>
+              <h3 data-i18n="m2.sim.title" class="text-base font-bold text-[#0f172a]">🎛️ ตัวควบคุมพารามิเตอร์ FSCV</h3>
               <span class="text-[11px] font-mono-tech px-2.5 py-0.5 rounded-full bg-teal-50 text-[#0f766e] border border-teal-200 font-semibold">Interactive</span>
             </div>
 
             <div class="space-y-4 pt-1">
               <div>
                 <div class="flex justify-between text-xs font-medium mb-1">
-                  <span class="text-[#334155]">อัตราการกวาดศักย์ <span class="font-mono-tech">Scan Rate (v)</span></span>
+                  <span data-i18n-html="m2.sim.rate" class="text-[#334155]">อัตราการกวาดศักย์ <span class="font-mono-tech">Scan Rate (v)</span></span>
                   <span id="label-scan-rate" class="font-mono-tech font-bold text-[#0d9488]">400 V/s</span>
                 </div>
                 <input id="input-scan-rate" type="range" min="100" max="1200" step="50" value="400" class="w-full" />
                 <div class="flex justify-between font-mono-tech text-[10px] text-[#64748b] mt-0.5">
                   <span>100 V/s</span>
-                  <span>400 V/s (มาตรฐาน)</span>
+                  <span data-i18n="m2.sim.rateStd">400 V/s (มาตรฐาน)</span>
                   <span>1200 V/s</span>
                 </div>
               </div>
 
               <div>
                 <div class="flex justify-between text-xs font-medium mb-1">
-                  <span class="text-[#334155]">ความจุชั้นคู่ไฟฟ้า <span class="font-mono-tech">C<sub>dl</sub></span></span>
+                  <span data-i18n-html="m2.sim.cdl" class="text-[#334155]">ความจุชั้นคู่ไฟฟ้า <span class="font-mono-tech">C<sub>dl</sub></span></span>
                   <span id="label-cdl" class="font-mono-tech font-bold text-[#0284c7]">1.0 nF</span>
                 </div>
                 <input id="input-cdl" type="range" min="0.2" max="2.0" step="0.1" value="1.0" class="w-full" />
@@ -264,7 +218,7 @@
 
               <div>
                 <div class="flex justify-between text-xs font-medium mb-1">
-                  <span class="text-[#334155]">ความเข้มข้นโดปามีน <span class="font-mono-tech">[DA]</span></span>
+                  <span data-i18n-html="m2.sim.conc" class="text-[#334155]">ความเข้มข้นโดปามีน <span class="font-mono-tech">[DA]</span></span>
                   <span id="label-conc" class="font-mono-tech font-bold text-[#4f46e5]">250 nM</span>
                 </div>
                 <input id="input-conc" type="range" min="20" max="1000" step="10" value="250" class="w-full" />
@@ -281,25 +235,25 @@
           <div class="space-y-3 pt-4 border-t border-slate-200">
             <div class="grid grid-cols-2 gap-2.5">
               <div class="bg-[#f8fafc] border border-slate-200 rounded-xl p-3">
-                <div class="text-[11px] text-[#64748b]">เวลาช่วงกวาดสัญญาณ</div>
+                <div data-i18n="m2.sim.m1" class="text-[11px] text-[#64748b]">เวลาช่วงกวาดสัญญาณ</div>
                 <div id="metric-sweep-time" class="font-mono-tech text-base font-bold text-[#0f172a] mt-0.5">8.50 ms</div>
               </div>
               <div class="bg-[#f8fafc] border border-slate-200 rounded-xl p-3">
-                <div class="text-[11px] text-[#64748b]">Duty Cycle (รอบ 100 ms)</div>
+                <div data-i18n="m2.sim.m2" class="text-[11px] text-[#64748b]">Duty Cycle (รอบ 100 ms)</div>
                 <div id="metric-duty-cycle" class="font-mono-tech text-base font-bold text-[#0284c7] mt-0.5">8.5%</div>
               </div>
               <div class="bg-[#fef3c7]/60 border border-amber-200 rounded-xl p-3">
-                <div class="text-[11px] text-amber-900 font-medium">กระแสพื้นหลัง <span class="font-mono-tech">I<sub>BG</sub></span></div>
+                <div data-i18n-html="m2.sim.m3" class="text-[11px] text-amber-900 font-medium">กระแสพื้นหลัง <span class="font-mono-tech">I<sub>BG</sub></span></div>
                 <div id="metric-ibg" class="font-mono-tech text-base font-bold text-[#d97706] mt-0.5">400.0 nA</div>
               </div>
               <div class="bg-teal-50/70 border border-teal-200 rounded-xl p-3">
-                <div class="text-[11px] text-[#0f766e] font-medium">กระแสพีค <span class="font-mono-tech">I<sub>redox</sub></span></div>
+                <div data-i18n-html="m2.sim.m4" class="text-[11px] text-[#0f766e] font-medium">กระแสพีค <span class="font-mono-tech">I<sub>redox</sub></span></div>
                 <div id="metric-ip" class="font-mono-tech text-base font-bold text-[#0d9488] mt-0.5">3.25 nA</div>
               </div>
             </div>
 
             <div class="flex items-center justify-between bg-[#eef2ff] border border-indigo-200 rounded-xl px-3.5 py-2.5 text-xs">
-              <span class="text-[#334155] font-medium">อัตราส่วนสัญญาณต่อพื้นหลัง (<span class="font-mono-tech">I<sub>redox</sub> / I<sub>BG</sub></span>):</span>
+              <span data-i18n-html="m2.sim.sbr" class="text-[#334155] font-medium">อัตราส่วนสัญญาณต่อพื้นหลัง (<span class="font-mono-tech">I<sub>redox</sub> / I<sub>BG</sub></span>):</span>
               <span id="metric-sbr" class="font-mono-tech text-sm font-bold text-[#4f46e5]">0.81%</span>
             </div>
           </div>
@@ -309,9 +263,9 @@
         <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="clinical-card p-5 flex flex-col justify-between space-y-3">
             <div>
-              <span class="text-[11px] font-mono-tech font-semibold text-[#0284c7]">กราฟที่ 1 · Total vs. Background Current</span>
-              <h3 class="text-sm sm:text-base font-bold text-[#0f172a] mt-0.5">คลื่นกระแสรวม <span class="font-mono-tech">I<sub>total</sub></span> เทียบกับกระแสพื้นหลัง <span class="font-mono-tech">I<sub>BG</sub></span></h3>
-              <p class="text-xs text-[#64748b] mt-1">แสดงกระแสประจุพื้นหลังขนาดใหญ่ที่ครอบงำกระแสรีดอกซ์ตลอดคาบการกวาดสามเหลี่ยม</p>
+              <span data-i18n="m2.c1.tag" class="text-[11px] font-mono-tech font-semibold text-[#0284c7]">กราฟที่ 1 · Total vs. Background Current</span>
+              <h3 data-i18n-html="m2.c1.title" class="text-sm sm:text-base font-bold text-[#0f172a] mt-0.5">คลื่นกระแสรวม <span class="font-mono-tech">I<sub>total</sub></span> เทียบกับกระแสพื้นหลัง <span class="font-mono-tech">I<sub>BG</sub></span></h3>
+              <p data-i18n="m2.c1.desc" class="text-xs text-[#64748b] mt-1">แสดงกระแสประจุพื้นหลังขนาดใหญ่ที่ครอบงำกระแสรีดอกซ์ตลอดคาบการกวาดสามเหลี่ยม</p>
             </div>
             <div class="chart-box">
               <canvas id="fscvRawChart"></canvas>
@@ -320,9 +274,9 @@
 
           <div class="clinical-card p-5 flex flex-col justify-between space-y-3">
             <div>
-              <span class="text-[11px] font-mono-tech font-semibold text-[#0d9488]">กราฟที่ 2 · Background-Subtracted CV</span>
-              <h3 class="text-sm sm:text-base font-bold text-[#0f172a] mt-0.5">Cyclic Voltammogram (CV) หลังหักพื้นหลัง</h3>
-              <p class="text-xs text-[#64748b] mt-1">เผยพีคออกซิเดชันของ Dopamine (~<span class="font-mono-tech">+0.60 V</span>) และพีครีดักชันของ Quinone (~<span class="font-mono-tech">-0.20 V</span>)</p>
+              <span data-i18n="m2.c2.tag" class="text-[11px] font-mono-tech font-semibold text-[#0d9488]">กราฟที่ 2 · Background-Subtracted CV</span>
+              <h3 data-i18n="m2.c2.title" class="text-sm sm:text-base font-bold text-[#0f172a] mt-0.5">Cyclic Voltammogram (CV) หลังหักพื้นหลัง</h3>
+              <p data-i18n-html="m2.c2.desc" class="text-xs text-[#64748b] mt-1">เผยพีคออกซิเดชันของ Dopamine (~<span class="font-mono-tech">+0.60 V</span>) และพีครีดักชันของ Quinone (~<span class="font-mono-tech">-0.20 V</span>)</p>
             </div>
             <div class="chart-box">
               <canvas id="fscvSubChart"></canvas>
@@ -335,11 +289,11 @@
       <div class="clinical-card p-6 space-y-4">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
-            <h3 class="text-base font-bold text-[#0f172a]">📊 ตารางเปรียบเทียบ 7 เทคนิคทางเคมีไฟฟ้าสำหรับวัดสัญญาณ Phasic และ Tonic</h3>
-            <p class="text-xs text-[#64748b]">เลือกตัวกรองด้านขวาเพื่อดูเฉพาะเทคนิคที่วัดสัญญาณฉับพลัน (<span class="font-mono-tech">Phasic</span>) ค่าพื้นฐาน (<span class="font-mono-tech">Tonic</span>) หรือทั้งสองช่วงเวลา</p>
+            <h3 data-i18n="m2.tbl.title" class="text-base font-bold text-[#0f172a]">📊 ตารางเปรียบเทียบ 7 เทคนิคทางเคมีไฟฟ้าสำหรับวัดสัญญาณ Phasic และ Tonic</h3>
+            <p data-i18n-html="m2.tbl.sub" class="text-xs text-[#64748b]">เลือกตัวกรองด้านขวาเพื่อดูเฉพาะเทคนิคที่วัดสัญญาณฉับพลัน (<span class="font-mono-tech">Phasic</span>) ค่าพื้นฐาน (<span class="font-mono-tech">Tonic</span>) หรือทั้งสองช่วงเวลา</p>
           </div>
           <div class="flex flex-wrap gap-1.5" id="modality-filter-group">
-            <button data-filter="all" class="mod-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#0d9488] text-white transition">ทั้งหมด (7)</button>
+            <button data-filter="all" data-i18n="m2.tbl.all" class="mod-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#0d9488] text-white transition">ทั้งหมด (7)</button>
             <button data-filter="Phasic" class="mod-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition">Phasic</button>
             <button data-filter="Tonic" class="mod-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition">Tonic</button>
             <button data-filter="Phasic + Tonic" class="mod-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition">Phasic + Tonic</button>
@@ -350,12 +304,12 @@
           <table class="w-full text-left border-collapse min-w-[780px]">
             <thead>
               <tr class="bg-[#f1f5f9] text-[#0f172a] text-xs border-b border-slate-200">
-                <th class="py-3 px-4 font-semibold">เทคนิค (Modality)</th>
-                <th class="py-3 px-4 font-semibold">ช่วงเวลาการวัด</th>
-                <th class="py-3 px-4 font-semibold">รูปคลื่นศักย์ไฟฟ้า (Waveform)</th>
-                <th class="py-3 px-4 font-semibold">ความละเอียดเชิงเวลา</th>
-                <th class="py-3 px-4 font-semibold">กลไกความจำเพาะเจาะจง</th>
-                <th class="py-3 px-4 font-semibold">ข้อจำกัดสำคัญทางวิศวกรรม</th>
+                <th data-i18n="m2.tbl.h1" class="py-3 px-4 font-semibold">เทคนิค (Modality)</th>
+                <th data-i18n="m2.tbl.h2" class="py-3 px-4 font-semibold">ช่วงเวลาการวัด</th>
+                <th data-i18n="m2.tbl.h3" class="py-3 px-4 font-semibold">รูปคลื่นศักย์ไฟฟ้า (Waveform)</th>
+                <th data-i18n="m2.tbl.h4" class="py-3 px-4 font-semibold">ความละเอียดเชิงเวลา</th>
+                <th data-i18n="m2.tbl.h5" class="py-3 px-4 font-semibold">กลไกความจำเพาะเจาะจง</th>
+                <th data-i18n="m2.tbl.h6" class="py-3 px-4 font-semibold">ข้อจำกัดสำคัญทางวิศวกรรม</th>
               </tr>
             </thead>
             <tbody id="modality-table-body" class="divide-y divide-slate-200 text-xs text-[#334155] bg-white"></tbody>
@@ -367,11 +321,11 @@
     <!-- ===================================================================== -->
     <!-- โมดูลที่ 3: วัสดุขั้วไฟฟ้าและกลศาสตร์แบบยืดหยุ่น                      -->
     <!-- ===================================================================== -->
-    <section id="module-3" class="scroll-mt-32 space-y-6">
+    <section id="module-3" class="scroll-mt-32 space-y-6 module-divider">
       <div class="max-w-4xl space-y-2">
-        <span class="text-xs font-bold uppercase tracking-wider text-[#0d9488]">โมดูลที่ 3 · วัสดุนาโนและวิศวกรรมกลศาสตร์ของขั้วไฟฟ้า</span>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#0f172a]">วัสดุขั้วไฟฟ้าขั้นสูงและความเข้ากันได้เชิงกลกับเนื้อเยื่อสมอง</h2>
-        <p class="text-sm text-[#334155] leading-relaxed">
+        <span data-i18n="m3.tag" class="text-xs font-bold uppercase tracking-wider text-[#0d9488]">โมดูลที่ 3 · วัสดุนาโนและวิศวกรรมกลศาสตร์ของขั้วไฟฟ้า</span>
+        <h2 data-i18n="m3.title" class="text-xl sm:text-2xl font-bold text-[#0f172a]">วัสดุขั้วไฟฟ้าขั้นสูงและความเข้ากันได้เชิงกลกับเนื้อเยื่อสมอง</h2>
+        <p data-i18n-html="m3.intro" class="read-body prose-comfort text-[#334155]">
           การดัดแปรผิวเส้นใยคาร์บอนด้วยวัสดุนาโน (<span class="formula-pill">PEDOT-CNT</span>, <span class="formula-pill">PEI-CNT</span>, <span class="formula-pill">B-NCD</span>, <span class="formula-pill">Graphene/AuNPs</span>) ช่วยลดขีดจำกัดการตรวจวัด (<span class="font-mono-tech">LoD</span>) ลงสู่ระดับนาโนโมลาร์ตอนต้นและป้องกันการอุดตันจากโปรตีนและ <span class="font-mono-tech">5-HT</span> ขณะที่ฐานรองพอลิเมอร์ยืดหยุ่นช่วยลดแรงเฉือนต่อเนื้อเยื่อสมอง
         </p>
       </div>
@@ -381,11 +335,11 @@
         <div class="lg:col-span-7 clinical-card p-6 flex flex-col justify-between space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h3 class="text-base font-bold text-[#0f172a]">📈 กราฟเปรียบเทียบประสิทธิภาพของวัสดุขั้วไฟฟ้า</h3>
-              <p class="text-xs text-[#64748b]">สลับเปรียบเทียบระหว่าง <span class="font-mono-tech">LoD (nM)</span> และ <span class="font-mono-tech">Sensitivity (nA/µM)</span></p>
+              <h3 data-i18n="m3.chart.title" class="text-base font-bold text-[#0f172a]">📈 กราฟเปรียบเทียบประสิทธิภาพของวัสดุขั้วไฟฟ้า</h3>
+              <p data-i18n-html="m3.chart.sub" class="text-xs text-[#64748b]">สลับเปรียบเทียบระหว่าง <span class="font-mono-tech">LoD (nM)</span> และ <span class="font-mono-tech">Sensitivity (nA/µM)</span></p>
             </div>
             <div class="inline-flex rounded-xl p-1 bg-[#f1f5f9] border border-slate-200 self-start">
-              <button id="btn-toggle-lod" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#0d9488] text-white transition">LoD (nM — ยิ่งต่ำยิ่งดี)</button>
+              <button id="btn-toggle-lod" data-i18n="m3.chart.btnLod" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#0d9488] text-white transition">LoD (nM — ยิ่งต่ำยิ่งดี)</button>
               <button id="btn-toggle-sens" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#334155] hover:text-[#0f172a] transition">Sensitivity (nA/µM)</button>
             </div>
           </div>
@@ -402,15 +356,15 @@
         <!-- แถบเปรียบเทียบความแข็งเชิงกล (Young's Modulus Logarithmic Comparison) -->
         <div class="lg:col-span-5 clinical-card p-6 flex flex-col justify-between space-y-5">
           <div class="space-y-3">
-            <h3 class="text-base font-bold text-[#0f172a]">🛡️ การเปรียบเทียบความแข็งเชิงกล (Young's Modulus — สเกลลอการิทึม)</h3>
-            <p class="text-xs text-[#64748b] leading-relaxed">
+            <h3 data-i18n="m3.ym.title" class="text-base font-bold text-[#0f172a]">🛡️ การเปรียบเทียบความแข็งเชิงกล (Young's Modulus — สเกลลอการิทึม)</h3>
+            <p data-i18n-html="m3.ym.sub" class="text-xs text-[#64748b] leading-relaxed">
               ความต่างของค่า Young's Modulus ระหว่างซิลิคอนแข็ง (<span class="font-mono-tech">&gt;100 GPa</span>) กับเนื้อเยื่อสมอง (<span class="font-mono-tech">&lt;30 kPa</span>) ทำให้เกิดแรงเฉือนจากการเต้นของชีพจรและแผลเป็นเกลีย
             </p>
 
             <div class="space-y-3.5 pt-2">
               <div class="space-y-1">
                 <div class="flex justify-between text-xs">
-                  <span class="font-semibold text-[#0f766e]">1. เนื้อเยื่อสมอง (Brain Tissue)</span>
+                  <span data-i18n="m3.ym.b1" class="font-semibold text-[#0f766e]">1. เนื้อเยื่อสมอง (Brain Tissue)</span>
                   <span class="font-mono-tech font-bold text-[#0f766e]">&lt; 30 kPa</span>
                 </div>
                 <div class="w-full h-3 rounded-full bg-[#f1f5f9] border border-slate-200 overflow-hidden">
@@ -440,7 +394,7 @@
 
               <div class="space-y-1">
                 <div class="flex justify-between text-xs">
-                  <span class="font-semibold text-[#d97706]">4. ซิลิคอนและโลหะแข็ง (Silicon / Metal Shanks)</span>
+                  <span data-i18n="m3.ym.b4" class="font-semibold text-[#d97706]">4. ซิลิคอนและโลหะแข็ง (Silicon / Metal Shanks)</span>
                   <span class="font-mono-tech font-bold text-[#d97706]">&gt; 100 GPa</span>
                 </div>
                 <div class="w-full h-3 rounded-full bg-[#f1f5f9] border border-slate-200 overflow-hidden">
@@ -451,10 +405,10 @@
           </div>
 
           <div class="bg-[#f8fafc] border border-slate-200 rounded-xl p-4 space-y-2">
-            <div class="text-xs font-bold text-[#0f172a]">เทคนิคการสอดใส่ขั้วไฟฟ้ายืดหยุ่นโดยไม่โค้งงอ (Anti-Buckling)</div>
+            <div data-i18n="m3.ab.title" class="text-xs font-bold text-[#0f172a]">เทคนิคการสอดใส่ขั้วไฟฟ้ายืดหยุ่นโดยไม่โค้งงอ (Anti-Buckling)</div>
             <ul class="text-xs text-[#334155] space-y-1.5 list-disc pl-4 leading-relaxed">
-              <li><strong class="text-[#0f766e]">สารช่วยแข็งชั่วคราว Pullulan:</strong> เคลือบโพรบยืดหยุ่นด้วยพอลิแซ็กคาไรด์ <span class="font-mono-tech">Pullulan</span> ที่ละลายน้ำได้ ช่วยเพิ่มความแข็งขณะแทงผ่านเยื่อหุ้มสมองและสลายตัวทันทีหลังฝัง</li>
-              <li><strong class="text-[#0284c7]">อาร์เรย์ fGCFs 16 ช่อง:</strong> เส้นใยคาร์บอนคล้ายแก้วแบบยืดหยุ่นสามารถสอดเข้าสู่สมองส่วนลึกได้โดยไม่ต้องใช้เข็มนำร่อง</li>
+              <li data-i18n-html="m3.ab.li1"><strong class="text-[#0f766e]">สารช่วยแข็งชั่วคราว Pullulan:</strong> เคลือบโพรบยืดหยุ่นด้วยพอลิแซ็กคาไรด์ <span class="font-mono-tech">Pullulan</span> ที่ละลายน้ำได้ ช่วยเพิ่มความแข็งขณะแทงผ่านเยื่อหุ้มสมองและสลายตัวทันทีหลังฝัง</li>
+              <li data-i18n-html="m3.ab.li2"><strong class="text-[#0284c7]">อาร์เรย์ fGCFs 16 ช่อง:</strong> เส้นใยคาร์บอนคล้ายแก้วแบบยืดหยุ่นสามารถสอดเข้าสู่สมองส่วนลึกได้โดยไม่ต้องใช้เข็มนำร่อง</li>
             </ul>
           </div>
         </div>
@@ -463,8 +417,8 @@
       <!-- การ์ดตรวจสอบรายละเอียดวัสดุทั้ง 7 ชนิด -->
       <div class="clinical-card p-6 space-y-4">
         <div>
-          <h3 class="text-base font-bold text-[#0f172a]">🔬 ตัวตรวจสอบความจำเพาะเจาะจงและเสถียรภาพของวัสดุขั้วไฟฟ้าทั้ง 7 กลุ่ม</h3>
-          <p class="text-xs text-[#64748b]">คลิกเลือกวัสดุแต่ละกลุ่มเพื่อดูค่าอัตราส่วนคัดแยกสารรบกวน (<span class="font-mono-tech">DA/AA</span>, <span class="font-mono-tech">DA/DOPAC</span>) และอายุการใช้งานในร่างกาย</p>
+          <h3 data-i18n="m3.ins.title" class="text-base font-bold text-[#0f172a]">🔬 ตัวตรวจสอบความจำเพาะเจาะจงและเสถียรภาพของวัสดุขั้วไฟฟ้าทั้ง 7 กลุ่ม</h3>
+          <p data-i18n-html="m3.ins.sub" class="text-xs text-[#64748b]">คลิกเลือกวัสดุแต่ละกลุ่มเพื่อดูค่าอัตราส่วนคัดแยกสารรบกวน (<span class="font-mono-tech">DA/AA</span>, <span class="font-mono-tech">DA/DOPAC</span>) และอายุการใช้งานในร่างกาย</p>
         </div>
         <div id="material-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5"></div>
         <div id="material-inspector-box" class="bg-[#f8fafc] border border-teal-200 rounded-xl p-5"></div>
@@ -474,11 +428,11 @@
     <!-- ===================================================================== -->
     <!-- โมดูลที่ 4: วงจร CMOS Potentiostat และสัญญาณรบกวน AFE                 -->
     <!-- ===================================================================== -->
-    <section id="module-4" class="scroll-mt-32 space-y-6">
+    <section id="module-4" class="scroll-mt-32 space-y-6 module-divider">
       <div class="max-w-4xl space-y-2">
-        <span class="text-xs font-bold uppercase tracking-wider text-[#4f46e5]">โมดูลที่ 4 · การออกแบบวงจรรวมแอนะล็อกสัญญาณรบกวนต่ำ</span>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#0f172a]">วงจร CMOS Potentiostat สัญญาณรบกวนต่ำและสมดุลการออกแบบ AFE</h2>
-        <p class="text-sm text-[#334155] leading-relaxed">
+        <span data-i18n="m4.tag" class="text-xs font-bold uppercase tracking-wider text-[#4f46e5]">โมดูลที่ 4 · การออกแบบวงจรรวมแอนะล็อกสัญญาณรบกวนต่ำ</span>
+        <h2 data-i18n="m4.title" class="text-xl sm:text-2xl font-bold text-[#0f172a]">วงจร CMOS Potentiostat สัญญาณรบกวนต่ำและสมดุลการออกแบบ AFE</h2>
+        <p data-i18n-html="m4.intro" class="read-body prose-comfort text-[#334155]">
           วงจร Analog Front-End (<span class="formula-pill-indigo">AFE</span>) บนชิป CMOS ที่ฝังในสมองต้องสร้างคลื่นกวาดศักย์ <span class="font-mono-tech">1.4–1.7 V<sub>pp</sub></span> และตรวจจับกระแสรีดอกซ์ระดับพิโคแอมแปร์ที่ซ้อนบนกระแสประจุพื้นหลัง <span class="font-mono-tech">300–400 nA</span> ภายใต้กำลังงานระดับไมโครวัตต์
         </p>
       </div>
@@ -487,8 +441,8 @@
         <!-- กราฟ Scatter/Bubble Plot เปรียบเทียบ Noise vs Area -->
         <div class="lg:col-span-7 clinical-card p-6 flex flex-col justify-between space-y-4">
           <div>
-            <h3 class="text-base font-bold text-[#0f172a]">📉 แผนภาพสมดุล: สัญญาณรบกวนขาเข้า (pA<sub>rms</sub>) vs. พื้นที่ซิลิคอน (mm²)</h3>
-            <p class="text-xs text-[#64748b]">
+            <h3 data-i18n-html="m4.sc.title" class="text-base font-bold text-[#0f172a]">📉 แผนภาพสมดุล: สัญญาณรบกวนขาเข้า (pA<sub>rms</sub>) vs. พื้นที่ซิลิคอน (mm²)</h3>
+            <p data-i18n="m4.sc.sub" class="text-xs text-[#64748b]">
               เปรียบเทียบสถาปัตยกรรม CMOS ทั้ง 6 รุ่นบนสเกลลอการิทึม (พิกเซล Amperometry มีพื้นที่เล็กมากและสัญญาณรบกวนต่ำระดับเฟมโตแอมแปร์ แต่จะอิ่มตัวหากใช้กับพื้นหลัง FSCV ขนาด 400 nA)
             </p>
           </div>
@@ -497,7 +451,7 @@
             <canvas id="cmosTradeoffChart"></canvas>
           </div>
 
-          <div class="text-xs text-[#334155] bg-[#f8fafc] border border-slate-200 rounded-xl p-3.5 leading-relaxed">
+          <div data-i18n-html="m4.sc.note" class="text-xs text-[#334155] bg-[#f8fafc] border border-slate-200 rounded-xl p-3.5 leading-relaxed">
             <span class="text-[#4f46e5] font-bold">ข้อสรุปเชิงสถาปัตยกรรม:</span> วงจรของ <span class="font-mono-tech font-semibold">Hall et al. (2022)</span> ทำสัญญาณรบกวนได้ <span class="font-mono-tech font-semibold text-[#0f766e]">26.5 pA<sub>rms</sub></span> (Open) และ <span class="font-mono-tech font-semibold text-[#0f766e]">39.2 pA<sub>rms</sub></span> (ต่อโหลด <span class="font-mono-tech">1 nF</span> ที่ <span class="font-mono-tech">5 kHz</span>) ขณะที่อาร์เรย์ <span class="font-mono-tech">128-Ch R-TIA</span> บรรจุได้ 128 ช่องในพื้นที่รวม <span class="font-mono-tech">2.25 mm²</span>
           </div>
         </div>
@@ -506,17 +460,17 @@
         <div class="lg:col-span-5 clinical-card p-6 flex flex-col justify-between space-y-4">
           <div class="space-y-3.5">
             <div class="flex items-center justify-between">
-              <h3 class="text-base font-bold text-[#0f172a]">🧮 ตัวคำนวณสัญญาณรบกวน AFE (Hall et al.)</h3>
+              <h3 data-i18n="m4.calc.title" class="text-base font-bold text-[#0f172a]">🧮 ตัวคำนวณสัญญาณรบกวน AFE (Hall et al.)</h3>
               <span class="formula-pill-indigo">BW = 5 kHz</span>
             </div>
-            <p class="text-xs text-[#64748b] leading-relaxed">
+            <p data-i18n-html="m4.calc.desc" class="text-xs text-[#64748b] leading-relaxed">
               อ้างอิงสมการวิเคราะห์ <span class="font-mono-tech text-[#0f172a]">i²<sub>n,rms</sub></span> ของ Hall et al. (2022) ที่รวม Shot Noise จากวงจรสะท้อนกระแส (<span class="font-mono-tech">2q(I<sub>CMR</sub> + I<sub>CC</sub>)</span>) เข้ากับสัญญาณรบกวนแรงดันของ Opamp (<span class="font-mono-tech">v²<sub>n,op</sub></span>) ที่เหนี่ยวนำผ่านความจุ <span class="font-mono-tech">C<sub>dl</sub></span>
             </p>
 
             <div class="space-y-3 pt-1">
               <div>
                 <div class="flex justify-between text-xs font-medium mb-1">
-                  <span class="text-[#334155]">ความจุชั้นคู่ไฟฟ้าขั้วทำงาน (<span class="font-mono-tech">C<sub>dl</sub></span>)</span>
+                  <span data-i18n-html="m4.calc.cdl" class="text-[#334155]">ความจุชั้นคู่ไฟฟ้าขั้วทำงาน (<span class="font-mono-tech">C<sub>dl</sub></span>)</span>
                   <span id="calc-label-cdl" class="font-mono-tech font-bold text-[#0d9488]">1.0 nF</span>
                 </div>
                 <input id="calc-slider-cdl" type="range" min="0.0" max="2.0" step="0.1" value="1.0" class="w-full" />
@@ -524,7 +478,7 @@
 
               <div>
                 <div class="flex justify-between text-xs font-medium mb-1">
-                  <span class="text-[#334155]">กระแสไบแอส (<span class="font-mono-tech">I<sub>CMR</sub> + I<sub>CC</sub></span>)</span>
+                  <span data-i18n-html="m4.calc.ibias" class="text-[#334155]">กระแสไบแอส (<span class="font-mono-tech">I<sub>CMR</sub> + I<sub>CC</sub></span>)</span>
                   <span id="calc-label-ibias" class="font-mono-tech font-bold text-[#0284c7]">200 nA</span>
                 </div>
                 <input id="calc-slider-ibias" type="range" min="50" max="500" step="10" value="200" class="w-full" />
@@ -532,7 +486,7 @@
 
               <div>
                 <div class="flex justify-between text-xs font-medium mb-1">
-                  <span class="text-[#334155]">สัญญาณรบกวนแรงดัน Opamp (<span class="font-mono-tech">v<sub>n,op</sub></span>)</span>
+                  <span data-i18n-html="m4.calc.vnop" class="text-[#334155]">สัญญาณรบกวนแรงดัน Opamp (<span class="font-mono-tech">v<sub>n,op</sub></span>)</span>
                   <span id="calc-label-vnop" class="font-mono-tech font-bold text-[#4f46e5]">40 nV/√Hz</span>
                 </div>
                 <input id="calc-slider-vnop" type="range" min="20" max="100" step="5" value="40" class="w-full" />
@@ -556,7 +510,7 @@
             </div>
 
             <div class="flex items-center justify-between bg-[#eef2ff] border border-indigo-200 rounded-xl px-3.5 py-2 text-xs">
-              <span class="text-[#334155]">Effective Dynamic Range (เทียบ 290 nA<sub>pp</sub> CMR):</span>
+              <span data-i18n-html="m4.calc.dr" class="text-[#334155]">Effective Dynamic Range (เทียบ 290 nA<sub>pp</sub> CMR):</span>
               <span id="calc-out-dr" class="font-mono-tech font-bold text-[#4f46e5]">83.0 dB</span>
             </div>
           </div>
@@ -571,25 +525,25 @@
       <div class="clinical-card p-6 space-y-5">
         <div class="space-y-3">
           <div>
-            <h3 class="text-base font-bold text-[#0f172a]">🔀 ตัวเลือกวิเคราะห์สถาปัตยกรรมวงจร Potentiostat (Topology Selector)</h3>
-            <p class="text-xs text-[#64748b]">เปรียบเทียบจุดเด่นและข้อจำกัดของโทโพโลยีหลัก 3 รูปแบบที่ใช้ในวงจร CMOS AFE</p>
+            <h3 data-i18n="m4.topo.title" class="text-base font-bold text-[#0f172a]">🔀 ตัวเลือกวิเคราะห์สถาปัตยกรรมวงจร Potentiostat (Topology Selector)</h3>
+            <p data-i18n="m4.topo.sub" class="text-xs text-[#64748b]">เปรียบเทียบจุดเด่นและข้อจำกัดของโทโพโลยีหลัก 3 รูปแบบที่ใช้ในวงจร CMOS AFE</p>
           </div>
           <div id="topology-tabs" class="grid grid-cols-1 md:grid-cols-3 gap-2.5"></div>
           <div id="topology-detail" class="bg-[#f8fafc] border border-slate-200 rounded-xl p-4 text-xs text-[#334155]"></div>
         </div>
 
         <div class="pt-4 border-t border-slate-200 space-y-3">
-          <h4 class="text-sm font-bold text-[#0f172a]">🔌 ตารางเปรียบเทียบประสิทธิภาพชิป CMOS Potentiostat และ AFE ทั้ง 6 รุ่น</h4>
+          <h4 data-i18n="m4.tbl.title" class="text-sm font-bold text-[#0f172a]">🔌 ตารางเปรียบเทียบประสิทธิภาพชิป CMOS Potentiostat และ AFE ทั้ง 6 รุ่น</h4>
           <div class="overflow-x-auto custom-scrollbar rounded-xl border border-slate-200">
             <table class="w-full text-left border-collapse min-w-[860px]">
               <thead>
                 <tr class="bg-[#f1f5f9] text-[#0f172a] text-xs border-b border-slate-200">
-                  <th class="py-3 px-4 font-semibold">สถาปัตยกรรม / งานวิจัย</th>
-                  <th class="py-3 px-4 font-semibold">เทคโนโลยี CMOS</th>
-                  <th class="py-3 px-4 font-semibold">โครงสร้างวงจร (Topology)</th>
-                  <th class="py-3 px-4 font-semibold">สัญญาณรบกวนขาเข้า</th>
-                  <th class="py-3 px-4 font-semibold">ช่วงไดนามิก / พิสัยกระแส</th>
-                  <th class="py-3 px-4 font-semibold">กำลังงานและพื้นที่ชิป</th>
+                  <th data-i18n="m4.tbl.h1" class="py-3 px-4 font-semibold">สถาปัตยกรรม / งานวิจัย</th>
+                  <th data-i18n="m4.tbl.h2" class="py-3 px-4 font-semibold">เทคโนโลยี CMOS</th>
+                  <th data-i18n="m4.tbl.h3" class="py-3 px-4 font-semibold">โครงสร้างวงจร (Topology)</th>
+                  <th data-i18n="m4.tbl.h4" class="py-3 px-4 font-semibold">สัญญาณรบกวนขาเข้า</th>
+                  <th data-i18n="m4.tbl.h5" class="py-3 px-4 font-semibold">ช่วงไดนามิก / พิสัยกระแส</th>
+                  <th data-i18n="m4.tbl.h6" class="py-3 px-4 font-semibold">กำลังงานและพื้นที่ชิป</th>
                 </tr>
               </thead>
               <tbody id="cmos-table-body" class="divide-y divide-slate-200 text-xs text-[#334155] bg-white"></tbody>
@@ -602,11 +556,11 @@
     <!-- ===================================================================== -->
     <!-- โมดูลที่ 5: Chemometrics การประยุกต์ใช้ทางคลินิก และ Closed-Loop DBS    -->
     <!-- ===================================================================== -->
-    <section id="module-5" class="scroll-mt-32 space-y-6">
+    <section id="module-5" class="scroll-mt-32 space-y-6 module-divider">
       <div class="max-w-4xl space-y-2">
-        <span class="text-xs font-bold uppercase tracking-wider text-[#d97706]">โมดูลที่ 5 · การประยุกต์ใช้ทางคลินิกและการควบคุมวงปิด</span>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#0f172a]">Chemometrics การประยุกต์ใช้ทางคลินิก และระบบ Closed-Loop DBS</h2>
-        <p class="text-sm text-[#334155] leading-relaxed">
+        <span data-i18n="m5.tag" class="text-xs font-bold uppercase tracking-wider text-[#d97706]">โมดูลที่ 5 · การประยุกต์ใช้ทางคลินิกและการควบคุมวงปิด</span>
+        <h2 data-i18n="m5.title" class="text-xl sm:text-2xl font-bold text-[#0f172a]">Chemometrics การประยุกต์ใช้ทางคลินิก และระบบ Closed-Loop DBS</h2>
+        <p data-i18n-html="m5.intro" class="read-body prose-comfort text-[#334155]">
           การผสานอัลกอริทึมทางสถิติหลายตัวแปรและโครงข่ายประสาทเทียมเชิงลึกเข้ากับข้อมูลโวลแทมเมทรีแบบเรียลไทม์ ช่วยเปิดเผยกลไกของโรคทางระบบประสาทจิตเวชและขับเคลื่อนการกระตุ้นสมองส่วนลึกแบบปรับตัวอัตโนมัติ (<span class="formula-pill">Closed-Loop DBS</span>)
         </p>
       </div>
@@ -614,10 +568,10 @@
       <!-- แท็บสำรวจ 4 หัวข้อ: Chemometrics & AI, พาร์กินสัน, การเสพติด, โรคซึมเศร้าและการผ่าตัดในมนุษย์ -->
       <div class="clinical-card p-6 space-y-5">
         <div class="flex flex-wrap gap-2" id="clinical-domain-tabs">
-          <button data-domain="chemometrics" class="clin-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#0d9488] text-white transition">1. Chemometrics &amp; AI</button>
-          <button data-domain="parkinsons" class="clin-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition">2. โรคพาร์กินสัน (Parkinson's)</button>
-          <button data-domain="addiction" class="clin-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition">3. การเสพติด (Addiction)</button>
-          <button data-domain="depression_human" class="clin-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition">4. โรคซึมเศร้าและการผ่าตัดในมนุษย์ (Depression &amp; Human Surgery)</button>
+          <button data-domain="chemometrics" data-i18n="m5.tab1" class="clin-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#0d9488] text-white transition">1. Chemometrics &amp; AI</button>
+          <button data-domain="parkinsons" data-i18n="m5.tab2" class="clin-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition">2. โรคพาร์กินสัน (Parkinson's)</button>
+          <button data-domain="addiction" data-i18n="m5.tab3" class="clin-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition">3. การเสพติด (Addiction)</button>
+          <button data-domain="depression_human" data-i18n="m5.tab4" class="clin-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition">4. โรคซึมเศร้าและการผ่าตัดในมนุษย์ (Depression &amp; Human Surgery)</button>
         </div>
 
         <div id="clinical-domain-panel" class="bg-[#f8fafc] border border-slate-200 rounded-xl p-5 sm:p-6"></div>
@@ -627,8 +581,8 @@
       <div class="clinical-card p-6 space-y-6">
         <div>
           <span class="text-xs font-mono-tech font-semibold text-[#4f46e5]">Closed-Loop DBS Control Pipeline</span>
-          <h3 class="text-lg font-bold text-[#0f172a] mt-0.5">⚙️ แบบจำลองระบบควบคุมการกระตุ้นสมองส่วนลึกแบบวงปิด 5 ขั้นตอน</h3>
-          <p class="text-xs text-[#64748b] mt-1">
+          <h3 data-i18n="m5.dbs.title" class="text-lg font-bold text-[#0f172a] mt-0.5">⚙️ แบบจำลองระบบควบคุมการกระตุ้นสมองส่วนลึกแบบวงปิด 5 ขั้นตอน</h3>
+          <p data-i18n-html="m5.dbs.sub" class="text-xs text-[#64748b] mt-1">
             คลิกเลือกแต่ละขั้นตอนในสายการประมวลผล และทดลองปรับตัวเลื่อน <span class="font-mono-tech">Frequency (20–200 Hz)</span> และ <span class="font-mono-tech">Pulse Width (0.1–2.0 ms)</span> เพื่อจำลองการตอบสนองของการหลั่งโดปามีนตามแบบจำลอง ANN (150 Hidden Neurons, Levenberg–Marquardt)
           </p>
         </div>
@@ -641,8 +595,8 @@
         <div class="bg-[#f8fafc] border border-indigo-200 rounded-xl p-5 space-y-5">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
             <div>
-              <h4 class="text-sm font-bold text-[#0f172a]">🎯 ตัวสำรวจพารามิเตอร์กระตุ้น DBS (Stimulus Parameter Explorer)</h4>
-              <p class="text-xs text-[#64748b]">ปรับความถี่พัลส์และความกว้างพัลส์เพื่อดูการตอบสนองของความเข้มข้นโดปามีนและดัชนีประสิทธิภาพพลังงาน</p>
+              <h4 data-i18n="m5.exp.title" class="text-sm font-bold text-[#0f172a]">🎯 ตัวสำรวจพารามิเตอร์กระตุ้น DBS (Stimulus Parameter Explorer)</h4>
+              <p data-i18n="m5.exp.sub" class="text-xs text-[#64748b]">ปรับความถี่พัลส์และความกว้างพัลส์เพื่อดูการตอบสนองของความเข้มข้นโดปามีนและดัชนีประสิทธิภาพพลังงาน</p>
             </div>
             <span class="formula-pill-indigo self-start">ANN: 150 Hidden Neurons · LM</span>
           </div>
@@ -650,20 +604,20 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <div class="flex justify-between text-xs font-medium mb-1">
-                <span class="text-[#334155]">ความถี่การกระตุ้น <span class="font-mono-tech">Stimulation Frequency</span></span>
+                <span data-i18n-html="m5.exp.freq" class="text-[#334155]">ความถี่การกระตุ้น <span class="font-mono-tech">Stimulation Frequency</span></span>
                 <span id="dbs-freq-label" class="font-mono-tech font-bold text-[#0d9488]">100 Hz</span>
               </div>
               <input id="dbs-freq-slider" type="range" min="20" max="200" step="5" value="100" class="w-full" />
               <div class="flex justify-between font-mono-tech text-[10px] text-[#64748b] mt-0.5">
                 <span>20 Hz</span>
-                <span>100 Hz (จุดเหมาะสมทางสรีรวิทยา)</span>
+                <span data-i18n="m5.exp.freqMid">100 Hz (จุดเหมาะสมทางสรีรวิทยา)</span>
                 <span>200 Hz</span>
               </div>
             </div>
 
             <div>
               <div class="flex justify-between text-xs font-medium mb-1">
-                <span class="text-[#334155]">ความกว้างพัลส์กระตุ้น <span class="font-mono-tech">Pulse Width</span></span>
+                <span data-i18n-html="m5.exp.pw" class="text-[#334155]">ความกว้างพัลส์กระตุ้น <span class="font-mono-tech">Pulse Width</span></span>
                 <span id="dbs-pw-label" class="font-mono-tech font-bold text-[#4f46e5]">1.00 ms</span>
               </div>
               <input id="dbs-pw-slider" type="range" min="0.1" max="2.0" step="0.05" value="1.0" class="w-full" />
@@ -677,24 +631,24 @@
 
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <div class="bg-white border border-slate-200 rounded-xl p-3.5">
-              <div class="text-[11px] text-[#64748b]">การหลั่งโดปามีนที่กระตุ้นได้ (<span class="font-mono-tech">Δ[DA]<sub>evoked</sub></span>)</div>
+              <div data-i18n-html="m5.exp.o1" class="text-[11px] text-[#64748b]">การหลั่งโดปามีนที่กระตุ้นได้ (<span class="font-mono-tech">Δ[DA]<sub>evoked</sub></span>)</div>
               <div id="dbs-out-da" class="font-mono-tech text-lg font-bold text-[#0d9488] mt-0.5">245 nM</div>
-              <div class="text-[10px] text-[#64748b] mt-0.5">จุดสูงสุดทางสรีรวิทยาที่ ~100 Hz</div>
+              <div data-i18n="m5.exp.o1s" class="text-[10px] text-[#64748b] mt-0.5">จุดสูงสุดทางสรีรวิทยาที่ ~100 Hz</div>
             </div>
             <div class="bg-white border border-slate-200 rounded-xl p-3.5">
-              <div class="text-[11px] text-[#64748b]">อัตราการฟื้นคืนระดับ Tonic Striatum</div>
+              <div data-i18n="m5.exp.o2" class="text-[11px] text-[#64748b]">อัตราการฟื้นคืนระดับ Tonic Striatum</div>
               <div id="dbs-out-tonic" class="font-mono-tech text-lg font-bold text-[#0284c7] mt-0.5">97.2%</div>
-              <div class="text-[10px] text-[#64748b] mt-0.5">เทียบค่าสมดุลปกติ</div>
+              <div data-i18n="m5.exp.o2s" class="text-[10px] text-[#64748b] mt-0.5">เทียบค่าสมดุลปกติ</div>
             </div>
             <div class="bg-white border border-slate-200 rounded-xl p-3.5">
-              <div class="text-[11px] text-[#64748b]">ประจุต่อเฟส (Charge Density Index)</div>
+              <div data-i18n="m5.exp.o3" class="text-[11px] text-[#64748b]">ประจุต่อเฟส (Charge Density Index)</div>
               <div id="dbs-out-charge" class="font-mono-tech text-lg font-bold text-[#4f46e5] mt-0.5">1.00×</div>
-              <div class="text-[10px] text-[#64748b] mt-0.5">สัดส่วนตามความกว้างพัลส์</div>
+              <div data-i18n="m5.exp.o3s" class="text-[10px] text-[#64748b] mt-0.5">สัดส่วนตามความกว้างพัลส์</div>
             </div>
             <div class="bg-[#fef3c7]/50 border border-amber-200 rounded-xl p-3.5">
-              <div class="text-[11px] text-amber-900">สถานะประสิทธิภาพพลังงาน (Energy Efficiency)</div>
+              <div data-i18n="m5.exp.o4" class="text-[11px] text-amber-900">สถานะประสิทธิภาพพลังงาน (Energy Efficiency)</div>
               <div id="dbs-out-eff" class="font-mono-tech text-sm font-bold text-[#d97706] mt-1">เหมาะสมสูงสุด (Optimal)</div>
-              <div class="text-[10px] text-amber-800 mt-0.5">หลีกเลี่ยงภาวะกระตุ้นเกินความจำเป็น</div>
+              <div data-i18n="m5.exp.o4s" class="text-[10px] text-amber-800 mt-0.5">หลีกเลี่ยงภาวะกระตุ้นเกินความจำเป็น</div>
             </div>
           </div>
         </div>
@@ -704,11 +658,11 @@
     <!-- ===================================================================== -->
     <!-- โมดูลที่ 6: การประยุกต์ใช้จริงในโลกแห่งความเป็นจริง (IRL Applications)  -->
     <!-- ===================================================================== -->
-    <section id="module-6" class="scroll-mt-32 space-y-6">
+    <section id="module-6" class="scroll-mt-32 space-y-6 module-divider">
       <div class="max-w-4xl space-y-2">
-        <span class="text-xs font-bold uppercase tracking-wider text-[#0d9488]">โมดูลที่ 6 · การประยุกต์ใช้จริงในโลกแห่งความเป็นจริง (Real-World / IRL Applications &amp; Translational Systems)</span>
-        <h2 class="text-xl sm:text-2xl font-bold text-[#0f172a]">การเปลี่ยนผ่านจากห้องปฏิบัติการสู่ห้องผ่าตัดจริง อุตสาหกรรมยา และระบบประสาทเทียม</h2>
-        <p class="text-sm text-[#334155] leading-relaxed">
+        <span data-i18n="m6.tag" class="text-xs font-bold uppercase tracking-wider text-[#0d9488]">โมดูลที่ 6 · การประยุกต์ใช้จริงในโลกแห่งความเป็นจริง (Real-World / IRL Applications &amp; Translational Systems)</span>
+        <h2 data-i18n="m6.title" class="text-xl sm:text-2xl font-bold text-[#0f172a]">การเปลี่ยนผ่านจากห้องปฏิบัติการสู่ห้องผ่าตัดจริง อุตสาหกรรมยา และระบบประสาทเทียม</h2>
+        <p data-i18n-html="m6.intro" class="read-body prose-comfort text-[#334155]">
           การผสานขั้วไฟฟ้าขนาดเล็กพิเศษระดับไมโครเมตรเข้ากับวงจร <span class="formula-pill-indigo">CMOS Potentiostat</span> สัญญาณรบกวนระดับพิโคแอมแปร์ไม่ได้หยุดอยู่เพียงงานวิจัยพื้นฐาน แต่กำลังถูกนำไปใช้งานจริง (<span class="font-mono-tech text-[#0f766e] font-semibold">IRL Deployment</span>) ในห้องผ่าตัดประสาทศัลยศาสตร์ เครื่องกระตุ้นสมองอัตโนมัติ การพัฒนายาทางจิตเวช อิเล็กทรอนิกส์ชีวภาพแบบนิ่มสำหรับแกนสมอง–ลำไส้ และอินเทอร์เฟซสมองกับคอมพิวเตอร์รุ่นถัดไป
         </p>
       </div>
@@ -717,8 +671,8 @@
       <div class="clinical-card p-6 sm:p-8 space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h3 class="text-base sm:text-lg font-bold text-[#0f172a]">🌍 ตัวสำรวจการประยุกต์ใช้จริงทั้ง 6 สถานการณ์ (Interactive 6-Scenario IRL Deployment Explorer)</h3>
-            <p class="text-xs text-[#64748b] mt-0.5">คลิกเลือกแต่ละสถานการณ์ด้านล่างเพื่อตรวจสอบปัญหาในโลกจริง ชุดฮาร์ดแวร์/อัลกอริทึมที่ติดตั้งใช้งาน และข้อได้เปรียบเหนือเทคโนโลยีดั้งเดิม</p>
+            <h3 data-i18n="m6.exp.title" class="text-base sm:text-lg font-bold text-[#0f172a]">🌍 ตัวสำรวจการประยุกต์ใช้จริงทั้ง 6 สถานการณ์ (Interactive 6-Scenario IRL Deployment Explorer)</h3>
+            <p data-i18n="m6.exp.sub" class="text-xs text-[#64748b] mt-0.5">คลิกเลือกแต่ละสถานการณ์ด้านล่างเพื่อตรวจสอบปัญหาในโลกจริง ชุดฮาร์ดแวร์/อัลกอริทึมที่ติดตั้งใช้งาน และข้อได้เปรียบเหนือเทคโนโลยีดั้งเดิม</p>
           </div>
           <span class="formula-pill self-start">6 Real-World Deployments</span>
         </div>
@@ -730,71 +684,71 @@
       <!-- ตารางเปรียบเทียบเทคโนโลยีดั้งเดิม vs. ระบบไบโอเซนเซอร์เคมีไฟฟ้า + CMOS สมัยใหม่ -->
       <div class="clinical-card p-6 space-y-4">
         <div>
-          <h3 class="text-base font-bold text-[#0f172a]">⚖️ ตารางเปรียบเทียบความพร้อมใช้งานจริง: เทคโนโลยีดั้งเดิม vs. ระบบไบโอเซนเซอร์เคมีไฟฟ้า + CMOS สมัยใหม่</h3>
-          <p class="text-xs text-[#64748b] mt-0.5">เปรียบเทียบสมรรถนะในสภาพแวดล้อมคลินิกและอุตสาหกรรมระหว่างระบบรุ่นเก่ากับสถาปัตยกรรมเคมีไฟฟ้าความละเอียดสูง</p>
+          <h3 data-i18n="m6.tbl.title" class="text-base font-bold text-[#0f172a]">⚖️ ตารางเปรียบเทียบความพร้อมใช้งานจริง: เทคโนโลยีดั้งเดิม vs. ระบบไบโอเซนเซอร์เคมีไฟฟ้า + CMOS สมัยใหม่</h3>
+          <p data-i18n="m6.tbl.sub" class="text-xs text-[#64748b] mt-0.5">เปรียบเทียบสมรรถนะในสภาพแวดล้อมคลินิกและอุตสาหกรรมระหว่างระบบรุ่นเก่ากับสถาปัตยกรรมเคมีไฟฟ้าความละเอียดสูง</p>
         </div>
 
         <div class="overflow-x-auto custom-scrollbar rounded-xl border border-slate-200">
           <table class="w-full text-left border-collapse min-w-[820px]">
             <thead>
               <tr class="bg-[#f1f5f9] text-[#0f172a] text-xs border-b border-slate-200">
-                <th class="py-3 px-4 font-semibold w-48">มิติการประเมินผล</th>
-                <th class="py-3 px-4 font-semibold">เทคโนโลยีดั้งเดิม (Microdialysis / Open-Loop DBS / Spike-Only BCI)</th>
-                <th class="py-3 px-4 font-semibold text-[#0f766e]">ระบบไบโอเซนเซอร์เคมีไฟฟ้า + CMOS สมัยใหม่</th>
-                <th class="py-3 px-4 font-semibold">ผลลัพธ์เชิงประจักษ์ในโลกจริง (IRL Impact)</th>
+                <th data-i18n="m6.tbl.h1" class="py-3 px-4 font-semibold w-48">มิติการประเมินผล</th>
+                <th data-i18n="m6.tbl.h2" class="py-3 px-4 font-semibold">เทคโนโลยีดั้งเดิม (Microdialysis / Open-Loop DBS / Spike-Only BCI)</th>
+                <th data-i18n="m6.tbl.h3" class="py-3 px-4 font-semibold text-[#0f766e]">ระบบไบโอเซนเซอร์เคมีไฟฟ้า + CMOS สมัยใหม่</th>
+                <th data-i18n="m6.tbl.h4" class="py-3 px-4 font-semibold">ผลลัพธ์เชิงประจักษ์ในโลกจริง (IRL Impact)</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-200 text-xs text-[#334155] bg-white">
               <tr class="hover:bg-slate-50 transition">
-                <td class="py-3.5 px-4 font-bold text-[#0f172a]">1. ความละเอียดเชิงเวลา<br><span class="font-mono-tech text-[11px] font-normal text-[#64748b]">Temporal Resolution</span></td>
-                <td class="py-3.5 px-4 text-[#64748b]">
+                <td data-i18n-html="m6.tbl.r1c1" class="py-3.5 px-4 font-bold text-[#0f172a]">1. ความละเอียดเชิงเวลา<br><span class="font-mono-tech text-[11px] font-normal text-[#64748b]">Temporal Resolution</span></td>
+                <td data-i18n-html="m6.tbl.r1c2" class="py-3.5 px-4 text-[#64748b]">
                   <strong class="text-[#334155]">Microdialysis:</strong> 5–20 นาทีต่อตัวอย่าง (สูญเสียพลวัตการหลั่งระดับเสี้ยววินาที)<br>
                   <strong class="text-[#334155]">Open-Loop DBS:</strong> ส่งพัลส์คงที่ตลอด 24 ชม. ไม่ปรับตามอาการ
                 </td>
-                <td class="py-3.5 px-4">
+                <td data-i18n-html="m6.tbl.r1c3" class="py-3.5 px-4">
                   <strong class="text-[#0f766e]">FSCV / RPV-PLSR:</strong> <span class="font-mono-tech font-semibold">100 ms (10 Hz)</span> สำหรับ Phasic และ <span class="font-mono-tech font-semibold">10 วินาที</span> (M-CSWV) สำหรับ Tonic
                 </td>
-                <td class="py-3.5 px-4">
+                <td data-i18n="m6.tbl.r1c4" class="py-3.5 px-4">
                   จับสัญญาณ Reward Prediction Errors ในมนุษย์ขณะผ่าตัด และปรับการกระตุ้น DBS ทันทีที่ระดับโดปามีนลดลง
                 </td>
               </tr>
 
               <tr class="hover:bg-slate-50 transition">
-                <td class="py-3.5 px-4 font-bold text-[#0f172a]">2. ขนาดทางกายภาพ<br><span class="font-mono-tech text-[11px] font-normal text-[#64748b]">Spatial Footprint</span></td>
-                <td class="py-3.5 px-4 text-[#64748b]">
+                <td data-i18n-html="m6.tbl.r2c1" class="py-3.5 px-4 font-bold text-[#0f172a]">2. ขนาดทางกายภาพ<br><span class="font-mono-tech text-[11px] font-normal text-[#64748b]">Spatial Footprint</span></td>
+                <td data-i18n-html="m6.tbl.r2c2" class="py-3.5 px-4 text-[#64748b]">
                   <strong class="text-[#334155]">Microdialysis Probe:</strong> เส้นผ่านศูนย์กลาง ~200–300 µm ทำลายหลอดเลือดฝอยและเนื้อเยื่อรอบข้าง<br>
                   <strong class="text-[#334155]">BOLD fMRI:</strong> ขนาด Voxel ระดับ ~3–4 mm
                 </td>
-                <td class="py-3.5 px-4">
+                <td data-i18n-html="m6.tbl.r2c3" class="py-3.5 px-4">
                   <strong class="text-[#0284c7]">CFME / µIP-CFM:</strong> เส้นผ่านศูนย์กลางเพียง <span class="font-mono-tech font-semibold">7 µm</span> (เล็กกว่า Microdialysis ~30–40 เท่า) และชิป CMOS เล็กระดับ <span class="font-mono-tech font-semibold">0.0176–0.256 mm²/ช่อง</span>
                 </td>
-                <td class="py-3.5 px-4">
+                <td data-i18n="m6.tbl.r2c4" class="py-3.5 px-4">
                   เจาะจงระดับจุลภาคใน Nucleus Accumbens / Striatum โดยไม่ทำลายวงจรประสาทและฝังร่วมกับหัวตรวจทางคลินิกได้
                 </td>
               </tr>
 
               <tr class="hover:bg-slate-50 transition">
-                <td class="py-3.5 px-4 font-bold text-[#0f172a]">3. ความเข้ากันได้ทางชีวภาพระยะยาว<br><span class="font-mono-tech text-[11px] font-normal text-[#64748b]">Chronic Biocompatibility</span></td>
-                <td class="py-3.5 px-4 text-[#64748b]">
+                <td data-i18n-html="m6.tbl.r3c1" class="py-3.5 px-4 font-bold text-[#0f172a]">3. ความเข้ากันได้ทางชีวภาพระยะยาว<br><span class="font-mono-tech text-[11px] font-normal text-[#64748b]">Chronic Biocompatibility</span></td>
+                <td data-i18n-html="m6.tbl.r3c2" class="py-3.5 px-4 text-[#64748b]">
                   <strong class="text-[#334155]">โพรบซิลิคอน/โลหะแข็ง (&gt;100 GPa):</strong> เกิดแรงเฉือนจากการเต้นของชีพจร เกิดแผลเป็นเกลีย (Glial Scar) และเกิด Biofouling ภายในไม่กี่สัปดาห์
                 </td>
-                <td class="py-3.5 px-4">
+                <td data-i18n-html="m6.tbl.r3c3" class="py-3.5 px-4">
                   <strong class="text-[#4f46e5]">NeuroString (SEBS / Polyimide &lt;30 kPa) + PEDOT/CNT + PSB:</strong> ยืดหยุ่นตามเนื้อเยื่อสมองและลำไส้ ป้องกันการเกาะติดของโปรตีน
                 </td>
-                <td class="py-3.5 px-4">
+                <td data-i18n-html="m6.tbl.r3c4" class="py-3.5 px-4">
                   บันทึกสัญญาณในสมองได้นานกว่า <span class="font-mono-tech font-semibold text-[#0f766e]">1 ปี</span> และฝังในทางเดินอาหารที่บีบตัวตลอดเวลา (Gut-Brain Axis) ได้อย่างปลอดภัย
                 </td>
               </tr>
 
               <tr class="hover:bg-slate-50 transition">
-                <td class="py-3.5 px-4 font-bold text-[#0f172a]">4. ความพร้อมสำหรับวงปิด<br><span class="font-mono-tech text-[11px] font-normal text-[#64748b]">Closed-Loop Readiness</span></td>
-                <td class="py-3.5 px-4 text-[#64748b]">
+                <td data-i18n-html="m6.tbl.r4c1" class="py-3.5 px-4 font-bold text-[#0f172a]">4. ความพร้อมสำหรับวงปิด<br><span class="font-mono-tech text-[11px] font-normal text-[#64748b]">Closed-Loop Readiness</span></td>
+                <td data-i18n-html="m6.tbl.r4c2" class="py-3.5 px-4 text-[#64748b]">
                   <strong class="text-[#334155]">Spike-Only BCI / Open-Loop DBS:</strong> อ่านได้เฉพาะสัญญาณไฟฟ้าเซลล์ประสาท ไม่รู้สภาวะอารมณ์/แรงจูงใจ และใช้พลังงานสูงจากวงจรตั้งโต๊ะขนาดใหญ่
                 </td>
-                <td class="py-3.5 px-4">
+                <td data-i18n-html="m6.tbl.r4c3" class="py-3.5 px-4">
                   <strong class="text-[#d97706]">Neurochemostat / WINCS Harmoni / Hall et al. SoC:</strong> กินไฟต่ำ <span class="font-mono-tech font-semibold">3.74 µW</span> สัญญาณรบกวน <span class="font-mono-tech font-semibold">39.2 pA<sub>rms</sub></span> พร้อมตัวถอดรหัส AI/ANN บนชิป
                 </td>
-                <td class="py-3.5 px-4">
+                <td data-i18n="m6.tbl.r4c4" class="py-3.5 px-4">
                   ทำงานเป็นเทอร์โมสตัททางเคมีประสาทแบบไร้สาย ยืดอายุแบตเตอรี่เครื่องกระตุ้นสมอง และลดผลข้างเคียงด้านการพูดและการเคลื่อนไหว
                 </td>
               </tr>
@@ -807,52 +761,52 @@
     <!-- ===================================================================== -->
     <!-- โมดูลที่ 7: บทสังเคราะห์งานวิจัยภาษาไทยฉบับสมบูรณ์                     -->
     <!-- ===================================================================== -->
-    <section id="module-7" class="scroll-mt-32 space-y-6">
+    <section id="module-7" class="scroll-mt-32 space-y-6 module-divider">
       <div class="clinical-card p-6 sm:p-8 space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
           <div>
-            <span class="text-xs font-bold uppercase tracking-wider text-[#0f766e]">โมดูลที่ 7 · เอกสารวิชาการฉบับสมบูรณ์</span>
-            <h2 class="text-xl sm:text-2xl font-bold text-[#0f172a] mt-0.5">📄 บทสังเคราะห์งานวิจัยฉบับสมบูรณ์ (Full Thai Research Report + IRL Synthesis)</h2>
-            <p class="text-xs text-[#64748b] mt-0.5">ครอบคลุมหลักการออกแบบร่วม เคมีไฟฟ้า วัสดุศาสตร์ วงจร CMOS ประสาทวิทยาศาสตร์คลินิก และการประยุกต์ใช้จริงในโลกแห่งความเป็นจริง</p>
+            <span data-i18n="m7.tag" class="text-xs font-bold uppercase tracking-wider text-[#0f766e]">โมดูลที่ 7 · เอกสารวิชาการฉบับสมบูรณ์</span>
+            <h2 data-i18n="m7.title" class="text-xl sm:text-2xl font-bold text-[#0f172a] mt-0.5">📄 บทสังเคราะห์งานวิจัยฉบับสมบูรณ์ (Full Thai Research Report + IRL Synthesis)</h2>
+            <p data-i18n="m7.sub" class="text-xs text-[#64748b] mt-0.5">ครอบคลุมหลักการออกแบบร่วม เคมีไฟฟ้า วัสดุศาสตร์ วงจร CMOS ประสาทวิทยาศาสตร์คลินิก และการประยุกต์ใช้จริงในโลกแห่งความเป็นจริง</p>
           </div>
-          <button id="btn-copy-research" class="px-4 py-2.5 rounded-xl bg-[#0d9488] hover:bg-[#0f766e] text-white font-semibold text-xs shadow-xs transition self-start sm:self-auto shrink-0">
+          <button id="btn-copy-research" data-i18n="m7.copyBtn" class="px-4 py-2.5 rounded-xl bg-[#0d9488] hover:bg-[#0f766e] text-white font-semibold text-xs shadow-xs transition self-start sm:self-auto shrink-0">
             📋 คัดลอกบทความวิจัย (Copy Thai Report)
           </button>
         </div>
 
-        <div id="copy-toast" class="hidden text-xs font-semibold text-[#0f766e] bg-teal-50 border border-teal-200 rounded-xl px-4 py-3">
+        <div id="copy-toast" data-i18n="m7.copyToast" class="hidden text-xs font-semibold text-[#0f766e] bg-teal-50 border border-teal-200 rounded-xl px-4 py-3">
           ✅ คัดลอกบทความวิจัยภาษาไทยทั้งหมดไปยังคลิปบอร์ดเรียบร้อยแล้ว
         </div>
 
-        <article id="thai-research-text" class="bg-[#f8fafc] border border-slate-200 rounded-xl p-5 sm:p-7 text-xs sm:text-sm text-[#334155] space-y-4 leading-relaxed">
+        <article id="thai-research-text" class="bg-[#f8fafc] border border-slate-200 rounded-2xl p-6 sm:p-8 text-sm sm:text-[15px] text-[#334155] space-y-6 leading-relaxed prose-comfort mx-auto">
           <div class="space-y-1.5">
-            <h3 class="text-sm sm:text-base font-bold text-[#0f172a]">1. บทนำและสถาปัตยกรรมการออกแบบร่วม (System Co-Design)</h3>
-            <p>การตรวจวัดความเข้มข้นของสารสื่อประสาทในสมองสิ่งมีชีวิตแบบเรียลไทม์จำเป็นต้องอาศัยการออกแบบร่วมกันอย่างใกล้ชิดระหว่าง 3 ศาสตร์หลัก ได้แก่ (1) วิศวกรรมวัสดุขั้วไฟฟ้าขนาดไมโครและนาโนที่ฝังในเนื้อเยื่อสมองได้โดยรบกวนระบบประสาทน้อยที่สุด เช่น เส้นใยคาร์บอน T-650 ขนาดเส้นผ่านศูนย์กลาง 7 µm (ปลายเปิด ~100 µm) ท่อนาโนคาร์บอน (CNTs) กราฟีน เพชรเจือโบรอน (BDD) พอลิเมอร์นำไฟฟ้า PEDOT และอนุภาคนาโนทองคำ (AuNPs) (2) การออกแบบวงจรรวมแอนะล็อก CMOS Potentiostat สัญญาณรบกวนต่ำระดับพิโคแอมแปร์ (10⁻¹² A) ที่สามารถสร้างคลื่นกวาดศักย์ความเร็วสูงพร้อมแยกสัญญาณรีดอกซ์ขนาดเล็ก (&lt;10 nA) ออกจากกระแสประจุพื้นหลังขนาดใหญ่ (300–400 nA) และ (3) การประมวลผลสัญญาณด้วยเคมีมิติ (Chemometrics) เพื่อแยกสารสื่อประสาทที่มีโครงสร้างคล้ายคลึงกันในการศึกษาโรคพาร์กินสัน การเสพติดสารเสพติด และโรคซึมเศร้า</p>
+            <h3 data-i18n="m7.s1.h" class="text-sm sm:text-base font-bold text-[#0f172a]">1. บทนำและสถาปัตยกรรมการออกแบบร่วม (System Co-Design)</h3>
+            <p data-i18n="m7.s1.p">การตรวจวัดความเข้มข้นของสารสื่อประสาทในสมองสิ่งมีชีวิตแบบเรียลไทม์จำเป็นต้องอาศัยการออกแบบร่วมกันอย่างใกล้ชิดระหว่าง 3 ศาสตร์หลัก ได้แก่ (1) วิศวกรรมวัสดุขั้วไฟฟ้าขนาดไมโครและนาโนที่ฝังในเนื้อเยื่อสมองได้โดยรบกวนระบบประสาทน้อยที่สุด เช่น เส้นใยคาร์บอน T-650 ขนาดเส้นผ่านศูนย์กลาง 7 µm (ปลายเปิด ~100 µm) ท่อนาโนคาร์บอน (CNTs) กราฟีน เพชรเจือโบรอน (BDD) พอลิเมอร์นำไฟฟ้า PEDOT และอนุภาคนาโนทองคำ (AuNPs) (2) การออกแบบวงจรรวมแอนะล็อก CMOS Potentiostat สัญญาณรบกวนต่ำระดับพิโคแอมแปร์ (10⁻¹² A) ที่สามารถสร้างคลื่นกวาดศักย์ความเร็วสูงพร้อมแยกสัญญาณรีดอกซ์ขนาดเล็ก (&lt;10 nA) ออกจากกระแสประจุพื้นหลังขนาดใหญ่ (300–400 nA) และ (3) การประมวลผลสัญญาณด้วยเคมีมิติ (Chemometrics) เพื่อแยกสารสื่อประสาทที่มีโครงสร้างคล้ายคลึงกันในการศึกษาโรคพาร์กินสัน การเสพติดสารเสพติด และโรคซึมเศร้า</p>
           </div>
 
           <div class="space-y-1.5">
-            <h3 class="text-sm sm:text-base font-bold text-[#0f172a]">2. เทคนิคทางเคมีไฟฟ้าและความท้าทาย Phasic–Tonic (Electrochemical Modalities)</h3>
-            <p>เทคนิค Fast-Scan Cyclic Voltammetry (FSCV) กวาดรูปคลื่นศักย์ไฟฟ้าสามเหลี่ยมจาก -0.4 V ถึง +1.3 V vs. Ag/AgCl ด้วยอัตราเร็วมาตรฐาน 400 V/s (ช่วงกวาด 8.5 ms ที่ความถี่ซ้ำ 10 Hz หรือ Duty Cycle 8.5%) ทำให้โดปามีนเกิดออกซิเดชันเป็น Dopamine-o-quinone ที่ ~+0.60 V และรีดักชันกลับที่ ~-0.20 V ตามสมการ Randles–Ševčík (i_p = (2.69×10⁵) n^(3/2) A D^(1/2) C v^(1/2)) อย่างไรก็ตาม ความจุชั้นคู่ไฟฟ้าของขั้วทำงาน (C_dl ≈ 1 nF) ทำให้เกิดกระแสประจุพื้นหลัง I_BG = C_dl·v สูงถึง 400 nA จึงต้องใช้การหักลบพื้นหลัง (Background Subtraction) ซึ่งทำให้สูญเสียข้อมูลระดับพื้นฐานต่อเนื่อง (Tonic Baseline) นักวิจัยจึงพัฒนาเทคนิค M-CSWV (ความละเอียด 10 วินาที วัดค่าฐานโดปามีนใน rat NAcc ได้ 134 ± 32 nM), FSCAV, Rapid-Pulse Voltammetry ร่วมกับ PLSR (RPV-PLSR), Steered FSCV (ลด LoD ลง 39 เท่าเหลือ 0.17 nM) และอนุพันธ์อันดับสอง SDBR เพื่อวัดทั้งสัญญาณฉับพลัน (Phasic) และค่าฐาน (Tonic)</p>
+            <h3 data-i18n="m7.s2.h" class="text-sm sm:text-base font-bold text-[#0f172a]">2. เทคนิคทางเคมีไฟฟ้าและความท้าทาย Phasic–Tonic (Electrochemical Modalities)</h3>
+            <p data-i18n="m7.s2.p">เทคนิค Fast-Scan Cyclic Voltammetry (FSCV) กวาดรูปคลื่นศักย์ไฟฟ้าสามเหลี่ยมจาก -0.4 V ถึง +1.3 V vs. Ag/AgCl ด้วยอัตราเร็วมาตรฐาน 400 V/s (ช่วงกวาด 8.5 ms ที่ความถี่ซ้ำ 10 Hz หรือ Duty Cycle 8.5%) ทำให้โดปามีนเกิดออกซิเดชันเป็น Dopamine-o-quinone ที่ ~+0.60 V และรีดักชันกลับที่ ~-0.20 V ตามสมการ Randles–Ševčík (i_p = (2.69×10⁵) n^(3/2) A D^(1/2) C v^(1/2)) อย่างไรก็ตาม ความจุชั้นคู่ไฟฟ้าของขั้วทำงาน (C_dl ≈ 1 nF) ทำให้เกิดกระแสประจุพื้นหลัง I_BG = C_dl·v สูงถึง 400 nA จึงต้องใช้การหักลบพื้นหลัง (Background Subtraction) ซึ่งทำให้สูญเสียข้อมูลระดับพื้นฐานต่อเนื่อง (Tonic Baseline) นักวิจัยจึงพัฒนาเทคนิค M-CSWV (ความละเอียด 10 วินาที วัดค่าฐานโดปามีนใน rat NAcc ได้ 134 ± 32 nM), FSCAV, Rapid-Pulse Voltammetry ร่วมกับ PLSR (RPV-PLSR), Steered FSCV (ลด LoD ลง 39 เท่าเหลือ 0.17 nM) และอนุพันธ์อันดับสอง SDBR เพื่อวัดทั้งสัญญาณฉับพลัน (Phasic) และค่าฐาน (Tonic)</p>
           </div>
 
           <div class="space-y-1.5">
-            <h3 class="text-sm sm:text-base font-bold text-[#0f172a]">3. วัสดุขั้วไฟฟ้าขั้นสูงและกลศาสตร์แบบยืดหยุ่น (Nanomaterials &amp; Flexible Mechanics)</h3>
-            <p>ขั้วไฟฟ้าเส้นใยคาร์บอนเปลือยมีความเปราะหักง่าย เกิดการอุดตันบนพื้นผิว (Biofouling) จากเซโรโทนิน (5-HT) และโปรตีน รวมถึงถูกกัดกร่อนเมื่อกวาดศักย์เกิน +1.3 V การดัดแปรผิวด้วยวัสดุนาโนช่วยยกระดับประสิทธิภาพอย่างก้าวกระโดด เช่น คอมโพสิต PEDOT-CNT ร่วมกับ SWV ลดขีดจำกัดการตรวจวัด (LoD) ของโดปามีนเหลือ 2.03 ± 0.09 nM เส้นใย PEI-CNT ให้ค่า LoD 5.0 nM และหัวตรวจ µIP-CFM ให้ค่า LoD 5.7 nM พร้อมเสถียรภาพในสมองยาวนานกว่า 1 ปี การเคลือบ PEDOT:Nafion เพิ่มความไวเป็น 46 ± 13 nA/µM และคัดแยกสารรบกวน Ascorbic Acid ได้สูงถึง 1540 ± 150 เท่า ขณะที่ชั้นเพชร B-NCD (หนา 1 µm เกรน 50 nm) ช่วยป้องกันการกัดกร่อน ด้านกลศาสตร์ การเปลี่ยนฐานรองจากซิลิคอน (&gt;100 GPa) เป็นพอลิเมอร์ยืดหยุ่น (PDMS 1.9 MPa, SEBS NeuroString, Polyimide, Parylene-C) ร่วมกับตัวช่วยสอดใส่ที่ละลายน้ำได้ (Pullulan) หรือเส้นใย fGCFs ช่วยลดความไม่เข้ากันเชิงกลกับเนื้อเยื่อสมอง (&lt;30 kPa) และลดการเกิดแผลเป็นเกลีย</p>
+            <h3 data-i18n="m7.s3.h" class="text-sm sm:text-base font-bold text-[#0f172a]">3. วัสดุขั้วไฟฟ้าขั้นสูงและกลศาสตร์แบบยืดหยุ่น (Nanomaterials &amp; Flexible Mechanics)</h3>
+            <p data-i18n="m7.s3.p">ขั้วไฟฟ้าเส้นใยคาร์บอนเปลือยมีความเปราะหักง่าย เกิดการอุดตันบนพื้นผิว (Biofouling) จากเซโรโทนิน (5-HT) และโปรตีน รวมถึงถูกกัดกร่อนเมื่อกวาดศักย์เกิน +1.3 V การดัดแปรผิวด้วยวัสดุนาโนช่วยยกระดับประสิทธิภาพอย่างก้าวกระโดด เช่น คอมโพสิต PEDOT-CNT ร่วมกับ SWV ลดขีดจำกัดการตรวจวัด (LoD) ของโดปามีนเหลือ 2.03 ± 0.09 nM เส้นใย PEI-CNT ให้ค่า LoD 5.0 nM และหัวตรวจ µIP-CFM ให้ค่า LoD 5.7 nM พร้อมเสถียรภาพในสมองยาวนานกว่า 1 ปี การเคลือบ PEDOT:Nafion เพิ่มความไวเป็น 46 ± 13 nA/µM และคัดแยกสารรบกวน Ascorbic Acid ได้สูงถึง 1540 ± 150 เท่า ขณะที่ชั้นเพชร B-NCD (หนา 1 µm เกรน 50 nm) ช่วยป้องกันการกัดกร่อน ด้านกลศาสตร์ การเปลี่ยนฐานรองจากซิลิคอน (&gt;100 GPa) เป็นพอลิเมอร์ยืดหยุ่น (PDMS 1.9 MPa, SEBS NeuroString, Polyimide, Parylene-C) ร่วมกับตัวช่วยสอดใส่ที่ละลายน้ำได้ (Pullulan) หรือเส้นใย fGCFs ช่วยลดความไม่เข้ากันเชิงกลกับเนื้อเยื่อสมอง (&lt;30 kPa) และลดการเกิดแผลเป็นเกลีย</p>
           </div>
 
           <div class="space-y-1.5">
-            <h3 class="text-sm sm:text-base font-bold text-[#0f172a]">4. สถาปัตยกรรมวงจร CMOS Potentiostat และตัวขยายสัญญาณส่วนหน้า (Low-Noise CMOS AFEs)</h3>
-            <p>การออกแบบวงจร CMOS Potentiostat ต้องจัดการสมดุลระหว่างสัญญาณรบกวน พิสัยไดนามิก กำลังงาน และพื้นที่ซิลิคอน วงจรของ Hall et al. (IEEE TBioCAS 2022) บนเทคโนโลยี 0.18 µm CMOS ใช้สถาปัตยกรรม 2-Electrode Pseudo-Differential Class-AB Common-Mode Rejection (CMR) ร่วมกับ Regulated Current Conveyor และตัวแปลง 1st-Order I-ΔΣ ADC (ใช้เทคนิค DEM และ Chopping) สามารถหักล้างกระแสพื้นหลังได้สูงสุด 290 nA_pp ทำสัญญาณรบกวนขาเข้าได้ 26.5 pArms (วงจรเปิด) และ 39.2 pArms (ต่อโหลดขั้วไฟฟ้า 1 nF) ที่แบนด์วิดท์ 5 kHz คิดเป็น Effective Dynamic Range 83 dB ด้วยกำลังงานเฉลี่ยเพียง 3.74 µW เมื่อทำงานแบบ Duty-Cycled ส่วนอาร์เรย์ 128-Ch Programmable R-TIA ใช้ตัวต้านทาน n-well ความหนาแน่นสูงบรรจุได้ 128 ช่องในพื้นที่ 2.25 mm² (0.0176 mm²/ช่อง, สัญญาณรบกวน 220 pArms)</p>
+            <h3 data-i18n="m7.s4.h" class="text-sm sm:text-base font-bold text-[#0f172a]">4. สถาปัตยกรรมวงจร CMOS Potentiostat และตัวขยายสัญญาณส่วนหน้า (Low-Noise CMOS AFEs)</h3>
+            <p data-i18n="m7.s4.p">การออกแบบวงจร CMOS Potentiostat ต้องจัดการสมดุลระหว่างสัญญาณรบกวน พิสัยไดนามิก กำลังงาน และพื้นที่ซิลิคอน วงจรของ Hall et al. (IEEE TBioCAS 2022) บนเทคโนโลยี 0.18 µm CMOS ใช้สถาปัตยกรรม 2-Electrode Pseudo-Differential Class-AB Common-Mode Rejection (CMR) ร่วมกับ Regulated Current Conveyor และตัวแปลง 1st-Order I-ΔΣ ADC (ใช้เทคนิค DEM และ Chopping) สามารถหักล้างกระแสพื้นหลังได้สูงสุด 290 nA_pp ทำสัญญาณรบกวนขาเข้าได้ 26.5 pArms (วงจรเปิด) และ 39.2 pArms (ต่อโหลดขั้วไฟฟ้า 1 nF) ที่แบนด์วิดท์ 5 kHz คิดเป็น Effective Dynamic Range 83 dB ด้วยกำลังงานเฉลี่ยเพียง 3.74 µW เมื่อทำงานแบบ Duty-Cycled ส่วนอาร์เรย์ 128-Ch Programmable R-TIA ใช้ตัวต้านทาน n-well ความหนาแน่นสูงบรรจุได้ 128 ช่องในพื้นที่ 2.25 mm² (0.0176 mm²/ช่อง, สัญญาณรบกวน 220 pArms)</p>
           </div>
 
           <div class="space-y-1.5">
-            <h3 class="text-sm sm:text-base font-bold text-[#0f172a]">5. Chemometrics การประยุกต์ใช้ทางคลินิก และระบบ Closed-Loop DBS</h3>
-            <p>การวิเคราะห์องค์ประกอบหลัก (PCR พร้อม Malinowski's F-test), PLSR, Elastic Net และโครงข่ายประสาทเทียมเชิงลึก (1D-CNN, LSTM และ Physics-Informed Neural Networks: PINNs) ช่วยแยกความเข้มข้นของโดปามีนและเซโรโทนินออกจากสัญญาณ pH และการเลื่อนของขั้วอ้างอิงได้อย่างแม่นยำ ในการศึกษาทางคลินิก การกระตุ้น STN-DBS ช่วยเพิ่มระดับ Tonic Dopamine ในโรคพาร์กินสัน ส่วนในงานวิจัยการเสพติด โคเคนเพิ่มทั้ง Phasic DA (2.4 เท่า) และ Tonic DA (1.9 เท่า) ขณะที่เฟนทานิลและออกซิโคโดนปรับเปลี่ยนระดับ Tonic เป็นหลัก สำหรับการผ่าตัดในมนุษย์ขณะตื่นของ Kishida, Montague และ Lee พบว่าโดปามีนระดับต่ำกว่าวินาทีใน Striatum เข้ารหัสทั้ง Actual และ Counterfactual Reward Prediction Errors สุดท้าย ระบบ Closed-Loop DBS เชื่อมต่อวงจรตรวจวัดเข้ากับตัวกรอง Butterworth 100 Hz และโครงข่ายประสาทเทียม ANN (150 Hidden Neurons, Levenberg–Marquardt) เพื่อปรับความถี่ (~100 Hz) และความกว้างพัลส์ (0.1–2.0 ms) แบบอัตโนมัติ</p>
+            <h3 data-i18n="m7.s5.h" class="text-sm sm:text-base font-bold text-[#0f172a]">5. Chemometrics การประยุกต์ใช้ทางคลินิก และระบบ Closed-Loop DBS</h3>
+            <p data-i18n="m7.s5.p">การวิเคราะห์องค์ประกอบหลัก (PCR พร้อม Malinowski's F-test), PLSR, Elastic Net และโครงข่ายประสาทเทียมเชิงลึก (1D-CNN, LSTM และ Physics-Informed Neural Networks: PINNs) ช่วยแยกความเข้มข้นของโดปามีนและเซโรโทนินออกจากสัญญาณ pH และการเลื่อนของขั้วอ้างอิงได้อย่างแม่นยำ ในการศึกษาทางคลินิก การกระตุ้น STN-DBS ช่วยเพิ่มระดับ Tonic Dopamine ในโรคพาร์กินสัน ส่วนในงานวิจัยการเสพติด โคเคนเพิ่มทั้ง Phasic DA (2.4 เท่า) และ Tonic DA (1.9 เท่า) ขณะที่เฟนทานิลและออกซิโคโดนปรับเปลี่ยนระดับ Tonic เป็นหลัก สำหรับการผ่าตัดในมนุษย์ขณะตื่นของ Kishida, Montague และ Lee พบว่าโดปามีนระดับต่ำกว่าวินาทีใน Striatum เข้ารหัสทั้ง Actual และ Counterfactual Reward Prediction Errors สุดท้าย ระบบ Closed-Loop DBS เชื่อมต่อวงจรตรวจวัดเข้ากับตัวกรอง Butterworth 100 Hz และโครงข่ายประสาทเทียม ANN (150 Hidden Neurons, Levenberg–Marquardt) เพื่อปรับความถี่ (~100 Hz) และความกว้างพัลส์ (0.1–2.0 ms) แบบอัตโนมัติ</p>
           </div>
 
           <div class="space-y-1.5">
-            <h3 class="text-sm sm:text-base font-bold text-[#0f172a]">6. การประยุกต์ใช้จริงในโลกแห่งความเป็นจริง (Real-World Clinical &amp; Industrial Translation)</h3>
-            <p>ในโลกแห่งความเป็นจริง เทคโนโลยีขั้วไฟฟ้าขนาดไมโครและวงจร CMOS Potentiostat สัญญาณรบกวนระดับพิโคแอมแปร์กำลังถูกนำไปใช้งานจริงใน 6 ด้านสำคัญ ได้แก่ (1) ห้องผ่าตัดสมองขณะผู้ป่วยรู้สึกตัว (Awake Human DBS Surgery) เพื่อทำแผนที่การหลั่งโดปามีนใน Striatum ภายในกรอบเวลา IRB 15–60 นาที ช่วยยืนยันตำแหน่งฝังขั้วกระตุ้นสมอง (2) เครื่องกระตุ้นสมองแบบวงปิดอัตโนมัติ (Adaptive Closed-Loop DBS / Neurochemostat / WINCS Harmoni / MAVEN) ที่ทำหน้าที่เป็นเทอร์โมสตัททางเคมีประสาท ส่งพัลส์กระตุ้น ~100 Hz เฉพาะเมื่อโดปามีนลดต่ำ ช่วยยืดอายุแบตเตอรี่และลดผลข้างเคียงด้านการเคลื่อนไหวผิดปกติ (Dyskinesia) และการพูด (3) อุตสาหกรรมพัฒนายาทางจิตเวชและการบำบัดการเสพติด โดยใช้อาร์เรย์ 128 ช่องและ MAVEN ติดตามการตอบสนองของโดปามีนและเซโรโทนินต่อยา Escitalopram (+42% 5-HT) โคเคน เฟนทานิล และออกซิโคโดนภายในไม่กี่นาที (4) อิเล็กทรอนิกส์ชีวภาพแบบนิ่มสำหรับสมองและลำไส้ (NeuroString SEBS / Polyimide &lt;30 kPa) ที่ตรวจวัดเซโรโทนินแบบเรียลไทม์ในทางเดินอาหารที่บีบตัวตลอดเวลาเพื่อศึกษาโรค IBS และภาวะซึมเศร้าผ่านแกนสมอง–ลำไส้ (5) การถ่ายภาพสมองร่วมกับเครื่อง MRI (Multimodal WINCS + BOLD fMRI) เพื่อเชื่อมโยงการหลั่งโดปามีนระดับนาโนโมลาร์เข้ากับการเชื่อมต่อเครือข่ายสมองทั้งระบบ และ (6) อินเทอร์เฟซสมองกับคอมพิวเตอร์รุ่นถัดไป (Next-Gen Neurochemical BCIs) ที่ใช้ขั้วไฟฟ้าสองโหมด (PEDOT/CNT + PSB) บันทึกทั้งศักย์ไฟฟ้าเซลล์ประสาทและสภาวะอารมณ์/แรงจูงใจพร้อมกัน</p>
+            <h3 data-i18n="m7.s6.h" class="text-sm sm:text-base font-bold text-[#0f172a]">6. การประยุกต์ใช้จริงในโลกแห่งความเป็นจริง (Real-World Clinical &amp; Industrial Translation)</h3>
+            <p data-i18n="m7.s6.p">ในโลกแห่งความเป็นจริง เทคโนโลยีขั้วไฟฟ้าขนาดไมโครและวงจร CMOS Potentiostat สัญญาณรบกวนระดับพิโคแอมแปร์กำลังถูกนำไปใช้งานจริงใน 6 ด้านสำคัญ ได้แก่ (1) ห้องผ่าตัดสมองขณะผู้ป่วยรู้สึกตัว (Awake Human DBS Surgery) เพื่อทำแผนที่การหลั่งโดปามีนใน Striatum ภายในกรอบเวลา IRB 15–60 นาที ช่วยยืนยันตำแหน่งฝังขั้วกระตุ้นสมอง (2) เครื่องกระตุ้นสมองแบบวงปิดอัตโนมัติ (Adaptive Closed-Loop DBS / Neurochemostat / WINCS Harmoni / MAVEN) ที่ทำหน้าที่เป็นเทอร์โมสตัททางเคมีประสาท ส่งพัลส์กระตุ้น ~100 Hz เฉพาะเมื่อโดปามีนลดต่ำ ช่วยยืดอายุแบตเตอรี่และลดผลข้างเคียงด้านการเคลื่อนไหวผิดปกติ (Dyskinesia) และการพูด (3) อุตสาหกรรมพัฒนายาทางจิตเวชและการบำบัดการเสพติด โดยใช้อาร์เรย์ 128 ช่องและ MAVEN ติดตามการตอบสนองของโดปามีนและเซโรโทนินต่อยา Escitalopram (+42% 5-HT) โคเคน เฟนทานิล และออกซิโคโดนภายในไม่กี่นาที (4) อิเล็กทรอนิกส์ชีวภาพแบบนิ่มสำหรับสมองและลำไส้ (NeuroString SEBS / Polyimide &lt;30 kPa) ที่ตรวจวัดเซโรโทนินแบบเรียลไทม์ในทางเดินอาหารที่บีบตัวตลอดเวลาเพื่อศึกษาโรค IBS และภาวะซึมเศร้าผ่านแกนสมอง–ลำไส้ (5) การถ่ายภาพสมองร่วมกับเครื่อง MRI (Multimodal WINCS + BOLD fMRI) เพื่อเชื่อมโยงการหลั่งโดปามีนระดับนาโนโมลาร์เข้ากับการเชื่อมต่อเครือข่ายสมองทั้งระบบ และ (6) อินเทอร์เฟซสมองกับคอมพิวเตอร์รุ่นถัดไป (Next-Gen Neurochemical BCIs) ที่ใช้ขั้วไฟฟ้าสองโหมด (PEDOT/CNT + PSB) บันทึกทั้งศักย์ไฟฟ้าเซลล์ประสาทและสภาวะอารมณ์/แรงจูงใจพร้อมกัน</p>
           </div>
         </article>
       </div>
@@ -862,1316 +816,18 @@
 
   <footer class="border-t border-slate-200 bg-white py-6 mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#64748b]">
-      <span>ระบบสำรวจไบโอเซนเซอร์ทางเคมีไฟฟ้าและวงจร CMOS สำหรับการตรวจวัดสารสื่อประสาทในสมอง</span>
+      <span data-i18n="footer.title">ระบบสำรวจไบโอเซนเซอร์ทางเคมีไฟฟ้าและวงจร CMOS สำหรับการตรวจวัดสารสื่อประสาทในสมอง</span>
       <span class="font-mono-tech text-[#0f766e] font-medium">Light Clinical &amp; Laboratory Precision Edition</span>
     </div>
   </footer>
 
-  <script>
-    // =========================================================================
-    // ตั้งค่าเริ่มต้นของ Chart.js สำหรับธีม Light Clinical / Laboratory Precision
-    // =========================================================================
-    Chart.defaults.color = '#475569';
-    Chart.defaults.borderColor = '#e2e8f0';
-    Chart.defaults.font.family = '"Noto Sans Thai", "Inter", sans-serif';
-
-    const clinicalTooltipConfig = {
-      backgroundColor: '#ffffff',
-      titleColor: '#0f172a',
-      bodyColor: '#334155',
-      borderColor: '#cbd5e1',
-      borderWidth: 1,
-      padding: 10,
-      boxPadding: 4,
-      usePointStyle: true
-    };
-
-    // =========================================================================
-    // โมดูลที่ 1: ตัวสลับสำรวจ 4 เสาหลักข้อจำกัดสู่คลินิก
-    // =========================================================================
-    const bottlenecksThai = [
-      {
-        id: 'tonic',
-        pillar: 'เสาหลักที่ 1 · การประมวลผลสัญญาณ',
-        title: 'การสูญเสียค่าพื้นฐาน Tonic จากการหักพื้นหลัง',
-        subtitle: 'Background Subtraction Tonic Loss',
-        problem: 'เทคนิค FSCV มาตรฐานต้องหักลบโวลแทมโมแกรมก่อนการกระตุ้นเพื่อแยกกระแสฟาราเดอิก (<10 nA) ออกจากกระแสประจุพื้นหลังขนาดใหญ่ (300–400 nA) ทำให้ข้อมูลความเข้มข้นพื้นฐานต่อเนื่อง (Tonic Baseline) สูญหายไปทั้งหมดและเกิดความคลาดเคลื่อนเมื่อพื้นหลังเลื่อน',
-        solution: 'ใช้เทคนิค M-CSWV (ความละเอียด 10 วินาที วัดค่าฐานใน rat NAcc ได้ 134 ± 32 nM), FSCAV, RPV-PLSR, Steered FSCV (LoD 0.17 nM) และอนุพันธ์อันดับสอง SDBR เพื่อกู้คืนค่าฐาน Tonic โดยยังคงความไวระดับสูง'
-      },
-      {
-        id: 'etching',
-        pillar: 'เสาหลักที่ 2 · เคมีไฟฟ้าของพื้นผิว',
-        title: 'การกัดกร่อนคาร์บอนที่ศักย์สูงกว่า +1.3 V vs. Ag/AgCl',
-        subtitle: 'Carbon Etching > +1.3 V',
-        problem: 'การกวาดศักย์ไฟฟ้าสูงเกิน +1.3 V vs. Ag/AgCl แม้จะช่วยกระตุ้นหมู่ฟังก์ชันออกซิเจนและทำความสะอาดผิวขั้วไฟฟ้า แต่จะออกซิไดซ์และกัดกร่อนเนื้อคาร์บอนอย่างต่อเนื่อง ส่งผลให้ขั้วไฟฟ้าบางลงและจำกัดอายุการใช้งานในการฝังระยะยาว',
-        solution: 'การเคลือบเพชรนาโนคริสตัลไลน์เจือโบรอน B-NCD (หนา 1 µm เกรน 50 nm), หัวตรวจรุกรานต่ำพิเศษ µIP-CFM (พิสูจน์เสถียรภาพในสมองมากกว่า 1 ปี) และอินเทอร์เฟซดักจับอนุมูลอิสระ ROS'
-      },
-      {
-        id: 'reference',
-        pillar: 'เสาหลักที่ 3 · เสถียรภาพขั้วอ้างอิง',
-        title: 'การเลื่อนของศักย์ขั้วอ้างอิง Ag/AgCl ในร่างกาย',
-        subtitle: 'In Vivo Ag/AgCl Potential Drift',
-        problem: 'ขั้วไฟฟ้าอ้างอิง Ag/AgCl ที่สัมผัสกับน้ำหล่อเลี้ยงสมองและโปรตีนเป็นเวลานานจะเกิดการละลายของชั้น AgCl และเกิด Biofouling ทำให้ศักย์ไฟฟ้าอ้างอิงเลื่อนไปตามเวลา ส่งผลให้ตำแหน่งพีคออกซิเดชันคลาดเคลื่อน',
-        solution: 'ใช้ขั้วอ้างอิงฟิล์มบางสถานะของแข็งและเคลือบพอลิเมอร์ป้องกัน PSB (Poly(sulfobetaine)) บนทั้ง Polyimide PEDOT/CNT MEA และขั้วอ้างอิง Ag/AgCl (งานวิจัยปี 2026) ร่วมกับอัลกอริทึม Elastic Net'
-      },
-      {
-        id: 'mechanics',
-        pillar: 'เสาหลักที่ 4 · ชีวกลศาสตร์และเนื้อเยื่อ',
-        title: 'ความไม่เข้ากันทางกลและการเกิดแผลเป็นเกลีย',
-        subtitle: 'Mechanical Mismatch & Glial Encapsulation',
-        problem: 'โพรบซิลิคอนและโลหะแข็ง (>100 GPa) มีความแข็งสูงกว่าเนื้อเยื่อสมอง (<30 kPa) กว่าหนึ่งล้านเท่า แรงสั่นสะเทือนระดับไมโครจากการหายใจและชีพจรทำให้เกิดแรงเฉือน ทำลายเซลล์ประสาท และเกิดแผลเป็นเกลียห่อหุ้มปลายขั้วไฟฟ้า',
-        solution: 'ใช้ฐานโพลีเมอร์ยืดหยุ่น (Polyimide, Parylene-C, SU-8, PDMS 1.9 MPa, SEBS NeuroString) ร่วมกับสารช่วยสอดใส่ที่ละลายน้ำได้ชั่วคราว (Pullulan) หรือเส้นใยคาร์บอนคล้ายแก้วแบบยืดหยุ่น fGCFs'
-      }
-    ];
-
-    function initBottlenecksModule() {
-      const tabsEl = document.getElementById('bottleneck-tabs');
-      const detailEl = document.getElementById('bottleneck-detail');
-      let selectedId = bottlenecksThai[0].id;
-
-      function render() {
-        tabsEl.innerHTML = bottlenecksThai.map(item => {
-          const isActive = item.id === selectedId;
-          return `<button data-id="${item.id}" class="text-left p-3.5 rounded-xl border transition ${
-            isActive
-              ? 'bg-teal-50 border-[#0d9488] text-[#0f172a] shadow-xs'
-              : 'bg-white border-slate-200 text-[#334155] hover:bg-slate-50'
-          }">
-            <div class="text-[11px] font-semibold ${isActive ? 'text-[#0f766e]' : 'text-[#64748b]'}">${item.pillar}</div>
-            <div class="text-xs sm:text-sm font-bold mt-1 leading-snug text-[#0f172a]">${item.title}</div>
-          </button>`;
-        }).join('');
-
-        const activeItem = bottlenecksThai.find(b => b.id === selectedId);
-        detailEl.innerHTML = `
-          <div class="space-y-3">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-2.5 border-b border-slate-200">
-              <h4 class="text-sm sm:text-base font-bold text-[#0f172a]">${activeItem.title}</h4>
-              <span class="formula-pill self-start">${activeItem.subtitle}</span>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-              <div class="bg-white border border-amber-200 rounded-xl p-4">
-                <div class="inline-block px-2 py-0.5 rounded bg-[#fef3c7] text-[#d97706] text-xs font-bold mb-2">⚠️ กลไกข้อจำกัดทางวิศวกรรม</div>
-                <p class="text-xs sm:text-sm text-[#334155] leading-relaxed">${activeItem.problem}</p>
-              </div>
-              <div class="bg-white border border-teal-200 rounded-xl p-4">
-                <div class="inline-block px-2 py-0.5 rounded bg-teal-50 text-[#0f766e] text-xs font-bold mb-2">✅ แนวทางแก้ไขและนวัตกรรม</div>
-                <p class="text-xs sm:text-sm text-[#334155] leading-relaxed">${activeItem.solution}</p>
-              </div>
-            </div>
-          </div>
-        `;
-
-        tabsEl.querySelectorAll('button').forEach(btn => {
-          btn.addEventListener('click', () => {
-            selectedId = btn.getAttribute('data-id');
-            render();
-          });
-        });
-      }
-      render();
-    }
-
-    // =========================================================================
-    // โมดูลที่ 2: เครื่องจำลองฟิสิกส์ FSCV และตาราง 7 เทคนิคทางเคมีไฟฟ้า
-    // =========================================================================
-    let fscvRawChart = null;
-    let fscvSubChart = null;
-
-    function computeFscvWaveforms(scanRate, cdl, conc) {
-      const steps = 120;
-      const sweepLabels = [];
-      const bgSeries = [];
-      const totalSeries = [];
-      const cvLoopPoints = [];
-
-      // ความไวมาตรฐาน CFME ที่ 400 V/s ประมาณ 13.0 nA/µM และแปรผันตาม √(v/400)
-      const peakOx = 13.0 * (conc / 1000.0) * Math.sqrt(scanRate / 400.0);
-      const peakRed = -0.62 * peakOx;
-      const ibgNominal = cdl * scanRate; // nA = nF * V/s
-
-      for (let i = 0; i <= steps; i++) {
-        const frac = i / steps;
-        let potential, direction;
-        if (frac <= 0.5) {
-          potential = -0.4 + (frac / 0.5) * 1.7;
-          direction = 1; // Forward sweep (-0.4 V -> +1.3 V)
-        } else {
-          potential = 1.3 - ((frac - 0.5) / 0.5) * 1.7;
-          direction = -1; // Reverse sweep (+1.3 V -> -0.4 V)
-        }
-
-        sweepLabels.push(potential.toFixed(2) + ' V');
-
-        // กระแสฟาราเดอิก (พีคออกซิเดชันที่ +0.60 V และพีครีดักชันที่ -0.20 V)
-        let iFaradaic = 0;
-        if (direction === 1) {
-          iFaradaic = peakOx * Math.exp(-Math.pow((potential - 0.60) / 0.16, 2));
-        } else {
-          iFaradaic = peakRed * Math.exp(-Math.pow((potential - (-0.20)) / 0.18, 2));
-        }
-
-        // กระแสประจุพื้นหลัง I_BG = C_dl * v พร้อมผลตอบสนอง RC ตอนกลับทิศทาง
-        const rcTurn = direction === 1
-          ? (1 - Math.exp(-(potential - (-0.4)) / 0.07))
-          : -(1 - Math.exp(-(1.3 - potential) / 0.07));
-        const iCap = ibgNominal * rcTurn * (1 + 0.12 * (potential + 0.4));
-
-        bgSeries.push(Number(iCap.toFixed(2)));
-        totalSeries.push(Number((iCap + iFaradaic).toFixed(2)));
-        cvLoopPoints.push({
-          x: Number(potential.toFixed(3)),
-          y: Number(iFaradaic.toFixed(3))
-        });
-      }
-
-      return { sweepLabels, bgSeries, totalSeries, cvLoopPoints, peakOx, ibgNominal };
-    }
-
-    function initFscvSimulatorModule() {
-      const sliderRate = document.getElementById('input-scan-rate');
-      const sliderCdl = document.getElementById('input-cdl');
-      const sliderConc = document.getElementById('input-conc');
-
-      const ctxRaw = document.getElementById('fscvRawChart').getContext('2d');
-      fscvRawChart = new Chart(ctxRaw, {
-        type: 'line',
-        data: {
-          labels: [],
-          datasets: [
-            {
-              label: 'กระแสรวม (I_total = I_BG + I_redox)',
-              data: [],
-              borderColor: '#0284c7',
-              backgroundColor: 'rgba(2, 132, 199, 0.10)',
-              borderWidth: 2.2,
-              pointRadius: 0,
-              fill: true,
-              tension: 0.25
-            },
-            {
-              label: 'กระแสพื้นหลัง (I_BG = C_dl · v)',
-              data: [],
-              borderColor: '#d97706',
-              borderDash: [5, 4],
-              borderWidth: 1.8,
-              pointRadius: 0,
-              fill: false,
-              tension: 0.25
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { mode: 'index', intersect: false },
-          plugins: {
-            legend: { labels: { font: { size: 11 }, boxWidth: 12, color: '#334155' } },
-            tooltip: {
-              ...clinicalTooltipConfig,
-              callbacks: {
-                title: (items) => `ศักย์ไฟฟ้ากวาด: ${items[0].label}`,
-                label: (item) => `${item.dataset.label}: ${item.parsed.y} nA`
-              }
-            }
-          },
-          scales: {
-            x: {
-              ticks: { maxTicksLimit: 7, font: { size: 10 }, color: '#475569' },
-              grid: { color: '#e2e8f0' },
-              title: { display: true, text: 'ศักย์ไฟฟ้าตลอดคาบการกวาด (-0.4 V → +1.3 V → -0.4 V)', font: { size: 10 }, color: '#64748b' }
-            },
-            y: {
-              ticks: { font: { size: 10 }, color: '#475569' },
-              grid: { color: '#e2e8f0' },
-              title: { display: true, text: 'กระแสไฟฟ้า (nA)', font: { size: 10 }, color: '#64748b' }
-            }
-          }
-        }
-      });
-
-      const ctxSub = document.getElementById('fscvSubChart').getContext('2d');
-      fscvSubChart = new Chart(ctxSub, {
-        type: 'scatter',
-        data: {
-          datasets: [{
-            label: 'CV หลังหักพื้นหลัง (Dopamine Redox Loop)',
-            data: [],
-            borderColor: '#0d9488',
-            backgroundColor: 'rgba(13, 148, 136, 0.14)',
-            borderWidth: 2.5,
-            showLine: true,
-            pointRadius: 0,
-            fill: true,
-            tension: 0.3
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { labels: { font: { size: 11 }, boxWidth: 12, color: '#334155' } },
-            tooltip: {
-              ...clinicalTooltipConfig,
-              callbacks: {
-                label: (ctx) => `ศักย์ไฟฟ้า: ${ctx.parsed.x.toFixed(2)} V | กระแสสุทธิ: ${ctx.parsed.y.toFixed(2)} nA`
-              }
-            }
-          },
-          scales: {
-            x: {
-              type: 'linear',
-              min: -0.45,
-              max: 1.35,
-              ticks: { font: { size: 10 }, color: '#475569' },
-              grid: { color: '#e2e8f0' },
-              title: { display: true, text: 'ศักย์ไฟฟ้าเทียบกับ Ag/AgCl (V)', font: { size: 10 }, color: '#64748b' }
-            },
-            y: {
-              ticks: { font: { size: 10 }, color: '#475569' },
-              grid: { color: '#e2e8f0' },
-              title: { display: true, text: 'กระแสฟาราเดอิกสุทธิ I_redox (nA)', font: { size: 10 }, color: '#64748b' }
-            }
-          }
-        }
-      });
-
-      function updateSimulator() {
-        const rate = Number(sliderRate.value);
-        const cdl = Number(sliderCdl.value);
-        const conc = Number(sliderConc.value);
-
-        document.getElementById('label-scan-rate').textContent = `${rate} V/s`;
-        document.getElementById('label-cdl').textContent = `${cdl.toFixed(1)} nF`;
-        document.getElementById('label-conc').textContent = `${conc} nM`;
-
-        const res = computeFscvWaveforms(rate, cdl, conc);
-        const sbr = res.ibgNominal > 0 ? (res.peakOx / res.ibgNominal) * 100 : 0;
-        const activeSweepMs = (3.4 / rate) * 1000;
-        const dutyCyclePct = (activeSweepMs / 100.0) * 100; // รอบ 100 ms (10 Hz)
-
-        document.getElementById('metric-sweep-time').textContent = `${activeSweepMs.toFixed(2)} ms`;
-        document.getElementById('metric-duty-cycle').textContent = `${dutyCyclePct.toFixed(1)}%`;
-        document.getElementById('metric-ibg').textContent = `${res.ibgNominal.toFixed(1)} nA`;
-        document.getElementById('metric-ip').textContent = `${res.peakOx.toFixed(2)} nA`;
-        document.getElementById('metric-sbr').textContent = `${sbr.toFixed(2)}%`;
-
-        fscvRawChart.data.labels = res.sweepLabels;
-        fscvRawChart.data.datasets[0].data = res.totalSeries;
-        fscvRawChart.data.datasets[1].data = res.bgSeries;
-        fscvRawChart.update();
-
-        fscvSubChart.data.datasets[0].data = res.cvLoopPoints;
-        fscvSubChart.update();
-      }
-
-      sliderRate.addEventListener('input', updateSimulator);
-      sliderCdl.addEventListener('input', updateSimulator);
-      sliderConc.addEventListener('input', updateSimulator);
-      updateSimulator();
-    }
-
-    const modalitiesThai = [
-      {
-        name: 'Standard FSCV',
-        mode: 'Phasic',
-        waveform: 'รูปคลื่นสามเหลี่ยม -0.4 ถึง +1.3 V vs. Ag/AgCl ที่ 300–1200 V/s (มาตรฐาน 400 V/s) ความถี่ 10 Hz',
-        resolution: '100 ms (ช่วงกวาด 8.5 ms ที่ 400 V/s)',
-        selectivity: 'อาศัยตำแหน่งพีคออกซิเดชัน/รีดักชันเฉพาะตัวและการหักลบพื้นหลังก่อนการกระตุ้น',
-        limitation: 'กระแสพื้นหลัง 300–400 nA ต้องการวงจร Dynamic Range สูง และสูญเสียค่าฐาน Tonic'
-      },
-      {
-        name: 'Fixed-Potential Amperometry / Chronoamperometry',
-        mode: 'Tonic',
-        waveform: 'ป้อนศักย์ไฟฟ้าคงที่ (Constant Bias) หรือขั้นบันไดศักย์เดี่ยว (Potential Step)',
-        resolution: 'ต่อเนื่อง (ระดับต่ำกว่ามิลลิวินาที)',
-        selectivity: 'ใช้เยื่อเลือกผ่าน (oPD, mPD, Nafion) และเอนไซม์ออกซิเดสสำหรับวัด Glutamate / GABA / ACh',
-        limitation: 'ขาดความจำเพาะทางเคมีในตัวเองหากมีสารรบกวนที่ออกซิไดซ์ที่ศักย์ใกล้เคียงกัน'
-      },
-      {
-        name: 'FSCAV',
-        mode: 'Tonic',
-        waveform: 'ลำดับรูปคลื่นควบคุมการดูดซับ (Controlled Adsorption Waveform) บนขั้ว CFME',
-        resolution: 'ระดับวินาที (Tonic Timescale)',
-        selectivity: 'อาศัยสมดุลการดูดซับของโมเลกุลโดปามีนบนพื้นผิวเส้นใยคาร์บอนในเวลาที่กำหนด',
-        limitation: 'ความเร็วเชิงเวลาช้ากว่า FSCV และไวต่อการเปลี่ยนแปลงจลนพลศาสตร์การดูดซับ'
-      },
-      {
-        name: 'M-CSWV / N-MCSWV',
-        mode: 'Tonic',
-        waveform: 'ชุดพัลส์สี่เหลี่ยมแบบขั้นบันไดหลายรอบ (Multi-Cyclic Square Wave)',
-        resolution: '10 วินาที (วัดค่าฐานโดปามีนใน rat NAcc ได้ 134 ± 32 nM)',
-        selectivity: 'การหักลบพื้นหลังแบบไดนามิกร่วมกับการจำลองกระแสประจุพื้นหลัง',
-        limitation: 'ความละเอียด 10 วินาทีไม่สามารถจับการหลั่งแบบ Phasic ระดับเสี้ยววินาทีได้'
-      },
-      {
-        name: 'RPV + PLSR',
-        mode: 'Phasic + Tonic',
-        waveform: 'ลำดับพัลส์ศักย์ไฟฟ้าแบบขั้นบันไดเร็ว (Rapid-Pulse Voltammetry)',
-        resolution: 'หลายช่วงเวลาพร้อมกัน (ทั้ง Phasic และ Tonic)',
-        selectivity: 'ใช้การถดถอยกำลังสองน้อยที่สุดบางส่วน (PLSR) แยกโดปามีนและเซโรโทนินออกจากกระแสทรานเซียนต์',
-        limitation: 'ต้องอาศัยชุดข้อมูลฝึกสอนหลายตัวแปร (Training Set) ที่ครอบคลุมสารรบกวนในเนื้อเยื่อ'
-      },
-      {
-        name: 'Steered FSCV',
-        mode: 'Phasic',
-        waveform: 'ปรับลดความชัน dV/dt บริเวณพีคออกซิเดชันของโดปามีน (~+0.60 V) แบบปรับตัวได้',
-        resolution: '100 ms (ความถี่ซ้ำ 10 Hz)',
-        selectivity: 'กดกระแสประจุ Non-Faradaic เฉพาะจุดพีค ลด LoD ลง 39 เท่าเหลือ 0.17 nM',
-        limitation: 'ต้องอาศัยวงจรป้อนกลับแบบวนซ้ำ (Iterative Steering) เพื่อปรับรูปคลื่นให้ตรงยอดปฏิกิริยา'
-      },
-      {
-        name: 'FSCV + SDBR',
-        mode: 'Phasic + Tonic',
-        waveform: 'รูปคลื่นสามเหลี่ยม FSCV มาตรฐาน ร่วมกับการประมวลผลอนุพันธ์อันดับสอง (2nd Derivative)',
-        resolution: '100 ms (ระดับรายสแกน)',
-        selectivity: 'คำนวณอนุพันธ์อันดับสองข้ามพีคออกซิเดชันเพื่อกำจัดการเลื่อนของพื้นหลังอย่างช้าๆ',
-        limitation: 'รักษาความไว Phasic และใช้กับฮาร์ดแวร์ FSCV เดิมได้ทันทีโดยไม่ต้องดัดแปลงวงจร'
-      }
-    ];
-
-    function initModalitiesTable() {
-      const tbody = document.getElementById('modality-table-body');
-      const buttons = document.querySelectorAll('.mod-btn');
-      let currentFilter = 'all';
-
-      function renderTable() {
-        const list = currentFilter === 'all'
-          ? modalitiesThai
-          : modalitiesThai.filter(m => m.mode === currentFilter);
-
-        tbody.innerHTML = list.map(m => {
-          const badgeClass = m.mode === 'Phasic + Tonic'
-            ? 'bg-teal-50 text-[#0f766e] border-teal-200'
-            : m.mode === 'Tonic'
-              ? 'bg-[#fef3c7] text-[#d97706] border-amber-200'
-              : 'bg-sky-50 text-[#0284c7] border-sky-200';
-          return `<tr class="hover:bg-slate-50 transition">
-            <td class="py-3 px-4 font-bold text-[#0f172a]">${m.name}</td>
-            <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${badgeClass}">${m.mode}</span></td>
-            <td class="py-3 px-4 text-[#334155]">${m.waveform}</td>
-            <td class="py-3 px-4 font-mono-tech text-[#0f766e] font-medium">${m.resolution}</td>
-            <td class="py-3 px-4 text-[#334155]">${m.selectivity}</td>
-            <td class="py-3 px-4 text-[#64748b]">${m.limitation}</td>
-          </tr>`;
-        }).join('');
-      }
-
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentFilter = btn.getAttribute('data-filter');
-          buttons.forEach(b => {
-            b.className = b === btn
-              ? 'mod-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#0d9488] text-white transition'
-              : 'mod-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition';
-          });
-          renderTable();
-        });
-      });
-      renderTable();
-    }
-
-    // =========================================================================
-    // โมดูลที่ 3: วัสดุขั้วไฟฟ้าและกลศาสตร์แบบยืดหยุ่น (7 กลุ่มวัสดุ)
-    // =========================================================================
-    const materialsCardsData = [
-      {
-        id: 'bare-cfme',
-        name: '1. Bare CFME (T-650)',
-        tag: 'เส้นใยคาร์บอนมาตรฐานอ้างอิง',
-        lod: '~15–50 nM (ขึ้นกับอัตราการกวาด)',
-        sensitivity: '13.0 nA/µM (โดปามีนมาตรฐาน) · 1.7 nA/µM (ภาวะพาร์กินสัน)',
-        selectivity: 'ค่าคงที่เวลา RC สั้นมาก (C_dl ≈ 1 nF) ตอบสนองได้ระดับมิลลิวินาที',
-        stability: 'รุกรานเนื้อเยื่อต่ำกว่า Microdialysis แต่เปราะหักง่าย เกิด Biofouling เร็ว และถูกกัดกร่อนเมื่อกวาดเกิน +1.3 V'
-      },
-      {
-        id: 'pei-cnt',
-        name: '2. PEI-CNT / CNTYM',
-        tag: 'เส้นใยท่อนาโนคาร์บอนปั่นเปียก',
-        lod: '5.0 nM (PEI-CNT) · 13 ± 2 nM (CNTYM)',
-        sensitivity: 'จลนพลศาสตร์ถ่ายโอนอิเล็กตรอนเร็ว (ลด ΔEp) รองรับการสแกนสูงสุด 90 Hz',
-        selectivity: 'ต้านทานการอุดตันจาก Serotonin (5-HT) และ 5-HIAA ได้ดีเยี่ยม',
-        stability: 'PEI-CNT คงความไวได้นาน >10 ชม. ในหลอดทดลอง และ CNTYM คงความไว 100% ตลอด 4 ชม. ในสมอง'
-      },
-      {
-        id: 'nd-cooh',
-        name: '3. ND-COOH (Carboxylated Nanodiamonds)',
-        tag: 'อนุภาคนาโนเพชรหมู่ฟังก์ชันคาร์บอกซิล',
-        lod: 'ระดับนาโนโมลาร์ต่ำบนพื้นผิวคาร์บอนดัดแปร',
-        sensitivity: 'เพิ่มพื้นที่ผิวจำเพาะและหมู่ฟังก์ชันประจุลบดึงดูดไอออนบวกของโดปามีน',
-        selectivity: 'ผลักประจุลบของสารรบกวน Ascorbic Acid (AA) และ DOPAC ได้อย่างมีประสิทธิภาพ',
-        stability: 'ทนทานต่อการเกิดออกซิเดชันซ้ำๆ และลดการเกาะติดของโปรตีนในน้ำหล่อเลี้ยงสมอง'
-      },
-      {
-        id: 'bdd-bncd',
-        name: '4. BDD / B-NCD',
-        tag: 'เพชรเจือโบรอนและเพชรนาโนคริสตัลไลน์',
-        lod: '50 nM (W/BDD DPV) – 200 nM (Solid BDD FSCV)',
-        sensitivity: 'หน้าต่างศักย์ไฟฟ้ากว้างมากและกระแสพื้นหลังต่ำเป็นพิเศษ',
-        selectivity: 'ตรวจวัดได้ทั้ง Dopamine, Adenosine และสัญญาณไฟฟ้าเซลล์ประสาทเดี่ยว (Spikes)',
-        stability: 'ชั้น B-NCD หนา 1 µm (เกรน 50 nm) บนเส้นใยคาร์บอน 7 µm คงความไวได้ 93.3% หลัง 3 วันและป้องกันการกัดกร่อน'
-      },
-      {
-        id: 'pedot',
-        name: '5. PEDOT:Nafion / PEDOT-CNT',
-        tag: 'พอลิเมอร์นำไฟฟ้า + ท่อนาโนคาร์บอน',
-        lod: '2.03 ± 0.09 nM (PEDOT-CNT SWV — ต่ำที่สุด)',
-        sensitivity: '46 ± 13 nA/µM (PEDOT:Nafion — สูงกว่า Bare CFME ~3.5 เท่า)',
-        selectivity: 'อัตราส่วนคัดแยก DA/AA = 1540 ± 150 และ DA/DOPAC = 52 ± 4',
-        stability: 'ลด Impedance ทำให้บันทึกทั้งสารสื่อประสาทและ Spikes พร้อมกันได้บนฐาน Polyimide ยืดหยุ่น'
-      },
-      {
-        id: 'graphene-aunp',
-        name: '6. Graphene / AuNP / AuNS',
-        tag: 'กราฟีนและอนุภาคนาโนทองคำเร่งปฏิกิริยา',
-        lod: '20 nM (GR-FeTSPc) · 50 nM (AuNP CA)',
-        sensitivity: 'เร่งปฏิกิริยาเชิงไฟฟ้า (Electrocatalysis) ลดศักย์เกินของการเกิดปฏิกิริยา',
-        selectivity: 'แยกพีค DA และ 5-HT ได้ชัดเจน หรือติดฉลาก Aptamer บน Gold Nanostars (AuNS)',
-        stability: 'เหมาะสำหรับการตรวจวัดหลายสารพร้อมกันในเทคนิค DPV, SWV และ Chronoamperometry'
-      },
-      {
-        id: 'uip-cfm',
-        name: '7. µIP-CFM',
-        tag: 'หัวตรวจคาร์บอนไฟเบอร์รุกรานต่ำพิเศษ',
-        lod: '5.7 nM (Dopamine FSCV)',
-        sensitivity: 'ความไวระดับนาโนโมลาร์ตอนต้นสำหรับสัญญาณโดปามีนเรื้อรัง',
-        selectivity: 'ลดการกระตุ้นเซลล์เกลีย (Microglia / Astrocytes) รอบปลายหัวตรวจอย่างมาก',
-        stability: 'พิสูจน์เสถียรภาพในการตรวจวัดโดปามีนในสมองสิ่งมีชีวิตได้ยาวนานเกิน 1 ปี (> 1 Year)'
-      }
-    ];
-
-    function initMaterialsModule() {
-      const ctx = document.getElementById('materialBenchmarkChart').getContext('2d');
-      const btnLod = document.getElementById('btn-toggle-lod');
-      const btnSens = document.getElementById('btn-toggle-sens');
-      const captionEl = document.getElementById('material-benchmark-caption');
-
-      const lodData = {
-        labels: [
-          'PEDOT-CNT (SWV)',
-          'PEI-CNT Fiber',
-          'µIP-CFM Probe',
-          'CNT Yarn (CNTYM)',
-          'GR-FeTSPc (DPV)',
-          'AuNP (CA)',
-          'W/BDD (DPV)',
-          'Solid BDD (FSCV)'
-        ],
-        values: [2.03, 5.0, 5.7, 13.0, 20.0, 50.0, 50.0, 200.0],
-        label: 'ขีดจำกัดการตรวจวัดต่ำสุด LoD (nM — ยิ่งต่ำยิ่งดี)',
-        color: '#0d9488'
-      };
-
-      const sensData = {
-        labels: [
-          'PEDOT:Nafion',
-          'Tyrosinase/CeO₂/TiO₂',
-          'Bare CFME (มาตรฐาน)',
-          'Bare CFME (ภาวะพาร์กินสัน)'
-        ],
-        values: [46.0, 14.2, 13.0, 1.7],
-        label: 'ความไวในการตรวจวัด Sensitivity (nA/µM — ยิ่งสูงยิ่งดี)',
-        color: '#0284c7'
-      };
-
-      const matChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: lodData.labels,
-          datasets: [{
-            label: lodData.label,
-            data: lodData.values,
-            backgroundColor: lodData.color,
-            borderRadius: 6
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { labels: { font: { size: 11 }, color: '#334155' } },
-            tooltip: {
-              ...clinicalTooltipConfig,
-              callbacks: {
-                label: (item) => `${item.parsed.x} ${item.dataset.label.includes('LoD') ? 'nM' : 'nA/µM'}`
-              }
-            }
-          },
-          scales: {
-            x: { beginAtZero: true, ticks: { font: { size: 10 }, color: '#475569' }, grid: { color: '#e2e8f0' } },
-            y: { ticks: { font: { size: 10 }, color: '#334155' }, grid: { display: false } }
-          }
-        }
-      });
-
-      btnLod.addEventListener('click', () => {
-        btnLod.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#0d9488] text-white transition';
-        btnSens.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-[#334155] hover:text-[#0f172a] transition';
-        matChart.data.labels = lodData.labels;
-        matChart.data.datasets[0].label = lodData.label;
-        matChart.data.datasets[0].data = lodData.values;
-        matChart.data.datasets[0].backgroundColor = lodData.color;
-        matChart.update();
-        captionEl.innerHTML = `<span class="text-[#0f766e] font-bold">ข้อค้นพบสำคัญ:</span> การเคลือบ <span class="formula-pill">PEDOT-CNT</span> ร่วมกับ SWV ให้ค่า <span class="font-mono-tech font-semibold">LoD = 2.03 nM</span> รองลงมาคือ <span class="formula-pill">PEI-CNT (5 nM)</span> และหัวตรวจ <span class="formula-pill">µIP-CFM (5.7 nM)</span>`;
-      });
-
-      btnSens.addEventListener('click', () => {
-        btnSens.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#0284c7] text-white transition';
-        btnLod.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-[#334155] hover:text-[#0f172a] transition';
-        matChart.data.labels = sensData.labels;
-        matChart.data.datasets[0].label = sensData.label;
-        matChart.data.datasets[0].data = sensData.values;
-        matChart.data.datasets[0].backgroundColor = sensData.color;
-        matChart.update();
-        captionEl.innerHTML = `<span class="text-[#0284c7] font-bold">การเพิ่มความไวสัญญาณ:</span> การเคลือบ <span class="formula-pill">PEDOT:Nafion</span> เพิ่มความไวเป็น <span class="font-mono-tech font-semibold">46 nA/µM</span> เทียบกับ <span class="font-mono-tech">13 nA/µM</span> ของ Bare CFME ส่วนเอนไซม์ <span class="formula-pill">Tyrosinase/CeO₂/TiO₂</span> เพิ่มความไวจาก <span class="font-mono-tech">1.7</span> เป็น <span class="font-mono-tech">14.2 nA/µM</span>`;
-      });
-
-      // การ์ดวัสดุทั้ง 7 ชนิด
-      const gridEl = document.getElementById('material-cards-grid');
-      const boxEl = document.getElementById('material-inspector-box');
-      let activeMatId = materialsCardsData[0].id;
-
-      function renderCards() {
-        gridEl.innerHTML = materialsCardsData.map(m => {
-          const active = m.id === activeMatId;
-          return `<button data-id="${m.id}" class="text-left p-3 rounded-xl border transition ${
-            active
-              ? 'bg-teal-50 border-[#0d9488] text-[#0f172a] shadow-xs'
-              : 'bg-white border-slate-200 text-[#334155] hover:bg-slate-50'
-          }">
-            <div class="text-[10px] font-medium ${active ? 'text-[#0f766e]' : 'text-[#64748b]'}">${m.tag}</div>
-            <div class="text-xs font-bold mt-0.5 text-[#0f172a]">${m.name}</div>
-          </button>`;
-        }).join('');
-
-        const item = materialsCardsData.find(m => m.id === activeMatId);
-        boxEl.innerHTML = `
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-1.5">
-              <div class="text-sm sm:text-base font-bold text-[#0f172a]">${item.name}</div>
-              <p class="text-xs text-[#334155]"><strong class="text-[#0f766e]">ขีดจำกัดการตรวจวัด (LoD):</strong> <span class="font-mono-tech font-semibold">${item.lod}</span></p>
-              <p class="text-xs text-[#334155]"><strong class="text-[#0284c7]">ความไว (Sensitivity):</strong> ${item.sensitivity}</p>
-            </div>
-            <div class="space-y-1.5">
-              <p class="text-xs text-[#334155]"><strong class="text-[#4f46e5]">ความจำเพาะเจาะจง (Selectivity):</strong> ${item.selectivity}</p>
-              <p class="text-xs text-[#334155] leading-relaxed"><strong class="text-[#0f172a]">เสถียรภาพและข้อพิจารณา:</strong> ${item.stability}</p>
-            </div>
-          </div>
-        `;
-
-        gridEl.querySelectorAll('button').forEach(btn => {
-          btn.addEventListener('click', () => {
-            activeMatId = btn.getAttribute('data-id');
-            renderCards();
-          });
-        });
-      }
-      renderCards();
-    }
-
-    // =========================================================================
-    // โมดูลที่ 4: วงจร CMOS Potentiostat, ตัวคำนวณ Noise และ Topology Selector
-    // =========================================================================
-    const cmosArchitecturesThai = [
-      {
-        name: 'Hall et al. (2022) I-ΔΣ',
-        process: '0.18 µm CMOS (3.3 V AFE / 1.8 V Core)',
-        topology: '2-Electrode Pseudo-Differential Class-AB CMR + Regulated Current Conveyor + 1st-Order I-ΔΣ ADC',
-        noise: '26.5 pArms (Open) / 39.2 pArms (1 nF Load) @ 5 kHz',
-        dr: '83 dB Effective DR (หักล้างพื้นหลังได้ 290 nApp)',
-        powerArea: '3.74 µW เฉลี่ย (Duty-Cycled) | 0.256 mm²/ch',
-        xArea: 0.256,
-        yNoise: 39.2,
-        rBubble: 13
-      },
-      {
-        name: '128-Ch R-TIA Array',
-        process: '0.35 µm CMOS (n-well ~1,000 Ω/sq)',
-        topology: '128-Ch Programmable Resistive-Feedback TIA (ปรับเกน 23 ระดับ) + Digital Background Subtraction',
-        noise: '220 pArms (Gain 1, 40 kHz) ถึง 1,990 pArms (Gain 4)',
-        dr: '±650 nA (Gain 1) ถึง ±5 µA (Gain 4) @ 400 V/s',
-        powerArea: '0.0176 mm²/ch (รวม 2.25 mm² สำหรับ 128 ช่อง)',
-        xArea: 0.0176,
-        yNoise: 220,
-        rBubble: 16
-      },
-      {
-        name: 'Dual-Slope ROI Integrator',
-        process: '1.8 V CMOS (Recycling Folded Cascode OTA)',
-        topology: '3-Electrode Control OTA + หักล้างกระแสคงที่ช่วง ROI + Dual-Slope Current-to-Time ADC',
-        noise: '~30 pA ขีดจำกัดการตรวจวัด (5.1 µVrms OTA Noise)',
-        dr: '70.7 dB Max SNR | 62.4 dB SNDR (10 ENOB) @ 165 nA',
-        powerArea: '18 µW เฉพาะภาค OTA | ~0.045 mm²/ch',
-        xArea: 0.045,
-        yNoise: 30,
-        rBubble: 11
-      },
-      {
-        name: 'SC-TIA + SAR ADC (2026)',
-        process: '0.18 µm TSMC CMOS (1.8 V)',
-        topology: 'Switched-Capacitor TIA + 3-Bit PGA + SAR ADC + NMOS-Only Multiplexer',
-        noise: 'Sub-100 pA (<0.1 nA) Input Leakage Floor',
-        dr: '±4 µA @ fCLK = 180 kHz (ความเป็นเชิงเส้น R² = 0.998)',
-        powerArea: '210 µW (0.21 mW) | 2.89 mm² (ทั้งชิป 1.7 × 1.7 mm)',
-        xArea: 2.89,
-        yNoise: 100,
-        rBubble: 14
-      },
-      {
-        name: 'Compact SC Pixel Arrays',
-        process: '0.18 µm CMOS (สูงสุด 1,024 ช่องขนาน)',
-        topology: '8–14 Transistor Switched-Capacitor Integrator (ตัวเก็บประจุ 50 fF)',
-        noise: '0.11 pArms (110 fArms @ 2 kHz) ถึง 2.28 pArms',
-        dr: '±1.5 nA ถึง ±60 nA (อิ่มตัวหากใช้กับพื้นหลัง FSCV 400 nA)',
-        powerArea: '2.2 µW/ch | 0.00012 mm²/ch (10 × 12 µm)',
-        xArea: 0.00012,
-        yNoise: 0.11,
-        rBubble: 8
-      },
-      {
-        name: 'Neurochemostat SoC',
-        process: '0.35 µm AMS 2P/4M CMOS',
-        topology: 'SoC วงปิดรวมภาควัดโดปามีน FSCV + ภาคกระตุ้นไฟฟ้าขนาดไมโครบนชิปเดียว',
-        noise: 'ความละเอียดระดับโดปามีนทางสรีรวิทยา (~150 pArms)',
-        dr: 'รองรับการตรวจวัดและกระตุ้นแบบวงปิดครบวงจร',
-        powerArea: '10.56 mm² (พื้นที่ทั้ง SoC 3.3 × 3.2 mm)',
-        xArea: 10.56,
-        yNoise: 150,
-        rBubble: 15
-      }
-    ];
-
-    const topologiesThai = [
-      {
-        id: 'pseudo-diff',
-        name: '1. 2-Electrode Pseudo-Differential CMR',
-        badge: 'สัญญาณรบกวนต่ำสุดสำหรับ FSCV (39.2 pArms)',
-        pros: 'ใช้ขั้วไฟฟ้าอ้างอิงจำลอง (Dummy Electrode) คู่กับวงจร Class-AB Common-Mode Rejection หักล้างกระแสพื้นหลัง 290 nApp ในภาคแอนะล็อกก่อนเข้า I-ΔΣ ADC ทำให้ลดความต้องการ Dynamic Range ของ ADC และลดกำลังงานเหลือ 3.74 µW',
-        cons: 'ต้องจับคู่ความจุไฟฟ้า C_dl ระหว่างขั้วทำงานและขั้วอ้างอิงจำลองให้ใกล้เคียงกัน และความต้านทานสารละลายที่สูงอาจทำให้เกิดแรงดันตกคร่อมเล็กน้อย'
-      },
-      {
-        id: 'three-elec-ota',
-        name: '2. 3-Electrode Control OTA',
-        badge: 'ควบคุมศักย์เซลล์เคมีไฟฟ้าแม่นยำสูงสุด',
-        pros: 'แยกกระแสไหลผ่าน Counter Electrode (CE) ออกจาก Reference Electrode (RE) ทำให้ไม่มีกระแสไหลผ่านขั้วอ้างอิง ป้องกันการโพลาไรซ์ของ RE และรักษาศักย์ไฟฟ้าที่ขั้วทำงานอย่างแม่นยำแม้ในเนื้อเยื่อที่มีความต้านทานสูง',
-        cons: 'ต้องใช้วงจร Control Amplifier เพิ่มเติมซึ่งกินกำลังงานและพื้นที่ชิปมากขึ้น และต้องออกแบบการชดเชยเฟส (Frequency Compensation) เพื่อป้องกันการสั่นค้างเมื่อต่อโหลด C_dl ขนาดใหญ่'
-      },
-      {
-        id: 'rtia-array',
-        name: '3. Resistive-Feedback R-TIA Array',
-        badge: 'ขยายจำนวนช่องสัญญาณได้สูงสุด (128 Channels)',
-        pros: 'โครงสร้างเรียบง่าย ใช้ตัวต้านทาน n-well ความหนาแน่นสูงร่วมกับสวิตช์ปรับเกน 23 ระดับ ทำให้สามารถรวมวงจรขยายสัญญาณได้ถึง 128 ช่องในพื้นที่เพียง 2.25 mm² (0.0176 mm²/ช่อง) เหมาะสำหรับการทำแผนที่สารสื่อประสาทหลายจุดพร้อมกัน',
-        cons: 'ตัวต้านทานป้อนกลับสร้าง Thermal Noise สูงกว่าแบบ Capacitive (220–1,990 pArms) และต้องใช้ ADC ความละเอียดสูงเพื่อรองรับกระแสพื้นหลังเต็มพิสัยก่อนหักลบในภาคดิจิทัล'
-      }
-    ];
-
-    function initCmosModule() {
-      // 1. กราฟ Bubble Plot เปรียบเทียบ Noise vs Area
-      const ctxScatter = document.getElementById('cmosTradeoffChart').getContext('2d');
-      const colors = ['#0d9488', '#d97706', '#0284c7', '#4f46e5', '#0f766e', '#6366f1'];
-
-      new Chart(ctxScatter, {
-        type: 'bubble',
-        data: {
-          datasets: cmosArchitecturesThai.map((arch, i) => ({
-            label: arch.name,
-            data: [{ x: arch.xArea, y: arch.yNoise, r: arch.rBubble }],
-            backgroundColor: colors[i] + 'bf',
-            borderColor: colors[i],
-            borderWidth: 1.5
-          }))
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10, color: '#334155' } },
-            tooltip: {
-              ...clinicalTooltipConfig,
-              callbacks: {
-                label: (ctx) => `${ctx.dataset.label}: พื้นที่ ${ctx.raw.x} mm² | สัญญาณรบกวน ${ctx.raw.y} pArms`
-              }
-            }
-          },
-          scales: {
-            x: {
-              type: 'logarithmic',
-              title: { display: true, text: 'พื้นที่ซิลิคอนต่อช่องสัญญาณ / ชิป (mm², สเกลลอการิทึม)', font: { size: 10 }, color: '#64748b' },
-              ticks: { font: { size: 10 }, color: '#475569' },
-              grid: { color: '#e2e8f0' }
-            },
-            y: {
-              type: 'logarithmic',
-              title: { display: true, text: 'สัญญาณรบกวนขาเข้า Input-Referred Noise (pArms, สเกลลอการิทึม)', font: { size: 10 }, color: '#64748b' },
-              ticks: { font: { size: 10 }, color: '#475569' },
-              grid: { color: '#e2e8f0' }
-            }
-          }
-        }
-      });
-
-      // 2. ตัวคำนวณสัญญาณรบกวนตามสมการ Hall et al.
-      const sCdl = document.getElementById('calc-slider-cdl');
-      const sIbias = document.getElementById('calc-slider-ibias');
-      const sVnop = document.getElementById('calc-slider-vnop');
-
-      const ctxBreakdown = document.getElementById('noiseBreakdownChart').getContext('2d');
-      const breakdownChart = new Chart(ctxBreakdown, {
-        type: 'bar',
-        data: {
-          labels: ['องค์ประกอบสัญญาณรบกวน (pArms)'],
-          datasets: [
-            {
-              label: 'Shot Noise 2q(I_CMR + I_CC)',
-              data: [26.5],
-              backgroundColor: '#0284c7',
-              borderRadius: 4
-            },
-            {
-              label: 'C_dl-Coupled Opamp Noise (v_n,op)',
-              data: [28.9],
-              backgroundColor: '#d97706',
-              borderRadius: 4
-            }
-          ]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 10, color: '#334155' } },
-            tooltip: {
-              ...clinicalTooltipConfig,
-              callbacks: {
-                label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.x.toFixed(1)} pArms`
-              }
-            }
-          },
-          scales: {
-            x: {
-              stacked: true,
-              beginAtZero: true,
-              max: 160,
-              title: { display: true, text: 'ขนาดองค์ประกอบสัญญาณรบกวน (pArms)', font: { size: 10 }, color: '#64748b' },
-              ticks: { font: { size: 10 }, color: '#475569' },
-              grid: { color: '#e2e8f0' }
-            },
-            y: {
-              stacked: true,
-              ticks: { font: { size: 10 }, color: '#334155' },
-              grid: { display: false }
-            }
-          }
-        }
-      });
-
-      function updateNoiseCalculator() {
-        const cdl = Number(sCdl.value);
-        const ibias = Number(sIbias.value);
-        const vnop = Number(sVnop.value);
-
-        document.getElementById('calc-label-cdl').textContent = `${cdl.toFixed(1)} nF`;
-        document.getElementById('calc-label-ibias').textContent = `${ibias} nA`;
-        document.getElementById('calc-label-vnop').textContent = `${vnop} nV/√Hz`;
-
-        // ยืนยันค่า 26.5 pArms (Open Input: Cdl=0, Ibias=200 nA) และ 39.2 pArms (1 nF Load, vnop=40 nV/√Hz, BW=5 kHz)
-        const shotNoise = 26.5 * Math.sqrt(ibias / 200.0);
-        const capNoise = 28.9 * (cdl / 1.0) * (vnop / 40.0);
-        const totalNoise = Math.sqrt(shotNoise * shotNoise + capNoise * capNoise);
-        const drDb = 83.0 - 20.0 * Math.log10(totalNoise / 39.21);
-
-        document.getElementById('calc-out-shot').textContent = `${shotNoise.toFixed(1)} pA`;
-        document.getElementById('calc-out-cap').textContent = `${capNoise.toFixed(1)} pA`;
-        document.getElementById('calc-out-total').innerHTML = `${totalNoise.toFixed(1)} pA<sub>rms</sub>`;
-        document.getElementById('calc-out-dr').textContent = `${drDb.toFixed(1)} dB`;
-
-        breakdownChart.data.datasets[0].data = [Number(shotNoise.toFixed(2))];
-        breakdownChart.data.datasets[1].data = [Number(capNoise.toFixed(2))];
-        breakdownChart.update();
-      }
-
-      sCdl.addEventListener('input', updateNoiseCalculator);
-      sIbias.addEventListener('input', updateNoiseCalculator);
-      sVnop.addEventListener('input', updateNoiseCalculator);
-      updateNoiseCalculator();
-
-      // 3. Topology Selector
-      const topoTabs = document.getElementById('topology-tabs');
-      const topoDetail = document.getElementById('topology-detail');
-      let activeTopo = topologiesThai[0].id;
-
-      function renderTopology() {
-        topoTabs.innerHTML = topologiesThai.map(t => {
-          const active = t.id === activeTopo;
-          return `<button data-id="${t.id}" class="text-left p-3 rounded-xl border transition ${
-            active
-              ? 'bg-indigo-50 border-[#4f46e5] text-[#0f172a] shadow-xs'
-              : 'bg-white border-slate-200 text-[#334155] hover:bg-slate-50'
-          }">
-            <div class="text-xs font-bold text-[#0f172a]">${t.name}</div>
-            <div class="text-[11px] mt-0.5 ${active ? 'text-[#4f46e5] font-medium' : 'text-[#64748b]'}">${t.badge}</div>
-          </button>`;
-        }).join('');
-
-        const item = topologiesThai.find(t => t.id === activeTopo);
-        topoDetail.innerHTML = `
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-white border border-teal-200 rounded-xl p-3.5">
-              <div class="font-bold text-[#0f766e] mb-1">✅ จุดเด่นทางสถาปัตยกรรม</div>
-              <p class="leading-relaxed">${item.pros}</p>
-            </div>
-            <div class="bg-white border border-amber-200 rounded-xl p-3.5">
-              <div class="font-bold text-[#d97706] mb-1">⚠️ ข้อจำกัดและความท้าทาย</div>
-              <p class="leading-relaxed">${item.cons}</p>
-            </div>
-          </div>
-        `;
-
-        topoTabs.querySelectorAll('button').forEach(btn => {
-          btn.addEventListener('click', () => {
-            activeTopo = btn.getAttribute('data-id');
-            renderTopology();
-          });
-        });
-      }
-      renderTopology();
-
-      // 4. ตารางเปรียบเทียบ CMOS 6 รุ่น
-      const tbody = document.getElementById('cmos-table-body');
-      tbody.innerHTML = cmosArchitecturesThai.map(c => `
-        <tr class="hover:bg-slate-50 transition">
-          <td class="py-3 px-4 font-bold text-[#0f172a]">${c.name}</td>
-          <td class="py-3 px-4 font-mono-tech text-[#4f46e5] font-medium">${c.process}</td>
-          <td class="py-3 px-4 text-[#334155]">${c.topology}</td>
-          <td class="py-3 px-4 font-mono-tech text-[#0f766e] font-semibold">${c.noise}</td>
-          <td class="py-3 px-4 text-[#334155]">${c.dr}</td>
-          <td class="py-3 px-4 font-mono-tech text-[#0284c7] font-medium">${c.powerArea}</td>
-        </tr>
-      `).join('');
-    }
-
-    // =========================================================================
-    // โมดูลที่ 5: Chemometrics & AI, การประยุกต์ใช้ทางคลินิก และ Closed-Loop DBS
-    // =========================================================================
-    const clinicalDomainsThai = {
-      chemometrics: {
-        title: 'Chemometrics & AI: การถอดรหัสสัญญาณหลายสารสื่อประสาทแบบเรียลไทม์',
-        badge: 'PCR · PLSR · Elastic Net · 1D-CNN · LSTM · PINNs',
-        summary: 'โวลแทมโมแกรมในสมองมีชีวิตประกอบด้วยสัญญาณซ้อนทับของ Dopamine, Serotonin, Adenosine, H₂O₂, การเปลี่ยนแปลง pH และการเลื่อนของขั้วไฟฟ้า การวิเคราะห์หลายตัวแปรและปัญญาประดิษฐ์ช่วยแยกองค์ประกอบแต่ละชนิดได้อย่างแม่นยำ',
-        points: [
-          '<strong>PCR ร่วมกับ Malinowski’s F-test &amp; PLSR:</strong> คัดเลือกองค์ประกอบหลักที่มีนัยสำคัญทางสถิติและกำจัดสัญญาณรบกวน ทำให้แยกความเข้มข้นโดปามีนออกจากความผันผวนของ pH ในเนื้อเยื่อสมองได้อย่างแม่นยำ',
-          '<strong>Elastic Net Regression:</strong> ผสาน L1 และ L2 Regularization เพื่อเลือกจุดศักย์ไฟฟ้าที่มีความจำเพาะสูงและทนทานต่อการเลื่อนของตำแหน่งพีค (Peak Shift) เมื่อขั้วอ้างอิงเกิดการเปลี่ยนแปลง',
-          '<strong>โครงข่ายประสาทเทียมเชิงลึกและ PINNs:</strong> โมเดล 1D-CNN, LSTM และ Physics-Informed Neural Networks (PINNs) เรียนรู้พลวัตไม่เชิงเส้นของปฏิกิริยารีดอกซ์และการแพร่ของโมเลกุล ทำให้ทำนายความเข้มข้นได้แม่นยำแม้ในสภาวะที่มีสิ่งรบกวนสูง'
-        ]
-      },
-      parkinsons: {
-        title: "โรคพาร์กินสัน (Parkinson's Disease): ภาวะพร่องโดปามีนและกลไกของ STN-DBS",
-        badge: 'Nigrostriatal Dopamine Depletion & Neuromodulation',
-        summary: 'การเสื่อมสลายของเซลล์ประสาทสร้างโดปามีนใน Substantia Nigra ทำให้ระดับโดปามีนพื้นฐาน (Tonic Dopamine) ใน Striatum ลดลงอย่างรุนแรง การตรวจวัดทางเคมีไฟฟ้าช่วยยืนยันกลไกการรักษาด้วย DBS',
-        points: [
-          '<strong>STN-DBS ยกระดับ Tonic Dopamine:</strong> การวัดด้วยโวลแทมเมทรีในแบบจำลองโรคพาร์กินสันพบว่าการกระตุ้น Subthalamic Nucleus (STN-DBS) ช่วยเพิ่มความเข้มข้นพื้นฐานของโดปามีนใน Striatum อย่างมีนัยสำคัญ',
-          '<strong>เซนเซอร์เอนไซม์ความไวสูงพิเศษ:</strong> การเคลือบ Tyrosinase/CeO₂/TiO₂-Chitosan บนเส้นใยคาร์บอนเพิ่มความไวในการตรวจวัดโดปามีนขึ้นกว่า 8 เท่า (จาก 1.7 เป็น 14.2 nA/µM) เพื่อตรวจจับระดับโดปามีนที่ต่ำมากในภาวะโรค',
-          '<strong>ระบบไร้สาย WINCS ร่วมกับ fMRI:</strong> เชื่อมโยงการหลั่งโดปามีนเฉพาะจุดเข้ากับการตอบสนองของเครือข่ายสมองทั้งระบบแบบเรียลไทม์'
-        ]
-      },
-      addiction: {
-        title: 'การเสพติดสารเสพติด (Substance Addiction): พลวัตที่แตกต่างระหว่าง Phasic และ Tonic',
-        badge: 'Nucleus Accumbens Core (NAcc) Reward Circuitry',
-        summary: 'การใช้เทคนิค FSCV ร่วมกับ M-CSWV และแพลตฟอร์ม MAVEN เผยให้เห็นความแตกต่างเชิงกลไกระหว่างสารกระตุ้นประสาทกลุ่มโคเคนและกลุ่มโอปิออยด์',
-        points: [
-          '<strong>โคเคน (Cocaine):</strong> เพิ่มทั้งการหลั่งโดปามีนฉับพลัน (Phasic DA เพิ่มขึ้น 2.4 เท่า) และยกระดับโดปามีนพื้นฐานในไซแนปส์ (Tonic DA เพิ่มขึ้น 1.9 เท่า) โดยสารยับยั้ง DAT/Sigma สามารถลดการพุ่งสูงนี้ได้',
-          '<strong>เฟนทานิล (Fentanyl) และพฤติกรรมเสพติดเรื้อรัง:</strong> พฤติกรรมการแสวงหายากลุ่มโอปิออยด์ถูกขับเคลื่อนโดยการเปลี่ยนแปลงของระดับ Tonic มากกว่า Phasic โดยเฟนทานิลยกระดับ Tonic DA ใน NAcc ภายใน 5 นาที',
-          '<strong>ออกซิโคโดน (Oxycodone 2.5 mg/kg IV):</strong> เพิ่มระดับ Tonic 5-HT ขึ้น +23.37 ± 3.19 nM ที่เวลา 1 ชั่วโมง ขณะที่กดการหลั่ง Phasic 5-HT ให้ลดลงเหลือ 62% ของกลุ่มควบคุม'
-        ]
-      },
-      depression_human: {
-        title: 'โรคซึมเศร้าและการผ่าตัดในมนุษย์ (Depression & Human Intraoperative Surgery)',
-        badge: 'Serotonin Dynamics & Striatal Reward Prediction Errors',
-        summary: 'การตรวจวัดเซโรโทนินช่วยติดตามการออกฤทธิ์ของยาต้านเศร้า ขณะที่การบันทึกสัญญาณในสมองมนุษย์ขณะผ่าตัด DBS เปิดเผยกลไกการประมวลผลรางวัลระดับสูงของมนุษย์',
-        points: [
-          '<strong>โรคซึมเศร้าและยา Escitalopram (SSRI):</strong> เทคนิค N-FSCV (1000 V/s, LoD < 5 nM) และรูปคลื่น ESW 5-HT แยกเซโรโทนินออกจากโดปามีนได้สมบูรณ์ และพบว่า Escitalopram เพิ่มการหลั่ง 5-HT ที่ถูกกระตุ้นขึ้น +42% ภายใน 35 นาที',
-          '<strong>การผ่าตัดในมนุษย์ขณะตื่น (Kishida, Montague &amp; Lee):</strong> การวัด FSCV ใน Striatum ของผู้ป่วยขณะผ่าตัด DBS พบว่าโดปามีนระดับต่ำกว่าวินาทีเข้ารหัสทั้ง Actual และ Counterfactual Reward Prediction Errors ("สิ่งที่เกิดขึ้นจริง" เทียบกับ "สิ่งที่อาจเกิดขึ้นได้")',
-          '<strong>กรอบความปลอดภัยและ IRB Window:</strong> การทดลองในมนุษย์ขณะผ่าตัดจำกัดเวลาไว้ไม่เกิน 15–60 นาทีต่อจากการผ่าตัดมาตรฐาน 4 ชั่วโมง และต้องมีระบบคัดแยกสิ่งรบกวนจากการขยับตัวของสมองอย่างเข้มงวด'
-        ]
-      }
-    };
-
-    const dbsPipelineData = [
-      {
-        step: 'ขั้นตอนที่ 1',
-        title: '10 Hz FSCV Sensing',
-        spec: '7 µm CFME / Flexible PEDOT-CNT MEA',
-        detail: 'ขั้วไฟฟ้าที่ฝังในสมองส่วน Striatum กวาดศักย์ไฟฟ้ารูปสามเหลี่ยมที่ความถี่ 10 Hz เพื่อตรวจจับกระแสรีดอกซ์ระดับพิโคแอมแปร์ของการหลั่งโดปามีนแบบเรียลไทม์'
-      },
-      {
-        step: 'ขั้นตอนที่ 2',
-        title: '5th-Order Butterworth 100 Hz',
-        spec: 'Low-Pass Digital Filtering (fc = 100 Hz)',
-        detail: 'สัญญาณกระแสดิบจากวงจร CMOS AFE และตัวแปลง I-ΔΣ ADC ผ่านตัวกรองความถี่ต่ำผ่าน Butterworth อันดับ 5 ที่จุดตัด 100 Hz เพื่อกำจัดสัญญาณรบกวนความถี่สูงและสิ่งรบกวนจากการกระตุ้น'
-      },
-      {
-        step: 'ขั้นตอนที่ 3',
-        title: '7th-Deg Poly & 2nd-Order Exp Fit',
-        spec: 'Kinetic Release & Reuptake Modeling',
-        detail: 'ถอดรหัสความเข้มข้นโดปามีนและฟิตเส้นโค้งจลนพลศาสตร์การหลั่งและการดูดกลับด้วยสมการพหุนามดีกรี 7 ร่วมกับฟังก์ชันเอกซ์โพเนนเชียลอันดับ 2 เพื่อสกัดพารามิเตอร์ทางสรีรวิทยา'
-      },
-      {
-        step: 'ขั้นตอนที่ 4',
-        title: 'Double-Layer Feedforward ANN',
-        spec: '150 Hidden Neurons · Levenberg–Marquardt',
-        detail: 'โครงข่ายประสาทเทียมแบบป้อนไปข้างหน้า 2 ชั้น (150 Hidden Neurons ฝึกสอนด้วยอัลกอริทึม Levenberg–Marquardt) คำนวณความถี่และความกว้างพัลส์กระตุ้นที่เหมาะสมที่สุดเพื่อคืนสมดุลโดปามีน'
-      },
-      {
-        step: 'ขั้นตอนที่ 5',
-        title: 'Stimulation Output',
-        spec: '20–200 Hz · Pulse Width 0.1–2.0 ms',
-        detail: 'ส่งพัลส์กระตุ้นไฟฟ้าแบบสมดุลประจุ (Charge-Balanced Biphasic Pulses) ในช่วงความถี่ 20–200 Hz (จุดเหมาะสมทางสรีรวิทยา ~100 Hz) และความกว้างพัลส์ 0.1–2.0 ms เพื่อควบคุมระดับโดปามีนแบบวงปิด'
-      }
-    ];
-
-    function initClinicalAndDbsModule() {
-      // 1. แท็บ 4 ด้าน
-      const clinBtns = document.querySelectorAll('.clin-btn');
-      const clinPanel = document.getElementById('clinical-domain-panel');
-      let activeDomain = 'chemometrics';
-
-      function renderClinicalDomain() {
-        const d = clinicalDomainsThai[activeDomain];
-        clinPanel.innerHTML = `
-          <div class="space-y-3">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-200">
-              <h3 class="text-base sm:text-lg font-bold text-[#0f172a]">${d.title}</h3>
-              <span class="formula-pill self-start">${d.badge}</span>
-            </div>
-            <p class="text-xs sm:text-sm text-[#334155] leading-relaxed">${d.summary}</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
-              ${d.points.map(pt => `
-                <div class="bg-white border border-slate-200 rounded-xl p-4 text-xs text-[#334155] leading-relaxed shadow-2xs">
-                  ${pt}
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      }
-
-      clinBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          activeDomain = btn.getAttribute('data-domain');
-          clinBtns.forEach(b => {
-            b.className = b === btn
-              ? 'clin-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#0d9488] text-white transition'
-              : 'clin-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#f1f5f9] text-[#334155] hover:bg-teal-50 border border-slate-200 transition';
-          });
-          renderClinicalDomain();
-        });
-      });
-      renderClinicalDomain();
-
-      // 2. ขั้นตอน Closed-Loop DBS 5 ขั้นตอน
-      const stepsContainer = document.getElementById('dbs-pipeline-steps');
-      const stepDetailEl = document.getElementById('dbs-step-detail');
-      let activeStepIdx = 0;
-
-      function renderDbsSteps() {
-        stepsContainer.innerHTML = dbsPipelineData.map((s, idx) => {
-          const active = idx === activeStepIdx;
-          return `<button data-idx="${idx}" class="text-left p-3.5 rounded-xl border transition flex flex-col justify-between ${
-            active
-              ? 'bg-indigo-50 border-[#4f46e5] text-[#0f172a] shadow-xs'
-              : 'bg-white border-slate-200 text-[#334155] hover:bg-slate-50'
-          }">
-            <div class="font-mono-tech text-[11px] font-semibold ${active ? 'text-[#4f46e5]' : 'text-[#64748b]'}">${s.step}</div>
-            <div class="text-xs font-bold mt-1 text-[#0f172a]">${s.title}</div>
-          </button>`;
-        }).join('');
-
-        const st = dbsPipelineData[activeStepIdx];
-        stepDetailEl.innerHTML = `
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-2.5 border-b border-slate-200">
-            <div class="text-sm sm:text-base font-bold text-[#0f172a]">${st.step}: ${st.title}</div>
-            <span class="formula-pill-indigo self-start">${st.spec}</span>
-          </div>
-          <p class="text-xs sm:text-sm text-[#334155] mt-3 leading-relaxed">${st.detail}</p>
-        `;
-
-        stepsContainer.querySelectorAll('button').forEach(btn => {
-          btn.addEventListener('click', () => {
-            activeStepIdx = Number(btn.getAttribute('data-idx'));
-            renderDbsSteps();
-          });
-        });
-      }
-      renderDbsSteps();
-
-      // 3. Stimulus Parameter Explorer (Frequency 20-200 Hz & Pulse Width 0.1-2.0 ms)
-      const freqSlider = document.getElementById('dbs-freq-slider');
-      const pwSlider = document.getElementById('dbs-pw-slider');
-
-      function updateDbsExplorer() {
-        const freq = Number(freqSlider.value); // 20 - 200 Hz
-        const pw = Number(pwSlider.value);     // 0.1 - 2.0 ms
-
-        document.getElementById('dbs-freq-label').textContent = `${freq} Hz`;
-        document.getElementById('dbs-pw-label').textContent = `${pw.toFixed(2)} ms`;
-
-        // แบบจำลองการตอบสนองทางสรีรวิทยา: จุดเหมาะสมสูงสุดอยู่ที่ ~100 Hz
-        const freqFactor = Math.exp(-Math.pow((freq - 100) / 65, 2));
-        const pwFactor = Math.min(1.25, 0.35 + 0.65 * Math.sqrt(pw / 1.0));
-        const evokedDa = Math.round(245 * freqFactor * pwFactor);
-        const tonicRestore = Math.min(99.5, Math.max(42.0, 97.2 * freqFactor * Math.min(1.03, pwFactor))).toFixed(1);
-        const chargeIndex = (pw / 1.0).toFixed(2);
-
-        document.getElementById('dbs-out-da').textContent = `${evokedDa} nM`;
-        document.getElementById('dbs-out-tonic').textContent = `${tonicRestore}%`;
-        document.getElementById('dbs-out-charge').textContent = `${chargeIndex}×`;
-
-        const effEl = document.getElementById('dbs-out-eff');
-        if (freq >= 85 && freq <= 120 && pw >= 0.6 && pw <= 1.3) {
-          effEl.textContent = 'เหมาะสมสูงสุด (Optimal)';
-          effEl.className = 'font-mono-tech text-sm font-bold text-[#0f766e] mt-1';
-        } else if (freq > 145 || pw > 1.5) {
-          effEl.textContent = 'ใช้พลังงานสูง (Over-Stimulation)';
-          effEl.className = 'font-mono-tech text-sm font-bold text-[#d97706] mt-1';
-        } else {
-          effEl.textContent = 'กระตุ้นระดับต่ำ (Sub-Threshold)';
-          effEl.className = 'font-mono-tech text-sm font-bold text-[#0284c7] mt-1';
-        }
-      }
-
-      freqSlider.addEventListener('input', updateDbsExplorer);
-      pwSlider.addEventListener('input', updateDbsExplorer);
-      updateDbsExplorer();
-
-      // 4. ปุ่มคัดลอกบทความวิจัยทั้งหมด (ใช้ document.execCommand('copy') เพื่อความเข้ากันได้ใน iFrame)
-      const copyBtn = document.getElementById('btn-copy-research');
-      const copyToast = document.getElementById('copy-toast');
-      copyBtn.addEventListener('click', () => {
-        const text = document.getElementById('thai-research-text').innerText;
-        const tempArea = document.createElement('textarea');
-        tempArea.value = text;
-        tempArea.style.position = 'fixed';
-        tempArea.style.opacity = '0';
-        document.body.appendChild(tempArea);
-        tempArea.select();
-        try {
-          document.execCommand('copy');
-          copyToast.classList.remove('hidden');
-          setTimeout(() => copyToast.classList.add('hidden'), 3500);
-        } catch (err) {
-          copyToast.textContent = '⚠️ ไม่สามารถคัดลอกอัตโนมัติได้ กรุณาเลือกข้อความด้านล่างเพื่อคัดลอก';
-          copyToast.classList.remove('hidden');
-        }
-        document.body.removeChild(tempArea);
-      });
-    }
-
-    // =========================================================================
-    // โมดูลที่ 6: ข้อมูลและตัวสำรวจการประยุกต์ใช้จริงในโลกแห่งความเป็นจริง (IRL)
-    // =========================================================================
-    const irlScenariosThai = [
-      {
-        id: 'awake-dbs',
-        code: 'IRL-01 · ประสาทศัลยศาสตร์คลินิก',
-        title: 'ห้องผ่าตัดสมองขณะผู้ป่วยรู้สึกตัว (Awake Human DBS Surgery)',
-        summary: 'ทำแผนที่การหลั่งโดปามีนใน Striatum แบบเรียลไทม์ระหว่างการผ่าตัดฝังขั้วกระตุ้น DBS เพื่อนำทางตำแหน่งขั้วไฟฟ้าอย่างแม่นยำ',
-        problem: 'ระหว่างการผ่าตัดฝังขั้วไฟฟ้า DBS ในผู้ป่วยโรคพาร์กินสันหรือโรคย้ำคิดย้ำทำ ศัลยแพทย์อาศัยเพียงภาพถ่ายรังสีและสัญญาณไฟฟ้าเซลล์ประสาท (Microelectrode Recording) ซึ่งไม่สามารถยืนยันได้โดยตรงว่าปลายขั้วไฟฟ้าอยู่ในตำแหน่งที่กระตุ้นวงจรสารสื่อประสาทโดปามีนได้เหมาะสมที่สุดหรือไม่',
-        stack: {
-          electrode: 'ขั้วไฟฟ้าเส้นใยคาร์บอน CFME ขนาด 7 µm (ปลายเปิด ~100 µm) ออกแบบให้สอดผ่านท่อนำร่องผ่าตัดสมองมาตรฐานได้',
-          waveform: 'Standard FSCV (-0.4 V ถึง +1.3 V vs. Ag/AgCl ที่ 400 V/s, ความถี่ 10 Hz) บันทึกในกรอบเวลา IRB 15–60 นาทีระหว่างผู้ป่วยทำภารกิจตัดสินใจ',
-          afe: 'ระบบวัดโวลแทมเมทรีสัญญาณรบกวนต่ำระดับพิโคแอมแปร์ที่แยกสัญญาณขณะผู้ป่วยตื่นและขยับตัวเล็กน้อยได้',
-          decoder: 'PCR / Elastic Net Regression ถอดรหัส Reward Prediction Errors (ทั้ง Actual และ Counterfactual RPEs ตามงานวิจัยของ Kishida, Montague & Lee / Carilion Clinic / Mayo Clinic)'
-        },
-        advantage: 'ยืนยันการตอบสนองทางเคมีประสาทในสมองมนุษย์แบบเรียลไทม์ (ความละเอียด 100 ms) แทนการคาดเดาจากตำแหน่งกายวิภาคเพียงอย่างเดียว ช่วยเพิ่มความแม่นยำในการวางตำแหน่งขั้วกระตุ้น DBS'
-      },
-      {
-        id: 'closed-loop-dbs',
-        code: 'IRL-02 · อุปกรณ์ฝังในร่างกายอัจฉริยะ',
-        title: 'เครื่องกระตุ้นสมองแบบวงปิดอัตโนมัติ (Adaptive Closed-Loop DBS / Neurochemostat)',
-        summary: 'ชิป SoC ไร้สายทำหน้าที่เป็นเทอร์โมสตัททางเคมีประสาท ส่งพัลส์กระตุ้น ~100 Hz เฉพาะเมื่อระดับโดปามีนในสมองลดต่ำลง',
-        problem: 'เครื่องกระตุ้นสมองส่วนลึกแบบวงเปิด (Open-Loop DBS) ในปัจจุบันปล่อยกระแสไฟฟ้าความถี่สูงคงที่ตลอด 24 ชั่วโมง ทำให้สิ้นเปลืองแบตเตอรี่อย่างรวดเร็ว (ต้องผ่าตัดเปลี่ยนแบตเตอรี่ซ้ำ) และก่อให้เกิดผลข้างเคียง เช่น อาการเคลื่อนไหวผิดปกติ (Dyskinesia) พูดไม่ชัด หรืออารมณ์แปรปรวนเมื่อกระตุ้นเกินความจำเป็น',
-        stack: {
-          electrode: 'หัวตรวจคาร์บอนไฟเบอร์อายุการใช้งานยาวนาน µIP-CFM (เสถียรเกิน 1 ปี) หรืออาร์เรย์ยืดหยุ่นเคลือบ PEDOT:Nafion',
-          waveform: 'FSCV 10 Hz สลับจังหวะกับพัลส์กระตุ้น (Time-Multiplexed Sensing & Stimulation) เพื่อป้องกันสิ่งรบกวนจากการกระตุ้น',
-          afe: 'ชิปไร้สายฝังในร่างกาย WINCS Harmoni / MAVEN / Neurochemostat (0.35 µm CMOS) หรือวงจร Hall et al. (กินไฟเพียง 3.74 µW, สัญญาณรบกวน 39.2 pArms)',
-          decoder: 'ตัวกรอง Butterworth 100 Hz ร่วมกับโครงข่ายประสาทเทียม ANN (150 Hidden Neurons, Levenberg–Marquardt) ปรับความถี่ (~100 Hz) และความกว้างพัลส์ (0.1–2.0 ms) อัตโนมัติ'
-        },
-        advantage: 'ทำหน้าที่เป็น “เทอร์โมสตัททางเคมีประสาท” จ่ายพลังงานกระตุ้นเฉพาะช่วงเวลาที่โดปามีนพร่อง ช่วยยืดอายุการใช้งานแบตเตอรี่ของอุปกรณ์ฝังในร่างกายและลดผลข้างเคียงทางระบบประสาทอย่างมีนัยสำคัญ'
-      },
-      {
-        id: 'psychopharmacology',
-        code: 'IRL-03 · อุตสาหกรรมยาและจิตเวชศาสตร์แม่นยำ',
-        title: 'การพัฒนายาทางจิตเวชและรักษาการเสพติด (Precision Psychopharmacology & Addiction R&D)',
-        summary: 'คัดกรองประสิทธิภาพและกลไกการออกฤทธิ์ของยาต้านเศร้าและยารักษาการเสพติดต่อโดปามีนและเซโรโทนินได้ภายในไม่กี่นาที',
-        problem: 'การทดสอบยาทางจิตเวชและยาบำบัดการเสพติดด้วยเทคนิค Microdialysis แบบดั้งเดิมต้องใช้เวลารอเก็บตัวอย่าง 10–20 นาทีต่อจุด ทำให้มองไม่เห็นการเปลี่ยนแปลงฉับพลันของวงจรรางวัล (Reward Circuitry) และทำให้การคัดกรองตัวยาใหม่ในสัตว์ทดลองล่าช้าและมีต้นทุนสูง',
-        stack: {
-          electrode: 'อาร์เรย์หลายช่องสัญญาณ PEI-CNT / CNTYM (LoD 5 nM) และอาร์เรย์ 128 ช่องสำหรับวัดพร้อมกันหลายบริเวณสมอง (NAcc, PFC, Dorsal Striatum)',
-          waveform: 'N-FSCV (1000 V/s สำหรับเซโรโทนิน), M-CSWV (ความละเอียด 10 วินาที สำหรับ Tonic) และ RPV-PLSR วัด Phasic + Tonic พร้อมกัน',
-          afe: 'ชิปอาร์เรย์ความหนาแน่นสูง 128-Ch Programmable R-TIA (พื้นที่ 2.25 mm²) และแพลตฟอร์มไร้สาย MAVEN สำหรับสัตว์ทดลองที่เคลื่อนไหวอย่างอิสระ',
-          decoder: 'PLSR และ Deep Learning (1D-CNN / LSTM) แยกผลของยาต่อ Phasic และ Tonic DA/5-HT ออกจากกันแบบเรียลไทม์'
-        },
-        advantage: 'วัดผลของยาได้ภายในไม่กี่นาที (เช่น ยา Escitalopram เพิ่ม 5-HT +42% ภายใน 35 นาที หรือแยกกลไกโคเคน vs. เฟนทานิล/ออกซิโคโดนได้ทันที) ช่วยเร่งความเร็วในการค้นพบยาใหม่'
-      },
-      {
-        id: 'neurostring-gut-brain',
-        code: 'IRL-04 · อิเล็กทรอนิกส์ชีวภาพแบบยืดหยุ่น',
-        title: 'อิเล็กทรอนิกส์ชีวภาพแบบยืดหยุ่นสำหรับสมองและลำไส้ (Soft Bioelectronics & Gut-Brain Axis — NeuroString)',
-        summary: 'โพรบยางยืดหยุ่นเนื้อนิ่ม (<30 kPa) ฝังได้ทั้งในสมองเรื้อรังและลำไส้ที่บีบตัวตลอดเวลา เพื่อวัดเซโรโทนินในโรค IBS และภาวะซึมเศร้า',
-        problem: 'กว่า 90% ของเซโรโทนินในร่างกายถูกสร้างขึ้นในทางเดินอาหาร (Enterochromaffin Cells) เพื่อสื่อสารกับสมองผ่านเส้นประสาทวากัส (Gut-Brain Axis) แต่โพรบซิลิคอนหรือโลหะแข็ง (>100 GPa) ไม่สามารถฝังในลำไส้ที่มีการบีบตัว (Peristalsis) ตลอดเวลาได้โดยไม่ทำลายเนื้อเยื่อหรือแตกหัก',
-        stack: {
-          electrode: 'NeuroString: โครงข่ายกราฟีนและอนุภาคนาโนเหล็กออกไซด์ฝังในอีลาสโตเมอร์เนื้อนิ่ม SEBS / PDMS (ความแข็ง ~1.9 MPa ถึง <30 kPa ยืดได้ >100%)',
-          waveform: 'FSCV และ Differential Pulse Voltammetry (DPV) ที่ปรับแต่งให้ทนทานต่อการยืดหดและโค้งงอของผนังลำไส้และเนื้อเยื่อสมอง',
-          afe: 'วงจร CMOS Potentiostat แบบยืดหยุ่นและใช้พลังงานต่ำ เชื่อมต่อผ่านสายนำสัญญาณโพลีเมอร์บางเฉียบ',
-          decoder: 'อัลกอริทึมชดเชยความแปรปรวนของพื้นที่ผิวขณะยืดตัว เพื่อสกัดความเข้มข้นของ Serotonin และ Dopamine อย่างต่อเนื่อง'
-        },
-        advantage: 'เป็นเทคโนโลยีแรกที่วัดสารสื่อประสาทแบบเรียลไทม์พร้อมกันได้ทั้งในสมองและลำไส้ที่กำลังเคลื่อนไหว เปิดทางสู่การรักษาโรคลำไส้แปรปรวน (IBS) โรคซึมเศร้า และโรคพาร์กินสันที่มีจุดเริ่มต้นจากลำไส้'
-      },
-      {
-        id: 'multimodal-fmri',
-        code: 'IRL-05 · การถ่ายภาพสมองหลายมิติ',
-        title: 'การถ่ายภาพสมองร่วมกับเครื่อง MRI (Multimodal WINCS + BOLD fMRI)',
-        summary: 'ผสานระบบ FSCV ไร้สายที่เข้ากันได้กับสนามแม่เหล็กสูงเข้ากับเครื่อง fMRI เพื่อเชื่อมโยงโดปามีนเฉพาะจุดเข้ากับเครือข่ายสมองทั้งระบบ',
-        problem: 'เครื่องสแกนสมอง fMRI (BOLD Signal) มองเห็นการทำงานของเครือข่ายสมองทั่วทั้งศีรษะแต่บอกไม่ได้ว่าเกิดจากสารสื่อประสาทชนิดใด ขณะที่ขั้วไฟฟ้าทั่วไปมีส่วนประกอบโลหะแม่เหล็กที่ก่อให้เกิดภาพบิดเบือน (Artifacts) หรือเกิดความร้อนอันตรายภายในอุโมงค์แม่เหล็ก MRI',
-        stack: {
-          electrode: 'ขั้วไฟฟ้าคาร์บอนไฟเบอร์ปลอดสารแม่เหล็ก (Non-Ferromagnetic CFME) และสายนำสัญญาณต้านทานสูงป้องกันการเหนี่ยวนำ RF',
-          waveform: 'FSCV 10 Hz ที่ซิงโครไนซ์สัญญาณนาฬิกากับรอบการสแกนภาพ (TR) ของเครื่อง MRI เพื่อไม่ให้คลื่นแม่เหล็กไฟฟ้ารบกวนกัน',
-          afe: 'ระบบไร้สาย WINCS ที่ออกแบบให้เข้ากันได้กับสภาพแวดล้อม MRI (MRI-Compatible Telemetry)',
-          decoder: 'การวิเคราะห์สหสัมพันธ์เชิงเวลา (Cross-Correlation) ระหว่างความเข้มข้นโดปามีนระดับนาโนโมลาร์ใน Nucleus Accumbens กับสัญญาณ BOLD ทั้งสมอง'
-        },
-        advantage: 'เชื่อมโยงเหตุและผลระหว่างการหลั่งโดปามีนเฉพาะจุดระดับนาโนโมลาร์กับการเปลี่ยนแปลงของเครือข่ายสมองทั้งระบบ ช่วยยกระดับการวินิจฉัยโรคทางจิตเวชด้วยภาพถ่ายสมอง'
-      },
-      {
-        id: 'neurochemical-bci',
-        code: 'IRL-06 · อินเทอร์เฟซสมองกับคอมพิวเตอร์รุ่นถัดไป',
-        title: 'อินเทอร์เฟซสมองกับคอมพิวเตอร์รุ่นถัดไป (Next-Gen Neurochemical BCIs)',
-        summary: 'ขั้วไฟฟ้าสองโหมดบันทึกทั้งสัญญาณสั่งการเคลื่อนไหว (Spikes/LFPs) และสภาวะอารมณ์/แรงจูงใจทางเคมีพร้อมกัน',
-        problem: 'อินเทอร์เฟซสมองกับคอมพิวเตอร์ (BCI) ในปัจจุบันอ่านได้เพียงสัญญาณไฟฟ้าของการสั่งการเคลื่อนไหว (Motor Spikes) แต่ไม่รับรู้สภาวะทางอารมณ์ ความเหนื่อยล้า ความเครียด หรือแรงจูงใจของผู้ป่วย ทำให้ระบบแขนกลหรืออุปกรณ์ช่วยเหลือไม่สามารถปรับตัวเข้ากับสภาวะจิตใจของผู้ใช้งานได้',
-        stack: {
-          electrode: 'ไมโครอิเล็กโทรดอาร์เรย์แบบยืดหยุ่น Polyimide เคลือบ PEDOT/CNT และพอลิเมอร์ป้องกัน PSB (Poly(sulfobetaine)) ลด Impedance และป้องกัน Biofouling',
-          waveform: 'การบันทึกแบบสองโหมดสลับเวลาความเร็วสูง (Dual-Mode Electrophysiology + FSCV) บนขั้วไฟฟ้าชุดเดียวกัน',
-          afe: 'ชิป CMOS Hybrid AFE ที่รวมวงจรขยายสัญญาณประสาท (Neural Amplifier) เข้ากับวงจร I-ΔΣ Potentiostat สัญญาณรบกวนต่ำ',
-          decoder: 'โมเดล Multimodal AI (PINNs + LSTM) ผสานข้อมูลความถี่ Spikes เข้ากับระดับโดปามีนและเซโรโทนินเพื่อถอดรหัสทั้งเจตนาและสภาวะอารมณ์'
-        },
-        advantage: 'สร้าง BCI รุ่นใหม่ที่ “เข้าใจทั้งเจตนาการเคลื่อนไหวและสภาวะอารมณ์” ของผู้ป่วย ทำให้แขนกลประสาทเทียมและระบบฟื้นฟูผู้ป่วยอัมพาตตอบสนองได้อย่างเป็นธรรมชาติและปลอดภัยยิ่งขึ้น'
-      }
-    ];
-
-    function initIrlApplicationsModule() {
-      const gridEl = document.getElementById('irl-scenario-grid');
-      const panelEl = document.getElementById('irl-detail-panel');
-      if (!gridEl || !panelEl) return;
-
-      let activeScenarioId = irlScenariosThai[0].id;
-
-      function renderIrl() {
-        gridEl.innerHTML = irlScenariosThai.map(item => {
-          const isActive = item.id === activeScenarioId;
-          return `<button data-id="${item.id}" class="text-left p-4 rounded-xl border transition flex flex-col justify-between ${
-            isActive
-              ? 'bg-teal-50 border-[#0d9488] text-[#0f172a] shadow-xs'
-              : 'bg-white border-slate-200 text-[#334155] hover:bg-slate-50'
-          }">
-            <div>
-              <div class="font-mono-tech text-[11px] font-semibold ${isActive ? 'text-[#0f766e]' : 'text-[#64748b]'}">${item.code}</div>
-              <div class="text-xs sm:text-sm font-bold mt-1 leading-snug text-[#0f172a]">${item.title}</div>
-            </div>
-            <p class="text-[11px] text-[#64748b] mt-2 line-clamp-2 leading-relaxed">${item.summary}</p>
-          </button>`;
-        }).join('');
-
-        const sc = irlScenariosThai.find(s => s.id === activeScenarioId);
-        panelEl.innerHTML = `
-          <div class="space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200">
-              <div>
-                <span class="font-mono-tech text-xs font-semibold text-[#0f766e]">${sc.code}</span>
-                <h4 class="text-base sm:text-lg font-bold text-[#0f172a] mt-0.5">${sc.title}</h4>
-              </div>
-              <span class="formula-pill self-start">Real-World Architecture</span>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-              <!-- ปัญหาในโลกจริง -->
-              <div class="lg:col-span-6 bg-white border border-amber-200 rounded-xl p-4 space-y-1.5">
-                <div class="inline-block px-2.5 py-0.5 rounded bg-[#fef3c7] text-[#d97706] text-xs font-bold">
-                  ⚠️ ปัญหาในโลกจริง (Real-World Problem)
-                </div>
-                <p class="text-xs sm:text-sm text-[#334155] leading-relaxed pt-1">${sc.problem}</p>
-              </div>
-
-              <!-- ข้อได้เปรียบเหนือวิธีดั้งเดิม -->
-              <div class="lg:col-span-6 bg-white border border-teal-200 rounded-xl p-4 space-y-1.5">
-                <div class="inline-block px-2.5 py-0.5 rounded bg-teal-50 text-[#0f766e] text-xs font-bold">
-                  ✅ ข้อได้เปรียบเหนือวิธีดั้งเดิม (IRL Advantage vs. Legacy Tech)
-                </div>
-                <p class="text-xs sm:text-sm text-[#334155] leading-relaxed pt-1">${sc.advantage}</p>
-              </div>
-            </div>
-
-            <!-- ชุดฮาร์ดแวร์และอัลกอริทึมที่ใช้งานจริง -->
-            <div class="bg-white border border-indigo-200 rounded-xl p-4 sm:p-5 space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="text-xs sm:text-sm font-bold text-[#4f46e5]">
-                  🛠️ ชุดฮาร์ดแวร์และอัลกอริทึมที่ใช้งานจริง (Deployed Hardware &amp; Algorithm Stack)
-                </span>
-                <span class="formula-pill-indigo hidden sm:inline-block">Co-Designed Stack</span>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-                <div class="bg-[#f8fafc] border border-slate-200 rounded-lg p-3">
-                  <div class="font-mono-tech text-[11px] font-bold text-[#0f766e] mb-1">1. Electrode (ขั้วไฟฟ้า)</div>
-                  <p class="text-[#334155] leading-relaxed">${sc.stack.electrode}</p>
-                </div>
-                <div class="bg-[#f8fafc] border border-slate-200 rounded-lg p-3">
-                  <div class="font-mono-tech text-[11px] font-bold text-[#0284c7] mb-1">2. Waveform (รูปคลื่นวัด)</div>
-                  <p class="text-[#334155] leading-relaxed">${sc.stack.waveform}</p>
-                </div>
-                <div class="bg-[#f8fafc] border border-slate-200 rounded-lg p-3">
-                  <div class="font-mono-tech text-[11px] font-bold text-[#4f46e5] mb-1">3. CMOS AFE (วงจรส่วนหน้า)</div>
-                  <p class="text-[#334155] leading-relaxed">${sc.stack.afe}</p>
-                </div>
-                <div class="bg-[#f8fafc] border border-slate-200 rounded-lg p-3">
-                  <div class="font-mono-tech text-[11px] font-bold text-[#d97706] mb-1">4. Decoder (ตัวถอดรหัส AI)</div>
-                  <p class="text-[#334155] leading-relaxed">${sc.stack.decoder}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-
-        gridEl.querySelectorAll('button').forEach(btn => {
-          btn.addEventListener('click', () => {
-            activeScenarioId = btn.getAttribute('data-id');
-            renderIrl();
-          });
-        });
-      }
-      renderIrl();
-    }
-
-    // =========================================================================
-    // เริ่มต้นทำงานทุกโมดูลและไฮไลต์แถบนำทางตามการเลื่อนหน้าจอ
-    // =========================================================================
-    window.addEventListener('DOMContentLoaded', () => {
-      initBottlenecksModule();
-      initFscvSimulatorModule();
-      initModalitiesTable();
-      initMaterialsModule();
-      initCmosModule();
-      initClinicalAndDbsModule();
-      initIrlApplicationsModule();
-
-      const navPills = document.querySelectorAll('.nav-pill');
-      navPills.forEach(pill => {
-        pill.addEventListener('click', () => {
-          navPills.forEach(p => {
-            p.className = 'nav-pill px-3 py-1.5 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition';
-          });
-          pill.className = 'nav-pill px-3 py-1.5 rounded-lg bg-[#0d9488] text-white shadow-xs transition';
-        });
-      });
-    });
-  </script>
+  <!-- ปุ่มกลับขึ้นด้านบน (Back to Top) -->
+  <button id="back-to-top" type="button" aria-label="Back to top" class="w-10 h-10 rounded-full bg-[#0d9488] hover:bg-[#0f766e] text-white shadow-lg flex items-center justify-center text-base transition">
+    ↑
+  </button>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
