@@ -81,9 +81,10 @@
         </div>
       </div>
 
-      <!-- แถบแท็บนำทาง 7 โมดูล -->
+      <!-- แถบแท็บนำทาง 8 โมดูล (เริ่มจาก 0. Intro) -->
       <nav aria-label="เมนูนำทางหลัก" class="flex flex-wrap items-center gap-1.5 text-xs pt-1 border-t border-slate-100">
-        <a href="#module-1" data-i18n="nav.m1" class="nav-pill px-3 py-1 rounded-lg bg-[#0d9488] text-white shadow-xs transition font-medium">1. ภาพรวมและข้อจำกัด</a>
+        <a href="#module-0" data-i18n="nav.m0" class="nav-pill px-3 py-1 rounded-lg bg-[#0d9488] text-white shadow-xs transition font-medium">0. สรุปเข้าใจง่าย</a>
+        <a href="#module-1" data-i18n="nav.m1" class="nav-pill px-3 py-1 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">1. ภาพรวมและข้อจำกัด</a>
         <a href="#module-2" data-i18n="nav.m2" class="nav-pill px-3 py-1 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">2. ฟิสิกส์ FSCV</a>
         <a href="#module-3" data-i18n="nav.m3" class="nav-pill px-3 py-1 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">3. วัสดุขั้วไฟฟ้า</a>
         <a href="#module-4" data-i18n="nav.m4" class="nav-pill px-3 py-1 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] hover:text-[#0f766e] border border-slate-200 transition">4. วงจร CMOS AFE</a>
@@ -97,9 +98,104 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
 
     <!-- ===================================================================== -->
+    <!-- โมดูลที่ 0: เริ่มต้นที่นี่ (สรุปเข้าใจง่ายสำหรับผู้เริ่มต้น)            -->
+    <!-- ===================================================================== -->
+    <section id="module-0" class="scroll-mt-32 space-y-6">
+      <div class="clinical-card p-6 sm:p-8 space-y-7">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="max-w-3xl space-y-2.5">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-[#0f766e] text-xs font-medium">
+              <span data-i18n="m0.badge">✨ เริ่มต้นที่นี่ · สรุปภาพรวมแบบเข้าใจง่าย (Start Here: Plain-Language Guide)</span>
+            </div>
+            <h2 data-i18n="m0.title" class="text-xl sm:text-2xl font-medium text-[#0f172a] leading-snug">
+              งานวิจัยนี้คืออะไร? พูดง่ายๆ ก็คือ “เทอร์โมสตัทอัจฉริยะสำหรับสารเคมีในสมอง”
+            </h2>
+            <p data-i18n="m0.intro" class="read-body prose-comfort text-[#334155]">
+              ลองนึกภาพว่าสมองของเราสื่อสารกันด้วยสารเคมีเล็กๆ (เช่น โดปามีนที่เกี่ยวกับการเคลื่อนไหวและแรงจูงใจ หรือเซโรโทนินที่เกี่ยวกับอารมณ์) งานวิจัยนี้สร้าง “สายตรวจขนาดเล็กกว่าเส้นผม 10 เท่า” คู่กับ “ไมโครชิปจิ๋ว” เพื่อแอบฟังสารเคมีเหล่านั้นแบบสดๆ วินาทีต่อวินาที
+            </p>
+          </div>
+          <a href="#module-1" data-i18n="m0.jumpBtn" class="px-4 py-2.5 rounded-xl bg-[#f1f5f9] hover:bg-teal-50 text-[#0f766e] border border-slate-200 text-xs font-medium transition self-start shrink-0">
+            ดูรายละเอียดเชิงลึกด้านเทคนิค ↓
+          </a>
+        </div>
+
+        <!-- แถวบน: ภาพประกอบ Biochip + 3 คำถามหลักที่คนสงสัย -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-5 bg-[#f8fafc] border border-slate-200 rounded-2xl p-3 overflow-hidden">
+            <img src="assets/biochip-overview.jpg" alt="Biochip sensor and hair-scale comparison illustration" class="w-full h-auto rounded-xl object-cover shadow-xs" />
+            <p data-i18n="m0.img1cap" class="text-xs text-[#64748b] text-center mt-2.5 px-2">
+              ภาพจำลองขนาด: สายตรวจคาร์บอน (7 µm) เล็กกว่าเส้นผมมนุษย์ ~10 เท่า เชื่อมกับชิปซิลิคอนจิ๋ว
+            </p>
+          </div>
+
+          <div class="lg:col-span-7 grid grid-cols-1 gap-4">
+            <div class="bg-[#f8fafc] border border-slate-200 rounded-2xl p-5 space-y-1.5">
+              <div data-i18n="m0.q1.t" class="text-sm font-medium text-[#0f766e]">1. สรุปแล้วนี่คืออะไร? (What totally is this?)</div>
+              <p data-i18n="m0.q1.p" class="read-card-text text-[#334155]">
+                มันคือ “เครื่องวัดสารเคมีในสมองแบบเรียลไทม์” ปกติหมอต้องเจาะดูดน้ำในสมองไปตรวจในแล็บซึ่งรอนาน 10–20 นาที แต่งานวิจัยนี้ใช้ขั้วไฟฟ้าขนาดจิ๋ววัดการเปลี่ยนแปลงของโดปามีนและเซโรโทนินได้ทันทีทุกๆ 0.1 วินาที
+              </p>
+            </div>
+
+            <div class="bg-[#f8fafc] border border-slate-200 rounded-2xl p-5 space-y-1.5">
+              <div data-i18n="m0.q2.t" class="text-sm font-medium text-[#0284c7]">2. นี่คือไบโอชิป (Biochip) หรือแค่งานวิจัยลอยๆ?</div>
+              <p data-i18n="m0.q2.p" class="read-card-text text-[#334155]">
+                ใช่ครับ นี่คือ “ระบบไบโอชิปฝังในร่างกายจริง” ประกอบด้วย 2 ส่วนคือ (1) สายตรวจคาร์บอนนิ่มๆ ที่ไม่บาดเนื้อเยื่อสมอง และ (2) ชิปอิเล็กทรอนิกส์ (CMOS) ที่กินไฟน้อยมากระดับไมโครวัตต์ โดยเริ่มมีการทดสอบแล้วทั้งในสัตว์ทดลองและในห้องผ่าตัดสมองมนุษย์จริง
+              </p>
+            </div>
+
+            <div class="bg-[#f8fafc] border border-slate-200 rounded-2xl p-5 space-y-1.5">
+              <div data-i18n="m0.q3.t" class="text-sm font-medium text-[#4f46e5]">3. เจ้าสิ่งนี้เอาไปทำอะไรได้บ้าง? (What can it do?)</div>
+              <p data-i18n="m0.q3.p" class="read-card-text text-[#334155]">
+                ช่วยรักษาโรคพาร์กินสันด้วยเครื่องกระตุ้นสมองอัจฉริยะ (กระตุ้นเฉพาะตอนโดปามีนตก เหมือนแอร์ตัดไฟอัตโนมัติ), ช่วยบริษัทยาทดสอบยาแก้ซึมเศร้าและยาเลิกเสพติดได้เร็วขึ้นจากหลายวันเหลือไม่กี่นาที และต่อยอดสู่แขนกล/คอมพิวเตอร์ที่เข้าใจอารมณ์ผู้ป่วย
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- แถวล่าง: ภาพขั้นตอนการทำงาน 4 ขั้นตอนแบบเข้าใจง่าย -->
+        <div class="pt-6 border-t border-slate-200 space-y-4">
+          <div>
+            <h3 data-i18n="m0.q4.t" class="text-base sm:text-lg font-medium text-[#0f172a]">4. มันทำงานยังไงทีละขั้นตอน? (How does it work step by step?)</h3>
+            <p data-i18n="m0.q4.sub" class="text-xs text-[#64748b] mt-0.5">ดูภาพประกอบจากซ้ายไปขวา: จากสารเคมีในสมอง → สายตรวจ → ชิปอ่านค่า → ส่งสัญญาณปรับสมดุล</p>
+          </div>
+
+          <div class="bg-[#f8fafc] border border-slate-200 rounded-2xl p-3 sm:p-4 overflow-hidden">
+            <img src="assets/how-it-works-steps.jpg" alt="4-step visual story of how the neurochemical biochip works" class="w-full max-w-4xl mx-auto h-auto rounded-xl shadow-xs" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            <div class="bg-[#f8fafc] border border-teal-200 rounded-xl p-4 space-y-1">
+              <div class="font-mono-tech text-xs font-medium text-[#0f766e]">STEP 1</div>
+              <div data-i18n="m0.s1.t" class="text-sm font-medium text-[#0f172a]">สมองหลั่งสารเคมี</div>
+              <p data-i18n="m0.s1.p" class="read-card-text text-[#334155]">เวลาเราคิด ขยับตัว หรือรู้สึกดี สมองจะปล่อยสารสื่อประสาท (เช่น โดปามีน) ออกมาในปริมาณน้อยมาก</p>
+            </div>
+
+            <div class="bg-[#f8fafc] border border-sky-200 rounded-xl p-4 space-y-1">
+              <div class="font-mono-tech text-xs font-medium text-[#0284c7]">STEP 2</div>
+              <div data-i18n="m0.s2.t" class="text-sm font-medium text-[#0f172a]">สายตรวจจับสัญญาณ</div>
+              <p data-i18n="m0.s2.p" class="read-card-text text-[#334155]">ขั้วไฟฟ้าเล็กกว่าเส้นผมจะปล่อยแรงดันไฟเบาๆ ทำให้สารเคมีเกิดปฏิกิริยาและกลายเป็นกระแสไฟฟ้าจิ๋ว</p>
+            </div>
+
+            <div class="bg-[#f8fafc] border border-indigo-200 rounded-xl p-4 space-y-1">
+              <div class="font-mono-tech text-xs font-medium text-[#4f46e5]">STEP 3</div>
+              <div data-i18n="m0.s3.t" class="text-sm font-medium text-[#0f172a]">ไมโครชิป + AI แปลผล</div>
+              <p data-i18n="m0.s3.p" class="read-card-text text-[#334155]">ชิป CMOS แยกสัญญาณจิ๋วนี้ออกจากเสียงรบกวน แล้วให้ AI คำนวณออกมาทันทีว่าตอนนี้สารเคมีมีกี่หน่วย</p>
+            </div>
+
+            <div class="bg-[#f8fafc] border border-amber-200 rounded-xl p-4 space-y-1">
+              <div class="font-mono-tech text-xs font-medium text-[#d97706]">STEP 4</div>
+              <div data-i18n="m0.s4.t" class="text-sm font-medium text-[#0f172a]">ปรับสมดุลอัตโนมัติ</div>
+              <p data-i18n="m0.s4.p" class="read-card-text text-[#334155]">ถ้าระดับสารเคมีตกต่ำกว่าปกติ เครื่องจะส่งพัลส์ไฟอ่อนๆ ไปกระตุ้นสมองให้กลับมาสมดุลเหมือนเทอร์โมสตัท</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
     <!-- โมดูลที่ 1: ภาพรวมระบบและข้อจำกัดสู่คลินิก                             -->
     <!-- ===================================================================== -->
-    <section id="module-1" class="scroll-mt-32 space-y-6">
+    <section id="module-1" class="scroll-mt-32 space-y-6 module-divider">
       <div class="clinical-card p-6 sm:p-8 space-y-6">
         <div class="max-w-4xl space-y-3">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-[#0f766e] text-xs font-semibold">
