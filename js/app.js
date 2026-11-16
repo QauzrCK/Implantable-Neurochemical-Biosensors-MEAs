@@ -337,7 +337,7 @@ function initModalitiesTable() {
           : 'bg-sky-50 text-[#0284c7] border-sky-200';
       return `<tr class="hover:bg-slate-50 transition">
         <td class="py-3.5 px-4 font-medium text-[#0f172a]">${m.name}</td>
-        <td class="py-3.5 px-4"><span class="px-2.5 py-0.5 rounded-full text-xs font-medium border ${badgeClass}">${m.mode}</span></td>
+        <td class="py-3.5 px-4 whitespace-nowrap"><span class="inline-block whitespace-nowrap px-2.5 py-0.5 rounded-full text-xs font-medium border ${badgeClass}">${m.mode}</span></td>
         <td class="py-3.5 px-4 text-[#334155]">${m.waveform}</td>
         <td class="py-3.5 px-4 font-mono-tech text-[#0f766e] font-medium">${m.resolution}</td>
         <td class="py-3.5 px-4 text-[#334155]">${m.selectivity}</td>
@@ -560,7 +560,19 @@ function initCmosModule() {
         x: {
           type: 'logarithmic',
           title: { display: true, text: '', font: { size: 10 }, color: c.title },
-          ticks: { font: { size: 10 }, color: c.tick },
+          ticks: {
+            font: { size: 10 },
+            color: c.tick,
+            callback: (val) => {
+              const exp = Math.log10(val);
+              if (Number.isInteger(exp)) {
+                const supMap = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵' };
+                const sup = String(exp).split('').map(ch => supMap[ch] || ch).join('');
+                return `10${sup}`;
+              }
+              return null;
+            }
+          },
           grid: { color: c.grid }
         },
         y: {

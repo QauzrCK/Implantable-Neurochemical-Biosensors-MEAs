@@ -204,12 +204,14 @@
           <h2 data-i18n="m1.title" class="text-xl sm:text-2xl font-bold text-[#0f172a] leading-tight">
             การออกแบบร่วมระหว่างวัสดุศาสตร์ วงจรรวมแอนะล็อก และประสาทวิทยาศาสตร์เชิงคำนวณ
           </h2>
-          <p data-i18n-html="m1.intro" class="read-body prose-comfort text-[#334155]">
-            การตรวจวัดการเปลี่ยนแปลงของสารสื่อประสาทในสมองแบบเรียลไทม์ต้องผสานการทำงานของระบบย่อย 3 ส่วนหลัก ได้แก่
-            <strong class="text-[#0f172a]">1) ขั้วไฟฟ้าขนาดไมโคร/นาโนที่ฝังในเนื้อเยื่อได้</strong> (เส้นใยคาร์บอน CFMEs ขนาด <span class="formula-pill">7 µm</span>, ท่อนาโนคาร์บอน CNTs, กราฟีน, เพชรเจือโบรอน BDD, พอลิเมอร์นำไฟฟ้า PEDOT และอนุภาคนาโนทองคำ AuNPs)
-            <strong class="text-[#0f172a]">2) วงจร CMOS Potentiostat สัญญาณรบกวนต่ำ</strong> ที่กวาดศักย์ไฟฟ้าความเร็วสูงและแยกกระแสรีดอกซ์ระดับพิโคแอมแปร์ (<span class="formula-pill-indigo">10⁻¹² A</span>) ออกจากกระแสประจุพื้นหลังขนาดใหญ่ <span class="px-2 py-0.5 rounded bg-[#fef3c7] text-[#d97706] font-mono-tech text-xs font-semibold">300–400 nA</span> และ
-            <strong class="text-[#0f172a]">3) อัลกอริทึมเคมีมิติ (Chemometrics)</strong> เพื่อถอดรหัสโดปามีนและเซโรโทนินในการรักษาโรคพาร์กินสัน การเสพติด และโรคซึมเศร้า
-          </p>
+          <div data-i18n-html="m1.intro" class="read-body prose-comfort text-[#334155] space-y-2">
+            <p>การตรวจวัดการเปลี่ยนแปลงของสารสื่อประสาทในสมองแบบเรียลไทม์ต้องผสานการทำงานของระบบย่อย 3 ส่วนหลัก ได้แก่</p>
+            <ol class="list-decimal pl-5 space-y-1.5">
+              <li><strong class="text-[#0f172a]">ขั้วไฟฟ้าขนาดไมโคร/นาโนที่ฝังในเนื้อเยื่อได้</strong> (เส้นใยคาร์บอน CFMEs ขนาด <span class="formula-pill">7 µm</span>, ท่อนาโนคาร์บอน CNTs, กราฟีน, เพชรเจือโบรอน BDD, พอลิเมอร์นำไฟฟ้า PEDOT และอนุภาคนาโนทองคำ AuNPs)</li>
+              <li><strong class="text-[#0f172a]">วงจร CMOS Potentiostat สัญญาณรบกวนต่ำ</strong> ที่กวาดศักย์ไฟฟ้าความเร็วสูงและแยกกระแสรีดอกซ์ระดับพิโคแอมแปร์ (<span class="formula-pill-indigo">10⁻¹² A</span>) ออกจากกระแสประจุพื้นหลังขนาดใหญ่ <span class="px-2 py-0.5 rounded bg-[#fef3c7] text-[#d97706] font-mono-tech text-xs font-semibold">300–400 nA</span></li>
+              <li><strong class="text-[#0f172a]">อัลกอริทึมเคมีมิติ (Chemometrics)</strong> เพื่อถอดรหัสโดปามีนและเซโรโทนินในการรักษาโรคพาร์กินสัน การเสพติด และโรคซึมเศร้า</li>
+            </ol>
+          </div>
         </div>
 
         <!-- 4 Hero KPI Cards -->
@@ -282,7 +284,7 @@
 
               <!-- Closed-Loop Feedback Path -->
               <path d="M 840 132 L 840 182 L 120 182 L 120 135" fill="none" stroke="#d97706" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-amber)" />
-              <rect x="335" y="169" width="290" height="24" rx="12" class="svg-surface" stroke="#d97706" stroke-width="1" />
+              <rect x="275" y="168" width="410" height="26" rx="13" class="svg-surface" stroke="#d97706" stroke-width="1.2" />
               <text x="480" y="185" text-anchor="middle" font-size="11" font-weight="500" fill="#d97706" data-i18n="m1.diag.fb">
                 Closed-Loop DBS Feedback (~100 Hz Charge-Balanced Pulses)
               </text>
