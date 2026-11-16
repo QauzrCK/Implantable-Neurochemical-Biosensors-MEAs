@@ -232,3 +232,76 @@ html.dark footer { background-color: #111827 !important; border-color: #1e293b !
   pointer-events: auto;
   transform: translateY(0);
 }
+
+/* Interactive Co-Design SVG Nodes */
+.svg-node {
+  cursor: pointer;
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+.svg-node:hover {
+  filter: drop-shadow(0 6px 14px rgba(13, 148, 136, 0.18));
+  transform: translateY(-2px);
+}
+.svg-surface {
+  fill: var(--bg-card);
+  stroke: var(--border-strong);
+}
+.svg-text-title {
+  fill: var(--text-heading);
+}
+.svg-text-sub {
+  fill: var(--text-muted);
+}
+
+/* Module 7 Accordion */
+.report-accordion {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.95rem 1.25rem;
+  transition: border-color 0.2s ease;
+}
+.report-accordion[open] {
+  border-color: var(--border-strong);
+}
+.report-accordion summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.report-accordion summary::-webkit-details-marker {
+  display: none;
+}
+.report-accordion summary .acc-chevron {
+  transition: transform 0.2s ease;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.report-accordion[open] summary .acc-chevron {
+  transform: rotate(180deg);
+}
+.report-accordion p {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Clean Print / PDF Export */
+@media print {
+  header, #reading-progress, #back-to-top, #btn-copy-research, #btn-toggle-report, #btn-print-report {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 12px !important;
+  }
+  .clinical-card {
+    box-shadow: none !important;
+    border-color: #cbd5e1 !important;
+    break-inside: avoid;
+  }
+}

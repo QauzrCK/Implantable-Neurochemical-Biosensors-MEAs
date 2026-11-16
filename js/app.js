@@ -294,6 +294,22 @@ function initFscvSimulatorModule() {
   sliderRate.addEventListener('input', updateSimulator);
   sliderCdl.addEventListener('input', updateSimulator);
   sliderConc.addEventListener('input', updateSimulator);
+
+  const fscvPresetBtns = document.querySelectorAll('.fscv-preset-btn');
+  fscvPresetBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sliderRate.value = btn.getAttribute('data-rate');
+      sliderCdl.value = btn.getAttribute('data-cdl');
+      sliderConc.value = btn.getAttribute('data-conc');
+      fscvPresetBtns.forEach(b => {
+        b.className = b === btn
+          ? 'fscv-preset-btn px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#0d9488] text-white transition'
+          : 'fscv-preset-btn px-2.5 py-1 rounded-lg text-[11px] bg-[#f1f5f9] text-[#334155] border border-slate-200 hover:bg-teal-50 transition';
+      });
+      updateSimulator();
+    });
+  });
+
   updateSimulator();
   i18nRefreshHooks.push(updateSimulator);
   themeRefreshHooks.push(tc => {
@@ -840,6 +856,21 @@ function initClinicalAndDbsModule() {
 
   freqSlider.addEventListener('input', updateDbsExplorer);
   pwSlider.addEventListener('input', updateDbsExplorer);
+
+  const dbsPresetBtns = document.querySelectorAll('.dbs-preset-btn');
+  dbsPresetBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      freqSlider.value = btn.getAttribute('data-freq');
+      pwSlider.value = btn.getAttribute('data-pw');
+      dbsPresetBtns.forEach(b => {
+        b.className = b === btn
+          ? 'dbs-preset-btn px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#4f46e5] text-white transition'
+          : 'dbs-preset-btn px-2.5 py-1 rounded-lg text-[11px] bg-white text-[#334155] border border-slate-200 hover:bg-indigo-50 transition';
+      });
+      updateDbsExplorer();
+    });
+  });
+
   updateDbsExplorer();
 
   i18nRefreshHooks.push(() => {
@@ -847,6 +878,22 @@ function initClinicalAndDbsModule() {
     renderDbsSteps();
     updateDbsExplorer();
   });
+
+  const toggleReportBtn = document.getElementById('btn-toggle-report');
+  const printReportBtn = document.getElementById('btn-print-report');
+  if (toggleReportBtn) {
+    toggleReportBtn.addEventListener('click', () => {
+      const accordions = document.querySelectorAll('#thai-research-text details.report-accordion');
+      const anyClosed = Array.from(accordions).some(d => !d.open);
+      accordions.forEach(d => { d.open = anyClosed; });
+    });
+  }
+  if (printReportBtn) {
+    printReportBtn.addEventListener('click', () => {
+      document.querySelectorAll('#thai-research-text details.report-accordion').forEach(d => { d.open = true; });
+      window.print();
+    });
+  }
 
   const copyBtn = document.getElementById('btn-copy-research');
   const copyToast = document.getElementById('copy-toast');

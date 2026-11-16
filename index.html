@@ -155,6 +155,93 @@
           </div>
         </div>
 
+        <!-- Interactive SVG System Co-Design Block Diagram -->
+        <div class="pt-6 border-t border-slate-200 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 data-i18n="m1.diag.title" class="text-base font-bold text-[#0f172a]">⚡ แผนภาพสถาปัตยกรรมระบบแบบวงปิด (Interactive Co-Design Signal Chain)</h3>
+              <p data-i18n="m1.diag.sub" class="text-xs text-[#64748b]">คลิกที่แต่ละบล็อกเพื่อข้ามไปยังโมดูลที่เกี่ยวข้อง</p>
+            </div>
+            <span class="formula-pill self-start">Sense → Amplify → Decode → Stimulate</span>
+          </div>
+
+          <div class="bg-[#f8fafc] border border-slate-200 rounded-2xl p-3 sm:p-5 overflow-x-auto custom-scrollbar">
+            <svg viewBox="0 0 960 215" class="w-full min-w-[680px] h-auto" role="img" aria-label="Neurochemical Closed-Loop Co-Design Diagram">
+              <defs>
+                <marker id="arrow-teal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#0d9488" />
+                </marker>
+                <marker id="arrow-indigo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#4f46e5" />
+                </marker>
+                <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#d97706" />
+                </marker>
+              </defs>
+
+              <!-- Forward Signal Path Arrows -->
+              <line x1="215" y1="80" x2="258" y2="80" stroke="#0d9488" stroke-width="2.2" marker-end="url(#arrow-teal)" />
+              <line x1="455" y1="80" x2="498" y2="80" stroke="#0284c7" stroke-width="2.2" marker-end="url(#arrow-indigo)" />
+              <line x1="695" y1="80" x2="738" y2="80" stroke="#4f46e5" stroke-width="2.2" marker-end="url(#arrow-amber)" />
+
+              <!-- Closed-Loop Feedback Path -->
+              <path d="M 840 132 L 840 182 L 120 182 L 120 135" fill="none" stroke="#d97706" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-amber)" />
+              <rect x="335" y="169" width="290" height="24" rx="12" class="svg-surface" stroke="#d97706" stroke-width="1" />
+              <text x="480" y="185" text-anchor="middle" font-size="11" font-weight="500" fill="#d97706" data-i18n="m1.diag.fb">
+                Closed-Loop DBS Feedback (~100 Hz Charge-Balanced Pulses)
+              </text>
+
+              <!-- Node 1: Micro/Nano Electrode -->
+              <a href="#module-3">
+                <g class="svg-node">
+                  <rect x="20" y="25" width="195" height="107" rx="14" class="svg-surface" stroke-width="1.6" />
+                  <rect x="20" y="25" width="195" height="6" rx="3" fill="#0d9488" />
+                  <text x="36" y="54" font-size="11" font-family="JetBrains Mono, monospace" fill="#0d9488" font-weight="600">01 · SENSOR</text>
+                  <text x="36" y="75" font-size="13" class="svg-text-title" font-weight="600" data-i18n="m1.diag.n1t">ขั้วไฟฟ้าไมโคร/นาโน</text>
+                  <text x="36" y="96" font-size="11" class="svg-text-sub">7 µm CFME · PEDOT-CNT</text>
+                  <text x="36" y="114" font-size="11" class="svg-text-sub">LoD 2.03 nM · &lt;30 kPa</text>
+                </g>
+              </a>
+
+              <!-- Node 2: CMOS AFE -->
+              <a href="#module-4">
+                <g class="svg-node">
+                  <rect x="260" y="25" width="195" height="107" rx="14" class="svg-surface" stroke-width="1.6" />
+                  <rect x="260" y="25" width="195" height="6" rx="3" fill="#0284c7" />
+                  <text x="276" y="54" font-size="11" font-family="JetBrains Mono, monospace" fill="#0284c7" font-weight="600">02 · CMOS AFE</text>
+                  <text x="276" y="75" font-size="13" class="svg-text-title" font-weight="600" data-i18n="m1.diag.n2t">วงจร Potentiostat</text>
+                  <text x="276" y="96" font-size="11" class="svg-text-sub">26.5–39.2 pArms · 3.74 µW</text>
+                  <text x="276" y="114" font-size="11" class="svg-text-sub">83 dB DR · I-ΔΣ ADC</text>
+                </g>
+              </a>
+
+              <!-- Node 3: Chemometrics & AI -->
+              <a href="#module-5">
+                <g class="svg-node">
+                  <rect x="500" y="25" width="195" height="107" rx="14" class="svg-surface" stroke-width="1.6" />
+                  <rect x="500" y="25" width="195" height="6" rx="3" fill="#4f46e5" />
+                  <text x="516" y="54" font-size="11" font-family="JetBrains Mono, monospace" fill="#4f46e5" font-weight="600">03 · DECODER</text>
+                  <text x="516" y="75" font-size="13" class="svg-text-title" font-weight="600" data-i18n="m1.diag.n3t">เคมีมิติและ AI</text>
+                  <text x="516" y="96" font-size="11" class="svg-text-sub">PCR · PLSR · Elastic Net</text>
+                  <text x="516" y="114" font-size="11" class="svg-text-sub">1D-CNN · LSTM · PINNs</text>
+                </g>
+              </a>
+
+              <!-- Node 4: Closed-Loop DBS -->
+              <a href="#module-5">
+                <g class="svg-node">
+                  <rect x="740" y="25" width="195" height="107" rx="14" class="svg-surface" stroke-width="1.6" />
+                  <rect x="740" y="25" width="195" height="6" rx="3" fill="#d97706" />
+                  <text x="756" y="54" font-size="11" font-family="JetBrains Mono, monospace" fill="#d97706" font-weight="600">04 · ACTUATOR</text>
+                  <text x="756" y="75" font-size="13" class="svg-text-title" font-weight="600" data-i18n="m1.diag.n4t">กระตุ้นสมองวงปิด</text>
+                  <text x="756" y="96" font-size="11" class="svg-text-sub">ANN (150 Hidden Neurons)</text>
+                  <text x="756" y="114" font-size="11" class="svg-text-sub">20–200 Hz · 0.1–2.0 ms</text>
+                </g>
+              </a>
+            </svg>
+          </div>
+        </div>
+
         <!-- Interactive 4-Pillar Translational Bottleneck Switcher -->
         <div class="pt-6 border-t border-slate-200 space-y-4">
           <div>
@@ -187,6 +274,14 @@
             <div class="flex items-center justify-between">
               <h3 data-i18n="m2.sim.title" class="text-base font-bold text-[#0f172a]">🎛️ ตัวควบคุมพารามิเตอร์ FSCV</h3>
               <span class="text-[11px] font-mono-tech px-2.5 py-0.5 rounded-full bg-teal-50 text-[#0f766e] border border-teal-200 font-semibold">Interactive</span>
+            </div>
+
+            <!-- 1-Click FSCV Presets -->
+            <div id="fscv-presets" class="flex flex-wrap gap-1.5">
+              <button type="button" data-rate="400" data-cdl="1.0" data-conc="250" data-i18n="m2.pre.std" class="fscv-preset-btn px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#0d9488] text-white transition">Standard CFME</button>
+              <button type="button" data-rate="1000" data-cdl="0.8" data-conc="150" data-i18n="m2.pre.fast" class="fscv-preset-btn px-2.5 py-1 rounded-lg text-[11px] bg-[#f1f5f9] text-[#334155] border border-slate-200 hover:bg-teal-50 transition">Fast 5-HT (1000 V/s)</button>
+              <button type="button" data-rate="400" data-cdl="1.0" data-conc="40" data-i18n="m2.pre.pd" class="fscv-preset-btn px-2.5 py-1 rounded-lg text-[11px] bg-[#f1f5f9] text-[#334155] border border-slate-200 hover:bg-teal-50 transition">Parkinsonian Low-DA</button>
+              <button type="button" data-rate="400" data-cdl="1.8" data-conc="500" data-i18n="m2.pre.cnt" class="fscv-preset-btn px-2.5 py-1 rounded-lg text-[11px] bg-[#f1f5f9] text-[#334155] border border-slate-200 hover:bg-teal-50 transition">High-Area CNT</button>
             </div>
 
             <div class="space-y-4 pt-1">
@@ -601,6 +696,13 @@
             <span class="formula-pill-indigo self-start">ANN: 150 Hidden Neurons · LM</span>
           </div>
 
+          <!-- 1-Click DBS Presets -->
+          <div id="dbs-presets" class="flex flex-wrap gap-1.5">
+            <button type="button" data-freq="100" data-pw="1.0" data-i18n="m5.pre.opt" class="dbs-preset-btn px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#4f46e5] text-white transition">Optimal (100 Hz · 1.0 ms)</button>
+            <button type="button" data-freq="40" data-pw="0.5" data-i18n="m5.pre.low" class="dbs-preset-btn px-2.5 py-1 rounded-lg text-[11px] bg-white text-[#334155] border border-slate-200 hover:bg-indigo-50 transition">Sub-Threshold (40 Hz · 0.5 ms)</button>
+            <button type="button" data-freq="180" data-pw="1.75" data-i18n="m5.pre.high" class="dbs-preset-btn px-2.5 py-1 rounded-lg text-[11px] bg-white text-[#334155] border border-slate-200 hover:bg-indigo-50 transition">Over-Stim (180 Hz · 1.75 ms)</button>
+          </div>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <div class="flex justify-between text-xs font-medium mb-1">
@@ -769,45 +871,71 @@
             <h2 data-i18n="m7.title" class="text-xl sm:text-2xl font-bold text-[#0f172a] mt-0.5">📄 บทสังเคราะห์งานวิจัยฉบับสมบูรณ์ (Full Thai Research Report + IRL Synthesis)</h2>
             <p data-i18n="m7.sub" class="text-xs text-[#64748b] mt-0.5">ครอบคลุมหลักการออกแบบร่วม เคมีไฟฟ้า วัสดุศาสตร์ วงจร CMOS ประสาทวิทยาศาสตร์คลินิก และการประยุกต์ใช้จริงในโลกแห่งความเป็นจริง</p>
           </div>
-          <button id="btn-copy-research" data-i18n="m7.copyBtn" class="px-4 py-2.5 rounded-xl bg-[#0d9488] hover:bg-[#0f766e] text-white font-semibold text-xs shadow-xs transition self-start sm:self-auto shrink-0">
-            📋 คัดลอกบทความวิจัย (Copy Thai Report)
-          </button>
+          <div class="flex flex-wrap items-center gap-2 self-start sm:self-auto shrink-0">
+            <button id="btn-toggle-report" type="button" data-i18n="m7.toggleBtn" class="px-3.5 py-2 rounded-xl bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] border border-slate-200 font-medium text-xs transition">
+              ↕️ ย่อ/ขยายทั้งหมด
+            </button>
+            <button id="btn-print-report" type="button" data-i18n="m7.printBtn" class="px-3.5 py-2 rounded-xl bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] border border-slate-200 font-medium text-xs transition">
+              🖨️ พิมพ์ / PDF
+            </button>
+            <button id="btn-copy-research" data-i18n="m7.copyBtn" class="px-4 py-2 rounded-xl bg-[#0d9488] hover:bg-[#0f766e] text-white font-semibold text-xs shadow-xs transition">
+              📋 คัดลอกบทความวิจัย (Copy Thai Report)
+            </button>
+          </div>
         </div>
 
         <div id="copy-toast" data-i18n="m7.copyToast" class="hidden text-xs font-semibold text-[#0f766e] bg-teal-50 border border-teal-200 rounded-xl px-4 py-3">
           ✅ คัดลอกบทความวิจัยภาษาไทยทั้งหมดไปยังคลิปบอร์ดเรียบร้อยแล้ว
         </div>
 
-        <article id="thai-research-text" class="bg-[#f8fafc] border border-slate-200 rounded-2xl p-6 sm:p-8 text-sm sm:text-[15px] text-[#334155] space-y-6 leading-relaxed prose-comfort mx-auto">
-          <div class="space-y-1.5">
-            <h3 data-i18n="m7.s1.h" class="text-sm sm:text-base font-bold text-[#0f172a]">1. บทนำและสถาปัตยกรรมการออกแบบร่วม (System Co-Design)</h3>
+        <article id="thai-research-text" class="bg-[#f8fafc] border border-slate-200 rounded-2xl p-6 sm:p-8 text-sm sm:text-[15px] text-[#334155] space-y-4 leading-relaxed prose-comfort mx-auto">
+          <details open class="report-accordion">
+            <summary>
+              <h3 data-i18n="m7.s1.h" class="text-sm sm:text-base font-medium text-[#0f172a]">1. บทนำและสถาปัตยกรรมการออกแบบร่วม (System Co-Design)</h3>
+              <span class="acc-chevron">▼</span>
+            </summary>
             <p data-i18n="m7.s1.p">การตรวจวัดความเข้มข้นของสารสื่อประสาทในสมองสิ่งมีชีวิตแบบเรียลไทม์จำเป็นต้องอาศัยการออกแบบร่วมกันอย่างใกล้ชิดระหว่าง 3 ศาสตร์หลัก ได้แก่ (1) วิศวกรรมวัสดุขั้วไฟฟ้าขนาดไมโครและนาโนที่ฝังในเนื้อเยื่อสมองได้โดยรบกวนระบบประสาทน้อยที่สุด เช่น เส้นใยคาร์บอน T-650 ขนาดเส้นผ่านศูนย์กลาง 7 µm (ปลายเปิด ~100 µm) ท่อนาโนคาร์บอน (CNTs) กราฟีน เพชรเจือโบรอน (BDD) พอลิเมอร์นำไฟฟ้า PEDOT และอนุภาคนาโนทองคำ (AuNPs) (2) การออกแบบวงจรรวมแอนะล็อก CMOS Potentiostat สัญญาณรบกวนต่ำระดับพิโคแอมแปร์ (10⁻¹² A) ที่สามารถสร้างคลื่นกวาดศักย์ความเร็วสูงพร้อมแยกสัญญาณรีดอกซ์ขนาดเล็ก (&lt;10 nA) ออกจากกระแสประจุพื้นหลังขนาดใหญ่ (300–400 nA) และ (3) การประมวลผลสัญญาณด้วยเคมีมิติ (Chemometrics) เพื่อแยกสารสื่อประสาทที่มีโครงสร้างคล้ายคลึงกันในการศึกษาโรคพาร์กินสัน การเสพติดสารเสพติด และโรคซึมเศร้า</p>
-          </div>
+          </details>
 
-          <div class="space-y-1.5">
-            <h3 data-i18n="m7.s2.h" class="text-sm sm:text-base font-bold text-[#0f172a]">2. เทคนิคทางเคมีไฟฟ้าและความท้าทาย Phasic–Tonic (Electrochemical Modalities)</h3>
+          <details open class="report-accordion">
+            <summary>
+              <h3 data-i18n="m7.s2.h" class="text-sm sm:text-base font-medium text-[#0f172a]">2. เทคนิคทางเคมีไฟฟ้าและความท้าทาย Phasic–Tonic (Electrochemical Modalities)</h3>
+              <span class="acc-chevron">▼</span>
+            </summary>
             <p data-i18n="m7.s2.p">เทคนิค Fast-Scan Cyclic Voltammetry (FSCV) กวาดรูปคลื่นศักย์ไฟฟ้าสามเหลี่ยมจาก -0.4 V ถึง +1.3 V vs. Ag/AgCl ด้วยอัตราเร็วมาตรฐาน 400 V/s (ช่วงกวาด 8.5 ms ที่ความถี่ซ้ำ 10 Hz หรือ Duty Cycle 8.5%) ทำให้โดปามีนเกิดออกซิเดชันเป็น Dopamine-o-quinone ที่ ~+0.60 V และรีดักชันกลับที่ ~-0.20 V ตามสมการ Randles–Ševčík (i_p = (2.69×10⁵) n^(3/2) A D^(1/2) C v^(1/2)) อย่างไรก็ตาม ความจุชั้นคู่ไฟฟ้าของขั้วทำงาน (C_dl ≈ 1 nF) ทำให้เกิดกระแสประจุพื้นหลัง I_BG = C_dl·v สูงถึง 400 nA จึงต้องใช้การหักลบพื้นหลัง (Background Subtraction) ซึ่งทำให้สูญเสียข้อมูลระดับพื้นฐานต่อเนื่อง (Tonic Baseline) นักวิจัยจึงพัฒนาเทคนิค M-CSWV (ความละเอียด 10 วินาที วัดค่าฐานโดปามีนใน rat NAcc ได้ 134 ± 32 nM), FSCAV, Rapid-Pulse Voltammetry ร่วมกับ PLSR (RPV-PLSR), Steered FSCV (ลด LoD ลง 39 เท่าเหลือ 0.17 nM) และอนุพันธ์อันดับสอง SDBR เพื่อวัดทั้งสัญญาณฉับพลัน (Phasic) และค่าฐาน (Tonic)</p>
-          </div>
+          </details>
 
-          <div class="space-y-1.5">
-            <h3 data-i18n="m7.s3.h" class="text-sm sm:text-base font-bold text-[#0f172a]">3. วัสดุขั้วไฟฟ้าขั้นสูงและกลศาสตร์แบบยืดหยุ่น (Nanomaterials &amp; Flexible Mechanics)</h3>
+          <details open class="report-accordion">
+            <summary>
+              <h3 data-i18n="m7.s3.h" class="text-sm sm:text-base font-medium text-[#0f172a]">3. วัสดุขั้วไฟฟ้าขั้นสูงและกลศาสตร์แบบยืดหยุ่น (Nanomaterials &amp; Flexible Mechanics)</h3>
+              <span class="acc-chevron">▼</span>
+            </summary>
             <p data-i18n="m7.s3.p">ขั้วไฟฟ้าเส้นใยคาร์บอนเปลือยมีความเปราะหักง่าย เกิดการอุดตันบนพื้นผิว (Biofouling) จากเซโรโทนิน (5-HT) และโปรตีน รวมถึงถูกกัดกร่อนเมื่อกวาดศักย์เกิน +1.3 V การดัดแปรผิวด้วยวัสดุนาโนช่วยยกระดับประสิทธิภาพอย่างก้าวกระโดด เช่น คอมโพสิต PEDOT-CNT ร่วมกับ SWV ลดขีดจำกัดการตรวจวัด (LoD) ของโดปามีนเหลือ 2.03 ± 0.09 nM เส้นใย PEI-CNT ให้ค่า LoD 5.0 nM และหัวตรวจ µIP-CFM ให้ค่า LoD 5.7 nM พร้อมเสถียรภาพในสมองยาวนานกว่า 1 ปี การเคลือบ PEDOT:Nafion เพิ่มความไวเป็น 46 ± 13 nA/µM และคัดแยกสารรบกวน Ascorbic Acid ได้สูงถึง 1540 ± 150 เท่า ขณะที่ชั้นเพชร B-NCD (หนา 1 µm เกรน 50 nm) ช่วยป้องกันการกัดกร่อน ด้านกลศาสตร์ การเปลี่ยนฐานรองจากซิลิคอน (&gt;100 GPa) เป็นพอลิเมอร์ยืดหยุ่น (PDMS 1.9 MPa, SEBS NeuroString, Polyimide, Parylene-C) ร่วมกับตัวช่วยสอดใส่ที่ละลายน้ำได้ (Pullulan) หรือเส้นใย fGCFs ช่วยลดความไม่เข้ากันเชิงกลกับเนื้อเยื่อสมอง (&lt;30 kPa) และลดการเกิดแผลเป็นเกลีย</p>
-          </div>
+          </details>
 
-          <div class="space-y-1.5">
-            <h3 data-i18n="m7.s4.h" class="text-sm sm:text-base font-bold text-[#0f172a]">4. สถาปัตยกรรมวงจร CMOS Potentiostat และตัวขยายสัญญาณส่วนหน้า (Low-Noise CMOS AFEs)</h3>
+          <details open class="report-accordion">
+            <summary>
+              <h3 data-i18n="m7.s4.h" class="text-sm sm:text-base font-medium text-[#0f172a]">4. สถาปัตยกรรมวงจร CMOS Potentiostat และตัวขยายสัญญาณส่วนหน้า (Low-Noise CMOS AFEs)</h3>
+              <span class="acc-chevron">▼</span>
+            </summary>
             <p data-i18n="m7.s4.p">การออกแบบวงจร CMOS Potentiostat ต้องจัดการสมดุลระหว่างสัญญาณรบกวน พิสัยไดนามิก กำลังงาน และพื้นที่ซิลิคอน วงจรของ Hall et al. (IEEE TBioCAS 2022) บนเทคโนโลยี 0.18 µm CMOS ใช้สถาปัตยกรรม 2-Electrode Pseudo-Differential Class-AB Common-Mode Rejection (CMR) ร่วมกับ Regulated Current Conveyor และตัวแปลง 1st-Order I-ΔΣ ADC (ใช้เทคนิค DEM และ Chopping) สามารถหักล้างกระแสพื้นหลังได้สูงสุด 290 nA_pp ทำสัญญาณรบกวนขาเข้าได้ 26.5 pArms (วงจรเปิด) และ 39.2 pArms (ต่อโหลดขั้วไฟฟ้า 1 nF) ที่แบนด์วิดท์ 5 kHz คิดเป็น Effective Dynamic Range 83 dB ด้วยกำลังงานเฉลี่ยเพียง 3.74 µW เมื่อทำงานแบบ Duty-Cycled ส่วนอาร์เรย์ 128-Ch Programmable R-TIA ใช้ตัวต้านทาน n-well ความหนาแน่นสูงบรรจุได้ 128 ช่องในพื้นที่ 2.25 mm² (0.0176 mm²/ช่อง, สัญญาณรบกวน 220 pArms)</p>
-          </div>
+          </details>
 
-          <div class="space-y-1.5">
-            <h3 data-i18n="m7.s5.h" class="text-sm sm:text-base font-bold text-[#0f172a]">5. Chemometrics การประยุกต์ใช้ทางคลินิก และระบบ Closed-Loop DBS</h3>
+          <details open class="report-accordion">
+            <summary>
+              <h3 data-i18n="m7.s5.h" class="text-sm sm:text-base font-medium text-[#0f172a]">5. Chemometrics การประยุกต์ใช้ทางคลินิก และระบบ Closed-Loop DBS</h3>
+              <span class="acc-chevron">▼</span>
+            </summary>
             <p data-i18n="m7.s5.p">การวิเคราะห์องค์ประกอบหลัก (PCR พร้อม Malinowski's F-test), PLSR, Elastic Net และโครงข่ายประสาทเทียมเชิงลึก (1D-CNN, LSTM และ Physics-Informed Neural Networks: PINNs) ช่วยแยกความเข้มข้นของโดปามีนและเซโรโทนินออกจากสัญญาณ pH และการเลื่อนของขั้วอ้างอิงได้อย่างแม่นยำ ในการศึกษาทางคลินิก การกระตุ้น STN-DBS ช่วยเพิ่มระดับ Tonic Dopamine ในโรคพาร์กินสัน ส่วนในงานวิจัยการเสพติด โคเคนเพิ่มทั้ง Phasic DA (2.4 เท่า) และ Tonic DA (1.9 เท่า) ขณะที่เฟนทานิลและออกซิโคโดนปรับเปลี่ยนระดับ Tonic เป็นหลัก สำหรับการผ่าตัดในมนุษย์ขณะตื่นของ Kishida, Montague และ Lee พบว่าโดปามีนระดับต่ำกว่าวินาทีใน Striatum เข้ารหัสทั้ง Actual และ Counterfactual Reward Prediction Errors สุดท้าย ระบบ Closed-Loop DBS เชื่อมต่อวงจรตรวจวัดเข้ากับตัวกรอง Butterworth 100 Hz และโครงข่ายประสาทเทียม ANN (150 Hidden Neurons, Levenberg–Marquardt) เพื่อปรับความถี่ (~100 Hz) และความกว้างพัลส์ (0.1–2.0 ms) แบบอัตโนมัติ</p>
-          </div>
+          </details>
 
-          <div class="space-y-1.5">
-            <h3 data-i18n="m7.s6.h" class="text-sm sm:text-base font-bold text-[#0f172a]">6. การประยุกต์ใช้จริงในโลกแห่งความเป็นจริง (Real-World Clinical &amp; Industrial Translation)</h3>
+          <details open class="report-accordion">
+            <summary>
+              <h3 data-i18n="m7.s6.h" class="text-sm sm:text-base font-medium text-[#0f172a]">6. การประยุกต์ใช้จริงในโลกแห่งความเป็นจริง (Real-World Clinical &amp; Industrial Translation)</h3>
+              <span class="acc-chevron">▼</span>
+            </summary>
             <p data-i18n="m7.s6.p">ในโลกแห่งความเป็นจริง เทคโนโลยีขั้วไฟฟ้าขนาดไมโครและวงจร CMOS Potentiostat สัญญาณรบกวนระดับพิโคแอมแปร์กำลังถูกนำไปใช้งานจริงใน 6 ด้านสำคัญ ได้แก่ (1) ห้องผ่าตัดสมองขณะผู้ป่วยรู้สึกตัว (Awake Human DBS Surgery) เพื่อทำแผนที่การหลั่งโดปามีนใน Striatum ภายในกรอบเวลา IRB 15–60 นาที ช่วยยืนยันตำแหน่งฝังขั้วกระตุ้นสมอง (2) เครื่องกระตุ้นสมองแบบวงปิดอัตโนมัติ (Adaptive Closed-Loop DBS / Neurochemostat / WINCS Harmoni / MAVEN) ที่ทำหน้าที่เป็นเทอร์โมสตัททางเคมีประสาท ส่งพัลส์กระตุ้น ~100 Hz เฉพาะเมื่อโดปามีนลดต่ำ ช่วยยืดอายุแบตเตอรี่และลดผลข้างเคียงด้านการเคลื่อนไหวผิดปกติ (Dyskinesia) และการพูด (3) อุตสาหกรรมพัฒนายาทางจิตเวชและการบำบัดการเสพติด โดยใช้อาร์เรย์ 128 ช่องและ MAVEN ติดตามการตอบสนองของโดปามีนและเซโรโทนินต่อยา Escitalopram (+42% 5-HT) โคเคน เฟนทานิล และออกซิโคโดนภายในไม่กี่นาที (4) อิเล็กทรอนิกส์ชีวภาพแบบนิ่มสำหรับสมองและลำไส้ (NeuroString SEBS / Polyimide &lt;30 kPa) ที่ตรวจวัดเซโรโทนินแบบเรียลไทม์ในทางเดินอาหารที่บีบตัวตลอดเวลาเพื่อศึกษาโรค IBS และภาวะซึมเศร้าผ่านแกนสมอง–ลำไส้ (5) การถ่ายภาพสมองร่วมกับเครื่อง MRI (Multimodal WINCS + BOLD fMRI) เพื่อเชื่อมโยงการหลั่งโดปามีนระดับนาโนโมลาร์เข้ากับการเชื่อมต่อเครือข่ายสมองทั้งระบบ และ (6) อินเทอร์เฟซสมองกับคอมพิวเตอร์รุ่นถัดไป (Next-Gen Neurochemical BCIs) ที่ใช้ขั้วไฟฟ้าสองโหมด (PEDOT/CNT + PSB) บันทึกทั้งศักย์ไฟฟ้าเซลล์ประสาทและสภาวะอารมณ์/แรงจูงใจพร้อมกัน</p>
-          </div>
+          </details>
         </article>
       </div>
     </section>
