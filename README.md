@@ -1,7 +1,7 @@
 # Implantable Neurochemical Biosensors & CMOS AFE Dashboard
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-0d9488?style=for-the-badge&logo=github)](https://qauzrck.github.io/neuro-biosensors-dashboard/)
-[![Language](https://img.shields.io/badge/Bilingual-Thai_%2F_English-0284c7?style=for-the-badge)](https://qauzrck.github.io/neuro-biosensors-dashboard/?lang=en)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-0d9488?style=for-the-badge&logo=github)](https://qauzrck.github.io/Implantable-Neurochemical-Biosensors-MEAs/)
+[![Language](https://img.shields.io/badge/Bilingual-Thai_%2F_English-0284c7?style=for-the-badge)](https://qauzrck.github.io/Implantable-Neurochemical-Biosensors-MEAs/?lang=en)
 [![Stack](https://img.shields.io/badge/Stack-HTML5_·_Tailwind_·_Chart.js-4f46e5?style=for-the-badge)](#project-structure)
 [![License: MIT](https://img.shields.io/badge/License-MIT-d97706?style=for-the-badge)](LICENSE)
 
@@ -51,7 +51,7 @@ An interactive, bilingual (**Thai / English**) biomedical & electrical engineeri
 ## Project Structure
 
 ```text
-neuro-biosensors-dashboard/
+Implantable-Neurochemical-Biosensors-MEAs/
 ├── index.html                  # Semantic 8-module dashboard layout
 ├── css/
 │   └── styles.css              # Light/Dark CSS variables, typography, accordions, print styles
