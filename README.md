@@ -84,6 +84,40 @@ Or using **VS Code Live Server** (`Right-click index.html` → `Open with Live S
 
 ---
 
+## References & Primary Literature
+
+### CMOS Potentiostats, Analog Front-Ends & SoCs
+- **Hall et al. (IEEE TBioCAS, 2022)** — [26.5 / 39.2 pArms Class-AB Background-Subtracting FSCV Front-End (PDF)](https://bioee.ucsd.edu/papers/A%2026.5%20pArms%20Neurotransmitter%20Front-End%20With%20Class-AB%20Background%20Subtraction%20-%20Hall%20(TBioCAS,%202022).pdf)
+- **White, Darroudi, Park & Kim (bioRxiv 2023 / IEEE Sensors J. 2024)** — [128-Ch Resistive-Feedback TIA Array (220 pArms, 400 V/s)](https://www.biorxiv.org/content/10.1101/2023.06.20.545834v1)
+- **Hybrid CMOS–Graphene Sensor Array** — [Dual-Slope ROI ADC (70.7 dB SNR) — PMC5936076](https://pmc.ncbi.nlm.nih.gov/articles/PMC5936076/)
+- **180 nm SC-TIA + 3-Bit PGA + SAR ADC (2026)** — [0.21 mW from 1.8 V (Frontiers in Nanotechnology)](https://www.frontiersin.org/journals/nanotechnology/articles/10.3389/fnano.2026.1888883/full)
+- **Bozorgzadeh, Mohseni et al. (2016)** — [Neurochemostat Closed-Loop Dopamine SoC — PMC4809062](https://pmc.ncbi.nlm.nih.gov/articles/PMC4809062/)
+- **Bozorgzadeh et al. (IEEE JSSC, 2014)** — [Neurochemical Pattern Generator SoC (9.3 µW, 78 pArms)](https://www.semanticscholar.org/paper/A-Neurochemical-Pattern-Generator-SoC-With-for-and-Bozorgzadeh-Covey/83c52c33ec068356bd8f0f51be5c0526397a5a9f)
+- **Alkhalifa, Eskandari, Sawan & Salama (IEEE Sensors Reviews, 2026)** — [CMOS Potentiostats for Electrochemical Biosensors](https://www.researchgate.net/figure/General-multimodal-potentiostat-architecture_fig4_408851646)
+
+### Electrochemical Modalities, Waveforms & Chemometrics
+- **Steered FSCV** — [0.17 nM Dopamine LoD & 39× Serotonin LoD Reduction (ACS Omega)](https://pubs.acs.org/doi/10.1021/acsomega.1c04475)
+- **SDBR & Analog Background Subtraction** — [Dopamine Detection with FSCV Used with Analog Background Subtraction](https://www.researchgate.net/publication/5420055_Dopamine_Detection_with_Fast-Scan_Cyclic_Voltammetry_Used_with_Analog_Background_Subtraction)
+- **RPV-PLSR** — [Rapid-Pulse Voltammetry with Partial Least Squares Regression (UC eScholarship)](https://escholarship.org/uc/item/3tb4231s)
+- **Keithley, Heien & Wightman** — [PCR Rank Estimation & Malinowski's F-test for In Vivo FSCV (PubMed)](https://pubmed.ncbi.nlm.nih.gov/20527815/)
+- **DPV, SWV & FSCV Review** — [Comparative Review on Carbon-Fiber Microelectrodes — PMC7922317](https://pmc.ncbi.nlm.nih.gov/articles/PMC7922317/)
+
+### Implantable Electrode Materials, Coatings & Stability
+- **B-NCD on CFMEs** — [Boron-Doped Nanocrystalline Diamond Characterization (PubMed)](https://pubmed.ncbi.nlm.nih.gov/41409014/)
+- **BDD Neurointerfaces** — [Boron-Doped Diamond Biotechnology — PMC9855027](https://pmc.ncbi.nlm.nih.gov/articles/PMC9855027/)
+- **Puthongkham & Venton (2019)** — [Carboxylated Nanodiamond (ND-COOH) Coatings on CFMEs (ACS)](https://pubs.acs.org/ascefj/article/4/9/2403/504275/Nanodiamond-Coating-Improves-the-Sensitivity-and)
+- **PSB Antifouling Coatings (2026)** — [PSB-Coated Ag/AgCl Reference & PEDOT/CNT Flexible MEAs — PMC12918813](https://pmc.ncbi.nlm.nih.gov/articles/PMC12918813/)
+- **Antifouling Carbon Nanofibers** — [Porous Carbon-Nanofiber Electrodes & >+1.3 V Oxidation (ChemRxiv)](https://chemrxiv.org/doi/10.26434/chemrxiv.10002065)
+
+### Translational Neuroscience, M-CSWV, MAVEN & Closed-Loop DBS
+- **Yuen et al. (2021)** — [M-CSWV for Tonic & Phasic NAcc Dopamine Under Cocaine — PMC8290896](https://pmc.ncbi.nlm.nih.gov/articles/PMC8290896/)
+- **Yuen et al. (2023)** — [High-Frequency DBS & M-CSWV Tonic Dopamine in Rat NAcc (Frontiers in Neuroscience)](https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2023.1061578/full)
+- **Oxycodone N-MCSWV & MAVEN** — [Tonic & Phasic Serotonin in Rat NAcc — PMC13110376](https://pmc.ncbi.nlm.nih.gov/articles/PMC13110376/)
+- **Grahn et al. (2014)** — [Closed-Loop DBS via Dopamine FSCV & Levenberg–Marquardt ANN — PMC4070176](https://pmc.ncbi.nlm.nih.gov/articles/PMC4070176/)
+- **Adaptive Neuromodulation Review** — [Neurochemical Closed-Loop Neuromodulation — PMC6710388](https://pmc.ncbi.nlm.nih.gov/articles/PMC6710388/)
+
+---
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
