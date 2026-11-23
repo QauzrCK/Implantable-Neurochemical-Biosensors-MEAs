@@ -1083,6 +1083,117 @@ function initNavigationAndScrollUX() {
 }
 
 // =========================================================================
+// Glossary Modal, BibTeX Citation Copy & CMOS CSV Export
+// =========================================================================
+const glossaryTerms = [
+  { term: 'FSCV', full: 'Fast-Scan Cyclic Voltammetry', th: 'เทคนิคกวาดศักย์ไฟฟ้าความเร็วสูง (เช่น 400 V/s ที่ 10 Hz) เพื่อตรวจวัดสารสื่อประสาทแบบ Phasic ระดับเสี้ยววินาที', en: 'High-speed triangular potential sweep (e.g., 400 V/s at 10 Hz) for sub-second phasic neurotransmitter sensing.' },
+  { term: 'M-CSWV', full: 'Multiple-Cyclic Square Wave Voltammetry', th: 'เทคนิคพัลส์สี่เหลี่ยมหลายรอบสำหรับวัดระดับสารสื่อประสาทพื้นฐาน (Tonic) ความละเอียด ~10 วินาที', en: 'Multi-cyclic square-wave pulse train for quantifying basal tonic neurotransmitter concentrations (~10 s resolution).' },
+  { term: 'CFME', full: 'Carbon-Fiber Microelectrode', th: 'ขั้วไฟฟ้าเส้นใยคาร์บอนมาตรฐานขนาดเส้นผ่านศูนย์กลาง ~7 µm รุกรานเนื้อเยื่อต่ำ', en: 'Standard ~7 µm diameter carbon-fiber microelectrode with minimal tissue perturbation.' },
+  { term: 'CMOS / AFE', full: 'Complementary Metal-Oxide-Semiconductor Analog Front-End', th: 'วงจรรวมแอนะล็อกส่วนหน้าที่สร้างคลื่นกวาดศักย์และขยายกระแสรีดอกซ์ระดับพิโคแอมแปร์บนชิป', en: 'On-chip analog integrated circuit that drives potential sweeps and amplifies picoampere redox currents.' },
+  { term: 'TIA / I-ΔΣ ADC', full: 'Transimpedance Amplifier / Current-to-Digital Delta-Sigma ADC', th: 'วงจรแปลงกระแสไฟฟ้าเป็นแรงดันหรือดิจิทัลโดยตรงที่มีสัญญาณรบกวนต่ำและช่วงไดนามิกสูง', en: 'Low-noise current-to-voltage or direct current-to-digital converter achieving high dynamic range.' },
+  { term: 'CMR', full: 'Common-Mode Rejection (Background Subtraction)', th: 'การหักล้างกระแสประจุพื้นหลังขนาดใหญ่ (290–400 nA) ในภาคแอนะล็อกก่อนเข้าตัวแปลง ADC', en: 'Analog cancellation of massive capacitive charging backgrounds (290–400 nA) before ADC digitization.' },
+  { term: 'LoD', full: 'Limit of Detection', th: 'ความเข้มข้นต่ำสุดของสารสื่อประสาทที่เซนเซอร์สามารถตรวจจับได้ (เช่น 2.03 nM สำหรับ PEDOT-CNT)', en: 'Lowest neurotransmitter concentration reliably detectable (e.g., 2.03 nM for PEDOT-CNT SWV).' },
+  { term: 'Phasic vs. Tonic', full: 'Transient Burst vs. Basal Resting Concentration', th: 'Phasic คือการหลั่งฉับพลันระดับเสี้ยววินาที ส่วน Tonic คือระดับความเข้มข้นพื้นฐานต่อเนื่อง', en: 'Phasic refers to rapid sub-second burst release; Tonic refers to slow, sustained extracellular baseline levels.' },
+  { term: 'DBS / STN-DBS', full: 'Deep Brain Stimulation (Subthalamic Nucleus)', th: 'การกระตุ้นสมองส่วนลึกด้วยพัลส์ไฟฟ้าเพื่อรักษาโรคพาร์กินสันและโรคทางระบบประสาท', en: 'Electrical neuromodulation of deep brain targets (e.g., STN) for Parkinson’s disease and neuropsychiatric disorders.' },
+  { term: 'RPE', full: 'Reward Prediction Error', th: 'สัญญาณความแตกต่างระหว่างรางวัลที่คาดหวังกับรางวัลที่ได้รับจริง ซึ่งเข้ารหัสโดยโดปามีนใน Striatum', en: 'Difference between expected and actual/counterfactual reward encoded by subsecond striatal dopamine.' },
+  { term: 'PCR / PLSR', full: 'Principal Component Regression / Partial Least Squares Regression', th: 'อัลกอริทึมสถิติหลายตัวแปรสำหรับแยกสัญญาณโดปามีนออกจาก pH และการเลื่อนของขั้วไฟฟ้า', en: 'Multivariate chemometric methods used to deconvolve dopamine from pH shifts and electrode drift.' },
+  { term: 'PINNs', full: 'Physics-Informed Neural Networks', th: 'โครงข่ายประสาทเทียมที่ผสานสมการฟิสิกส์การแพร่และปฏิกิริยารีดอกซ์เพื่อความแม่นยำสูง', en: 'Deep neural networks embedding diffusion and redox physics constraints for robust concentration decoding.' }
+];
+
+function initExtrasUX() {
+  // 1. Glossary Modal
+  const modal = document.getElementById('glossary-modal');
+  const openBtn = document.getElementById('btn-open-glossary');
+  const closeBtn = document.getElementById('btn-close-glossary');
+  const searchInput = document.getElementById('glossary-search');
+  const listEl = document.getElementById('glossary-list');
+
+  function renderGlossary() {
+    if (!listEl) return;
+    const q = (searchInput?.value || '').trim().toLowerCase();
+    const filtered = glossaryTerms.filter(item =>
+      !q ||
+      item.term.toLowerCase().includes(q) ||
+      item.full.toLowerCase().includes(q) ||
+      item.th.toLowerCase().includes(q) ||
+      item.en.toLowerCase().includes(q)
+    );
+    listEl.innerHTML = filtered.map(item => `
+      <div class="bg-[#f8fafc] border border-slate-200 rounded-xl p-3.5 space-y-1">
+        <div class="flex flex-wrap items-baseline justify-between gap-2">
+          <span class="font-mono-tech font-medium text-[#0f766e]">${item.term}</span>
+          <span class="text-xs text-[#64748b]">${item.full}</span>
+        </div>
+        <p class="text-xs sm:text-sm text-[#334155]">${t(item.th, item.en)}</p>
+      </div>
+    `).join('') || `<p class="text-xs text-[#64748b] text-center py-6">${t('ไม่พบคำศัพท์ที่ค้นหา', 'No matching terms found')}</p>`;
+  }
+
+  if (openBtn && modal) {
+    openBtn.addEventListener('click', () => {
+      renderGlossary();
+      modal.classList.remove('hidden');
+      searchInput?.focus();
+    });
+  }
+  if (closeBtn && modal) {
+    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.add('hidden');
+    });
+  }
+  if (searchInput) {
+    searchInput.addEventListener('input', renderGlossary);
+  }
+  i18nRefreshHooks.push(renderGlossary);
+
+  // 2. CMOS Table CSV Export
+  const csvBtn = document.getElementById('btn-export-cmos-csv');
+  if (csvBtn) {
+    csvBtn.addEventListener('click', () => {
+      const list = currentLang === 'en' ? cmosArchitecturesEn : cmosArchitecturesThai;
+      const headers = ['Architecture', 'CMOS Process', 'Topology', 'Input-Referred Noise', 'Dynamic Range', 'Power & Area'];
+      const esc = (v) => `"${String(v).replace(/"/g, '""')}"`;
+      const rows = list.map(r => [r.name, r.process, r.topology, r.noise, r.dr, r.powerArea].map(esc).join(','));
+      const csv = [headers.join(','), ...rows].join('\n');
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cmos-potentiostat-benchmark-${currentLang}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // 3. BibTeX Citation Copy
+  const bibBtn = document.getElementById('btn-copy-bibtex');
+  const copyToast = document.getElementById('copy-toast');
+  if (bibBtn) {
+    bibBtn.addEventListener('click', () => {
+      const bibtex = `@misc{krobbang2026neurochemical,\n  author = {Krobbang, Chanawit},\n  title = {Implantable Neurochemical Biosensors and Low-Noise CMOS Potentiostats: Interactive Synthesis Dashboard},\n  year = {2026},\n  url = {https://qauzrck.github.io/Implantable-Neurochemical-Biosensors-MEAs/}\n}`;
+      const ta = document.createElement('textarea');
+      ta.value = bibtex;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        if (copyToast) {
+          copyToast.textContent = t('✅ คัดลอก BibTeX สำหรับอ้างอิงเรียบร้อยแล้ว', '✅ BibTeX citation copied to clipboard.');
+          copyToast.classList.remove('hidden');
+          setTimeout(() => copyToast.classList.add('hidden'), 3500);
+        }
+      } catch (e) {}
+      document.body.removeChild(ta);
+    });
+  }
+}
+
+// =========================================================================
 // Initialize Everything on DOMContentLoaded
 // =========================================================================
 window.addEventListener('DOMContentLoaded', () => {
@@ -1095,5 +1206,6 @@ window.addEventListener('DOMContentLoaded', () => {
   initClinicalAndDbsModule();
   initIrlApplicationsModule();
   initNavigationAndScrollUX();
+  initExtrasUX();
   setLanguage(currentLang);
 });

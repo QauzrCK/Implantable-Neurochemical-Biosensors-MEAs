@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ระบบสำรวจไบโอเซนเซอร์ทางเคมีไฟฟ้าและวงจร CMOS สำหรับการตรวจวัดสารสื่อประสาทในสมอง</title>
+  <meta name="description" content="Interactive bilingual (Thai/English) engineering synthesis of implantable neurochemical biosensors, low-noise CMOS potentiostats, chemometrics, and closed-loop DBS." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%230d9488'/%3E%3Cstop offset='100%25' stop-color='%230284c7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M36 12L18 35h13l-3 17 18-23H33l3-17z' fill='white'/%3E%3C/svg%3E" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Implantable Neurochemical Biosensors & CMOS Potentiostats Dashboard" />
+  <meta property="og:description" content="Interactive bilingual (TH/EN) synthesis covering 7 µm CFMEs, nanomaterials, 26.5 pArms CMOS AFEs, chemometrics, and closed-loop DBS." />
+  <meta property="og:url" content="https://qauzrck.github.io/Implantable-Neurochemical-Biosensors-MEAs/" />
+  <meta property="og:image" content="https://qauzrck.github.io/Implantable-Neurochemical-Biosensors-MEAs/assets/biochip-overview.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Implantable Neurochemical Biosensors & CMOS Potentiostats" />
+  <meta name="twitter:description" content="Interactive bilingual (TH/EN) research dashboard on neurochemical sensing and closed-loop DBS." />
+  <meta name="twitter:image" content="https://qauzrck.github.io/Implantable-Neurochemical-Biosensors-MEAs/assets/biochip-overview.jpg" />
   <!-- โหลดฟอนต์ Prompt (300/400/500), Inter และ JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -65,8 +76,11 @@
           </div>
         </div>
 
-        <!-- ปุ่มสลับภาษา ไทย / English และ Light / Dark Mode -->
+        <!-- ปุ่ม Glossary, สลับภาษา ไทย / English และ Light / Dark Mode -->
         <div class="flex items-center gap-2 self-start lg:self-center shrink-0">
+          <button id="btn-open-glossary" type="button" data-i18n="header.glossary" class="px-2.5 py-1.5 rounded-xl bg-[#f1f5f9] border border-slate-200 text-xs font-medium text-[#334155] hover:border-[#0d9488] hover:text-[#0f766e] transition">
+            📖 คำศัพท์
+          </button>
           <div class="inline-flex items-center rounded-xl p-1 bg-[#f1f5f9] border border-slate-200" role="group" aria-label="Language Switcher">
             <button id="lang-btn-th" type="button" onclick="setLanguage('th')" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[#0d9488] text-white shadow-xs transition">
               🇹🇭 ไทย
@@ -239,7 +253,7 @@
             <div class="font-mono-tech text-xl sm:text-2xl font-bold text-[#4f46e5] mt-1">26.5 / 39.2 pA<sub>rms</sub></div>
             <div class="text-xs font-medium text-[#4f46e5] mt-0.5">Open Input vs. 1 nF Load (5 kHz)</div>
             <p data-i18n-html="m1.kpi3.desc" class="text-xs text-[#334155] mt-2 leading-relaxed">
-              สัญญาณรบกวนอ้างอิงขาเข้าของวงจร CMOS AFE (Hall et al. 2022) ที่แบนด์วิดท์ 5 kHz ด้วยกำลังงานเฉลี่ยเพียง <span class="font-mono-tech">3.74 µW</span>
+              สัญญาณรบกวนอ้างอิงขาเข้าของวงจร CMOS AFE (Hall et al. 2022<a href="#ref-1" class="cite-link">[1]</a>) ที่แบนด์วิดท์ 5 kHz ด้วยกำลังงานเฉลี่ยเพียง <span class="font-mono-tech">3.74 µW</span>
             </p>
           </div>
 
@@ -645,7 +659,7 @@
           </div>
 
           <div data-i18n-html="m4.sc.note" class="text-xs text-[#334155] bg-[#f8fafc] border border-slate-200 rounded-xl p-3.5 leading-relaxed">
-            <span class="text-[#4f46e5] font-bold">ข้อสรุปเชิงสถาปัตยกรรม:</span> วงจรของ <span class="font-mono-tech font-semibold">Hall et al. (2022)</span> ทำสัญญาณรบกวนได้ <span class="font-mono-tech font-semibold text-[#0f766e]">26.5 pA<sub>rms</sub></span> (Open) และ <span class="font-mono-tech font-semibold text-[#0f766e]">39.2 pA<sub>rms</sub></span> (ต่อโหลด <span class="font-mono-tech">1 nF</span> ที่ <span class="font-mono-tech">5 kHz</span>) ขณะที่อาร์เรย์ <span class="font-mono-tech">128-Ch R-TIA</span> บรรจุได้ 128 ช่องในพื้นที่รวม <span class="font-mono-tech">2.25 mm²</span>
+            <span class="text-[#4f46e5] font-bold">ข้อสรุปเชิงสถาปัตยกรรม:</span> วงจรของ <span class="font-mono-tech font-semibold">Hall et al. (2022)</span><a href="#ref-1" class="cite-link">[1]</a> ทำสัญญาณรบกวนได้ <span class="font-mono-tech font-semibold text-[#0f766e]">26.5 pA<sub>rms</sub></span> (Open) และ <span class="font-mono-tech font-semibold text-[#0f766e]">39.2 pA<sub>rms</sub></span> (ต่อโหลด <span class="font-mono-tech">1 nF</span> ที่ <span class="font-mono-tech">5 kHz</span>) ขณะที่อาร์เรย์ <span class="font-mono-tech">128-Ch R-TIA</span><a href="#ref-2" class="cite-link">[2]</a> บรรจุได้ 128 ช่องในพื้นที่รวม <span class="font-mono-tech">2.25 mm²</span>
           </div>
         </div>
 
@@ -726,7 +740,12 @@
         </div>
 
         <div class="pt-4 border-t border-slate-200 space-y-3">
-          <h4 data-i18n="m4.tbl.title" class="text-sm font-bold text-[#0f172a]">🔌 ตารางเปรียบเทียบประสิทธิภาพชิป CMOS Potentiostat และ AFE ทั้ง 6 รุ่น</h4>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h4 data-i18n="m4.tbl.title" class="text-sm font-bold text-[#0f172a]">🔌 ตารางเปรียบเทียบประสิทธิภาพชิป CMOS Potentiostat และ AFE ทั้ง 6 รุ่น</h4>
+            <button id="btn-export-cmos-csv" type="button" data-i18n="m4.tbl.csv" class="px-3 py-1.5 rounded-lg bg-[#f1f5f9] hover:bg-teal-50 text-[#0f766e] border border-slate-200 text-xs font-medium transition self-start">
+              📥 ดาวน์โหลด CSV
+            </button>
+          </div>
           <div class="overflow-x-auto custom-scrollbar rounded-xl border border-slate-200">
             <table class="w-full text-left border-collapse min-w-[860px]">
               <thead>
@@ -976,6 +995,9 @@
             <button id="btn-print-report" type="button" data-i18n="m7.printBtn" class="px-3.5 py-2 rounded-xl bg-[#f1f5f9] hover:bg-teal-50 text-[#334155] border border-slate-200 font-medium text-xs transition">
               🖨️ พิมพ์ / PDF
             </button>
+            <button id="btn-copy-bibtex" type="button" data-i18n="m7.bibBtn" class="px-3.5 py-2 rounded-xl bg-[#f1f5f9] hover:bg-indigo-50 text-[#4f46e5] border border-slate-200 font-medium text-xs transition">
+              ❞ BibTeX
+            </button>
             <button id="btn-copy-research" data-i18n="m7.copyBtn" class="px-4 py-2 rounded-xl bg-[#0d9488] hover:bg-[#0f766e] text-white font-semibold text-xs shadow-xs transition">
               📋 คัดลอกบทความวิจัย (Copy Thai Report)
             </button>
@@ -1037,51 +1059,64 @@
 
           <details open class="report-accordion">
             <summary>
-              <h3 data-i18n="m7.ref.h" class="text-sm sm:text-base font-medium text-[#0f172a]">7. เอกสารอ้างอิงและงานวิจัยปฐมภูมิ (Primary References &amp; Literature)</h3>
+              <h3 data-i18n="m7.meth.h" class="text-sm sm:text-base font-medium text-[#0f172a]">7. ระเบียบวิธี ขอบเขต และข้อจำกัดของแบบจำลอง (Methodology, Scope &amp; Limitations)</h3>
+              <span class="acc-chevron">▼</span>
+            </summary>
+            <p data-i18n="m7.meth.p">ข้อมูลตัวเลขในหน้าเว็บนี้สังเคราะห์จากเอกสารวิจัยที่ผ่านการตรวจสอบโดยผู้ทรงคุณวุฒิ (Peer-Reviewed Literature) ระหว่างปี 2005–2026 สำหรับเครื่องจำลองเชิงโต้ตอบทั้ง 3 ส่วน (FSCV Physics Simulator ในโมดูล 2, ตัวคำนวณสัญญาณรบกวน Hall et al. ในโมดูล 4 และตัวสำรวจพารามิเตอร์ DBS ANN ในโมดูล 5) ใช้สมการทางฟิสิกส์เชิงวิเคราะห์และแบบจำลองเชิงปรากฏการณ์วิทยาที่ปรับเทียบค่าพารามิเตอร์จากงานวิจัยอ้างอิงเพื่อวัตถุประสงค์ทางการศึกษาและเปรียบเทียบเชิงวิศวกรรมเท่านั้น ไม่ใช่เครื่องมือวินิจฉัยหรือกำหนดพารามิเตอร์ทางการแพทย์ในผู้ป่วยจริง</p>
+          </details>
+
+          <details open class="report-accordion">
+            <summary>
+              <h3 data-i18n="m7.ref.h" class="text-sm sm:text-base font-medium text-[#0f172a]">8. เอกสารอ้างอิงและงานวิจัยปฐมภูมิ (Primary References &amp; Literature — 27 Citations)</h3>
               <span class="acc-chevron">▼</span>
             </summary>
             <div class="mt-3 pt-3 border-t border-slate-200 space-y-4 text-xs sm:text-sm">
               <div>
                 <div class="font-medium text-[#0f766e] mb-1.5">CMOS Potentiostats, Analog Front-Ends &amp; SoCs</div>
-                <ul class="list-disc pl-5 space-y-1">
-                  <li><a href="https://bioee.ucsd.edu/papers/A%2026.5%20pArms%20Neurotransmitter%20Front-End%20With%20Class-AB%20Background%20Subtraction%20-%20Hall%20(TBioCAS,%202022).pdf" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Hall et al. (IEEE TBioCAS, 2022) — 26.5 / 39.2 pArms Class-AB Background-Subtracting FSCV Front-End (PDF)</a></li>
-                  <li><a href="https://www.biorxiv.org/content/10.1101/2023.06.20.545834v1" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">White, Darroudi, Park &amp; Kim (bioRxiv 2023 / IEEE Sensors J. 2024) — 128-Ch Resistive-Feedback TIA Array (220 pArms)</a></li>
-                  <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5936076/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Hybrid CMOS–Graphene Sensor Array (Dual-Slope ROI ADC, 70.7 dB SNR) — PMC5936076</a></li>
-                  <li><a href="https://www.frontiersin.org/journals/nanotechnology/articles/10.3389/fnano.2026.1888883/full" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">180 nm Switched-Capacitor TIA + 3-Bit PGA + SAR ADC (0.21 mW, Frontiers in Nanotechnology 2026)</a></li>
-                  <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4809062/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Bozorgzadeh, Mohseni et al. (2016) — Neurochemostat Closed-Loop Dopamine SoC (0.35 µm CMOS)</a></li>
-                  <li><a href="https://www.semanticscholar.org/paper/A-Neurochemical-Pattern-Generator-SoC-With-for-and-Bozorgzadeh-Covey/83c52c33ec068356bd8f0f51be5c0526397a5a9f" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Bozorgzadeh et al. (IEEE JSSC, 2014) — Neurochemical Pattern Generator SoC (9.3 µW, 78 pArms)</a></li>
-                  <li><a href="https://www.researchgate.net/figure/General-multimodal-potentiostat-architecture_fig4_408851646" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Alkhalifa, Eskandari, Sawan &amp; Salama (IEEE Sensors Reviews, 2026) — CMOS Potentiostats for Electrochemical Biosensors</a></li>
-                </ul>
+                <ol class="list-decimal pl-5 space-y-1">
+                  <li id="ref-1"><a href="https://bioee.ucsd.edu/papers/A%2026.5%20pArms%20Neurotransmitter%20Front-End%20With%20Class-AB%20Background%20Subtraction%20-%20Hall%20(TBioCAS,%202022).pdf" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Hall et al. (IEEE TBioCAS, 2022) — 26.5 / 39.2 pArms Class-AB Background-Subtracting FSCV Front-End (PDF)</a></li>
+                  <li id="ref-2"><a href="https://www.biorxiv.org/content/10.1101/2023.06.20.545834v1" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">White, Darroudi, Park &amp; Kim (bioRxiv 2023 / IEEE Sensors J. 2024) — 128-Ch Resistive-Feedback TIA Array (220 pArms)</a></li>
+                  <li id="ref-3"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5936076/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Hybrid CMOS–Graphene Sensor Array (Dual-Slope ROI ADC, 70.7 dB SNR) — PMC5936076</a></li>
+                  <li id="ref-4"><a href="https://www.frontiersin.org/journals/nanotechnology/articles/10.3389/fnano.2026.1888883/full" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">180 nm Switched-Capacitor TIA + 3-Bit PGA + SAR ADC (0.21 mW, Frontiers in Nanotechnology 2026)</a></li>
+                  <li id="ref-5"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4809062/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Bozorgzadeh, Mohseni et al. (2016) — Neurochemostat Closed-Loop Dopamine SoC (0.35 µm CMOS)</a></li>
+                  <li id="ref-6"><a href="https://www.semanticscholar.org/paper/A-Neurochemical-Pattern-Generator-SoC-With-for-and-Bozorgzadeh-Covey/83c52c33ec068356bd8f0f51be5c0526397a5a9f" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Bozorgzadeh et al. (IEEE JSSC, 2014) — Neurochemical Pattern Generator SoC (9.3 µW, 78 pArms)</a></li>
+                  <li id="ref-7"><a href="https://www.researchgate.net/figure/General-multimodal-potentiostat-architecture_fig4_408851646" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Alkhalifa, Eskandari, Sawan &amp; Salama (IEEE Sensors Reviews, 2026) — CMOS Potentiostats for Electrochemical Biosensors</a></li>
+                </ol>
               </div>
               <div>
                 <div class="font-medium text-[#0284c7] mb-1.5">Electrochemical Modalities, Waveforms &amp; Chemometrics</div>
-                <ul class="list-disc pl-5 space-y-1">
-                  <li><a href="https://pubs.acs.org/doi/10.1021/acsomega.1c04475" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Steered FSCV — 0.17 nM Dopamine LoD &amp; 39× Serotonin LoD Reduction (ACS Omega)</a></li>
-                  <li><a href="https://www.researchgate.net/publication/5420055_Dopamine_Detection_with_Fast-Scan_Cyclic_Voltammetry_Used_with_Analog_Background_Subtraction" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">FSCV with Analog Background Subtraction &amp; SDBR Drift Removal</a></li>
-                  <li><a href="https://escholarship.org/uc/item/3tb4231s" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Rapid-Pulse Voltammetry with Partial Least Squares Regression (RPV-PLSR) — UC eScholarship</a></li>
-                  <li><a href="https://pubmed.ncbi.nlm.nih.gov/20527815/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Keithley, Heien &amp; Wightman — PCR Rank Estimation &amp; Malinowski’s F-test for In Vivo FSCV (PubMed)</a></li>
-                  <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7922317/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Comparative Review of DPV, SWV, and FSCV on Carbon-Fiber Microelectrodes — PMC7922317</a></li>
-                </ul>
+                <ol start="8" class="list-decimal pl-5 space-y-1">
+                  <li id="ref-8"><a href="https://pubs.acs.org/doi/10.1021/acsomega.1c04475" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Steered FSCV — 0.17 nM Dopamine LoD &amp; 39× Serotonin LoD Reduction (ACS Omega)</a></li>
+                  <li id="ref-9"><a href="https://www.researchgate.net/publication/5420055_Dopamine_Detection_with_Fast-Scan_Cyclic_Voltammetry_Used_with_Analog_Background_Subtraction" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">FSCV with Analog Background Subtraction &amp; SDBR Drift Removal</a></li>
+                  <li id="ref-10"><a href="https://escholarship.org/uc/item/3tb4231s" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Rapid-Pulse Voltammetry with Partial Least Squares Regression (RPV-PLSR) — UC eScholarship</a></li>
+                  <li id="ref-11"><a href="https://pubmed.ncbi.nlm.nih.gov/20527815/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Keithley, Heien &amp; Wightman — PCR Rank Estimation &amp; Malinowski’s F-test for In Vivo FSCV (PubMed)</a></li>
+                  <li id="ref-12"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7922317/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Comparative Review of DPV, SWV, and FSCV on Carbon-Fiber Microelectrodes — PMC7922317</a></li>
+                </ol>
               </div>
               <div>
-                <div class="font-medium text-[#4f46e5] mb-1.5">Implantable Electrode Materials, Coatings &amp; Stability</div>
-                <ul class="list-disc pl-5 space-y-1">
-                  <li><a href="https://pubmed.ncbi.nlm.nih.gov/41409014/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Boron-Doped Nanocrystalline Diamond (B-NCD) Coatings on Carbon-Fiber Microelectrodes (PubMed)</a></li>
-                  <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9855027/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Boron-Doped Diamond (BDD) Biointerfaces &amp; Neurosensing — PMC9855027</a></li>
-                  <li><a href="https://pubs.acs.org/ascefj/article/4/9/2403/504275/Nanodiamond-Coating-Improves-the-Sensitivity-and" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Puthongkham &amp; Venton (2019) — Carboxylated Nanodiamond (ND-COOH) Coatings on CFMEs (ACS)</a></li>
-                  <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12918813/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">PSB Antifouling Ag/AgCl Reference &amp; PEDOT/CNT Flexible MEAs (2026) — PMC12918813</a></li>
-                  <li><a href="https://chemrxiv.org/doi/10.26434/chemrxiv.10002065" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Antifouling Carbon-Nanofiber Electrodes &amp; &gt;+1.3 V Oxidation Protocols (ChemRxiv)</a></li>
-                </ul>
+                <div class="font-medium text-[#4f46e5] mb-1.5">Implantable Electrode Materials, Coatings &amp; Flexible Probes</div>
+                <ol start="13" class="list-decimal pl-5 space-y-1">
+                  <li id="ref-13"><a href="https://doi.org/10.1021/acs.analchem.9b02904" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Taylor, Patel, Freedman, Castagnola &amp; Cui (Analytical Chemistry, 2019) — PEDOT-CNT SWV Resting Dopamine Detection (2.03 nM LoD)</a></li>
+                  <li id="ref-14"><a href="https://doi.org/10.1021/ac502165f" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Vreeland, Atcherley, Heien et al. (Analytical Chemistry, 2015) — Biocompatible PEDOT:Nafion Coatings (46 nA/µM, 1540× AA Selectivity)</a></li>
+                  <li id="ref-15"><a href="https://doi.org/10.1038/s41586-022-04615-2" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Li, Liu, Bao et al. (Nature, 2022) — NeuroString: A Tissue-Like Neurotransmitter Sensor for the Brain and Gut</a></li>
+                  <li id="ref-16"><a href="https://pubmed.ncbi.nlm.nih.gov/41409014/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Boron-Doped Nanocrystalline Diamond (B-NCD) Coatings on Carbon-Fiber Microelectrodes (PubMed)</a></li>
+                  <li id="ref-17"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9855027/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Boron-Doped Diamond (BDD) Biointerfaces &amp; Neurosensing — PMC9855027</a></li>
+                  <li id="ref-18"><a href="https://pubs.acs.org/ascefj/article/4/9/2403/504275/Nanodiamond-Coating-Improves-the-Sensitivity-and" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Puthongkham &amp; Venton (2019) — Carboxylated Nanodiamond (ND-COOH) Coatings on CFMEs (ACS)</a></li>
+                  <li id="ref-19"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12918813/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">PSB Antifouling Ag/AgCl Reference &amp; PEDOT/CNT Flexible MEAs (2026) — PMC12918813</a></li>
+                  <li id="ref-20"><a href="https://chemrxiv.org/doi/10.26434/chemrxiv.10002065" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Antifouling Carbon-Nanofiber Electrodes &amp; &gt;+1.3 V Oxidation Protocols (ChemRxiv)</a></li>
+                </ol>
               </div>
               <div>
-                <div class="font-medium text-[#d97706] mb-1.5">Translational Neuroscience, M-CSWV, MAVEN &amp; Closed-Loop DBS</div>
-                <ul class="list-disc pl-5 space-y-1">
-                  <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8290896/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Yuen et al. (2021) — Multiple-Cyclic Square Wave Voltammetry (M-CSWV) for Tonic &amp; Phasic NAcc Dopamine — PMC8290896</a></li>
-                  <li><a href="https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2023.1061578/full" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Yuen et al. (2023) — High-Frequency DBS &amp; M-CSWV Tonic Dopamine in Rat NAcc (Frontiers in Neuroscience)</a></li>
-                  <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13110376/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Oxycodone Tonic &amp; Phasic Serotonin in Rat NAcc (N-MCSWV, ESW 5-HT &amp; MAVEN) — PMC13110376</a></li>
-                  <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4070176/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Grahn et al. (2014) — Closed-Loop DBS via Dopamine FSCV &amp; Levenberg–Marquardt ANN — PMC4070176</a></li>
-                  <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6710388/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Neurochemical Closed-Loop Neuromodulation &amp; Adaptive DBS Review — PMC6710388</a></li>
-                </ul>
+                <div class="font-medium text-[#d97706] mb-1.5">Translational Neuroscience, Human DBS, M-CSWV &amp; Closed-Loop Systems</div>
+                <ol start="21" class="list-decimal pl-5 space-y-1">
+                  <li id="ref-21"><a href="https://doi.org/10.1073/pnas.1513619112" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Kishida, Saez, Lohrenz, Montague et al. (PNAS, 2016) — Subsecond Dopamine in Human Striatum Encodes Actual &amp; Counterfactual Reward Prediction Errors</a></li>
+                  <li id="ref-22"><a href="https://doi.org/10.1038/srep46675" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Lee et al. (Scientific Reports, 2017) — WINCS Harmoni: Closed-Loop Dynamic Neurochemical Control of Therapeutic Interventions</a></li>
+                  <li id="ref-23"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8290896/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Yuen et al. (2021) — Multiple-Cyclic Square Wave Voltammetry (M-CSWV) for Tonic &amp; Phasic NAcc Dopamine — PMC8290896</a></li>
+                  <li id="ref-24"><a href="https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2023.1061578/full" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Yuen et al. (2023) — High-Frequency DBS &amp; M-CSWV Tonic Dopamine in Rat NAcc (Frontiers in Neuroscience)</a></li>
+                  <li id="ref-25"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13110376/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Oxycodone Tonic &amp; Phasic Serotonin in Rat NAcc (N-MCSWV, ESW 5-HT &amp; MAVEN) — PMC13110376</a></li>
+                  <li id="ref-26"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4070176/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Grahn et al. (2014) — Closed-Loop DBS via Dopamine FSCV &amp; Levenberg–Marquardt ANN — PMC4070176</a></li>
+                  <li id="ref-27"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6710388/" target="_blank" rel="noopener noreferrer" class="text-[#0284c7] hover:underline">Neurochemical Closed-Loop Neuromodulation &amp; Adaptive DBS Review — PMC6710388</a></li>
+                </ol>
               </div>
             </div>
           </details>
@@ -1090,6 +1125,20 @@
     </section>
 
   </main>
+
+  <!-- Glossary & Abbreviations Modal -->
+  <div id="glossary-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="glossary-title">
+    <div class="clinical-card w-full max-w-2xl max-h-[82vh] flex flex-col overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+        <h3 id="glossary-title" data-i18n="gl.title" class="text-base font-medium text-[#0f172a]">📖 คำศัพท์และตัวย่อสำคัญ (Glossary &amp; Abbreviations)</h3>
+        <button id="btn-close-glossary" type="button" class="w-8 h-8 rounded-lg bg-[#f1f5f9] hover:bg-slate-200 text-[#334155] flex items-center justify-center text-sm transition" aria-label="Close">✕</button>
+      </div>
+      <div class="px-6 py-3 border-b border-slate-200">
+        <input id="glossary-search" type="search" placeholder="Search term (e.g., FSCV, CMOS, RPE, LoD)..." class="w-full px-3.5 py-2 rounded-xl bg-[#f8fafc] border border-slate-200 text-xs sm:text-sm text-[#0f172a] focus:outline-none focus:border-[#0d9488]" />
+      </div>
+      <div id="glossary-list" class="p-6 overflow-y-auto custom-scrollbar space-y-2.5 text-xs sm:text-sm"></div>
+    </div>
+  </div>
 
   <footer class="border-t border-slate-200 bg-white py-6 mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#64748b]">

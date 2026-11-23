@@ -289,6 +289,19 @@ html.dark footer { background-color: #111827 !important; border-color: #1e293b !
   border-top: 1px solid var(--border-color);
 }
 
+/* Inline Citation Links */
+.cite-link {
+  color: #0284c7;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8em;
+  font-weight: 500;
+  text-decoration: none;
+  margin-left: 0.1rem;
+}
+.cite-link:hover {
+  text-decoration: underline;
+}
+
 /* Clean Print / PDF Export */
 @media print {
   header, #reading-progress, #back-to-top, #btn-copy-research, #btn-toggle-report, #btn-print-report {

@@ -16,6 +16,7 @@ const themeRefreshHooks = [];
 const I18N_EN = {
   'doc.title': 'Electrochemical Biosensors & CMOS Potentiostats for Neurotransmitter Monitoring',
   'header.badge': 'Biomedical & Electrical Engineering Synthesis',
+  'header.glossary': '📖 Glossary',
   'header.title': 'Implantable Neurochemical Biosensors & Microelectrode Arrays (MEAs)',
   'header.subtitle': 'Co-design of micro/nano-scale electrodes, picoampere-noise (<span class="font-mono-tech text-[#0f766e] font-medium">10⁻¹² A</span>) CMOS Analog Front-End circuits, and real-time electrochemical signal decoding',
   'nav.m0': '0. Start Here (Intro)',
@@ -58,7 +59,7 @@ const I18N_EN = {
   'm1.kpi2.label': 'Signal vs. Background Current',
   'm1.kpi2.desc': 'Faradaic neurotransmitter current (<span class="font-mono-tech">I_redox</span>) is buried beneath a non-Faradaic background (<span class="font-mono-tech">I_BG</span>) 30–40× larger.',
   'm1.kpi3.label': 'CMOS AFE Input-Referred Noise',
-  'm1.kpi3.desc': 'Input-referred noise of the CMOS AFE (Hall et al. 2022) across a 5 kHz bandwidth at just <span class="font-mono-tech">3.74 µW</span> average power.',
+  'm1.kpi3.desc': 'Input-referred noise of the CMOS AFE (Hall et al. 2022<a href="#ref-1" class="cite-link">[1]</a>) across a 5 kHz bandwidth at just <span class="font-mono-tech">3.74 µW</span> average power.',
   'm1.kpi4.label': 'Mechanical Stiffness Mismatch (Young’s Modulus)',
   'm1.kpi4.sub': 'Brain Tissue vs. Rigid Silicon/Metal',
   'm1.kpi4.desc': 'A <span class="font-mono-tech">10⁵–10⁶×</span> modulus mismatch between brain tissue and rigid silicon/metal shanks drives micromotion shear and glial scarring.',
@@ -126,7 +127,7 @@ const I18N_EN = {
   'm4.intro': 'Implantable CMOS Analog Front-End (<span class="formula-pill-indigo">AFE</span>) circuits must generate <span class="font-mono-tech">1.4–1.7 V<sub>pp</sub></span> sweep waveforms while resolving picoampere redox currents superimposed on <span class="font-mono-tech">300–400 nA</span> charging backgrounds within a microwatt power budget.',
   'm4.sc.title': '📉 Trade-Off Map: Input-Referred Noise (pA<sub>rms</sub>) vs. Silicon Area (mm²)',
   'm4.sc.sub': 'Log-scale comparison of 6 CMOS architectures (amperometric pixel arrays achieve femtoampere noise and tiny area, but saturate under a 400 nA FSCV background).',
-  'm4.sc.note': '<span class="text-[#4f46e5] font-bold">Architectural Takeaway:</span> <span class="font-mono-tech font-semibold">Hall et al. (2022)</span> achieves <span class="font-mono-tech font-semibold text-[#0f766e]">26.5 pA<sub>rms</sub></span> (Open) and <span class="font-mono-tech font-semibold text-[#0f766e]">39.2 pA<sub>rms</sub></span> (<span class="font-mono-tech">1 nF</span> load @ <span class="font-mono-tech">5 kHz</span>), while the <span class="font-mono-tech">128-Ch R-TIA</span> packs 128 channels into <span class="font-mono-tech">2.25 mm²</span>.',
+  'm4.sc.note': '<span class="text-[#4f46e5] font-bold">Architectural Takeaway:</span> <span class="font-mono-tech font-semibold">Hall et al. (2022)</span><a href="#ref-1" class="cite-link">[1]</a> achieves <span class="font-mono-tech font-semibold text-[#0f766e]">26.5 pA<sub>rms</sub></span> (Open) and <span class="font-mono-tech font-semibold text-[#0f766e]">39.2 pA<sub>rms</sub></span> (<span class="font-mono-tech">1 nF</span> load @ <span class="font-mono-tech">5 kHz</span>), while the <span class="font-mono-tech">128-Ch R-TIA</span><a href="#ref-2" class="cite-link">[2]</a> packs 128 channels into <span class="font-mono-tech">2.25 mm²</span>.',
   'm4.calc.title': '🧮 AFE Noise Calculator (Hall et al.)',
   'm4.calc.desc': 'Based on the analytical <span class="font-mono-tech text-[#0f172a]">i²<sub>n,rms</sub></span> model of Hall et al. (2022), combining current-mirror shot noise (<span class="font-mono-tech">2q(I<sub>CMR</sub> + I<sub>CC</sub>)</span>) with opamp voltage noise (<span class="font-mono-tech">v²<sub>n,op</sub></span>) coupled through <span class="font-mono-tech">C<sub>dl</sub></span>.',
   'm4.calc.cdl': 'Working-Electrode Capacitance (<span class="font-mono-tech">C<sub>dl</sub></span>)',
@@ -136,6 +137,7 @@ const I18N_EN = {
   'm4.topo.title': '🔀 Potentiostat Architecture Analyzer (Topology Selector)',
   'm4.topo.sub': 'Compare the strengths and limitations of the 3 primary CMOS AFE topologies.',
   'm4.tbl.title': '🔌 Benchmark Table: 6 CMOS Potentiostat & AFE Chips',
+  'm4.tbl.csv': '📥 Export CSV',
   'm4.tbl.h1': 'Architecture / Study',
   'm4.tbl.h2': 'CMOS Process',
   'm4.tbl.h3': 'Circuit Topology',
@@ -201,6 +203,7 @@ const I18N_EN = {
   'm7.title': '📄 Full Research Synthesis Report (English & Thai + IRL Synthesis)',
   'm7.sub': 'Covering system co-design, electrochemistry, nanomaterials, CMOS circuits, clinical neuroscience, and real-world deployment.',
   'm7.copyBtn': '📋 Copy Research Report',
+  'm7.bibBtn': '❞ BibTeX',
   'm7.toggleBtn': '↕️ Expand / Collapse All',
   'm7.printBtn': '🖨️ Print / PDF',
   'm7.copyToast': '✅ Full research report copied to clipboard.',
@@ -216,7 +219,10 @@ const I18N_EN = {
   'm7.s5.p': 'Principal component regression (PCR with Malinowski’s F-test), PLSR, Elastic Net, and deep learning (1D-CNN, LSTM, Physics-Informed Neural Networks: PINNs) accurately deconvolve dopamine and serotonin from pH shifts and reference drift. Clinically, STN-DBS elevates striatal tonic dopamine in Parkinson’s models; in addiction, cocaine increases both phasic DA (2.4×) and tonic DA (1.9×), whereas fentanyl and oxycodone primarily shift tonic baselines. In awake human DBS surgery (Kishida, Montague & Lee), sub-second striatal dopamine encodes both actual and counterfactual reward prediction errors. Closed-loop DBS links 10 Hz FSCV sensing through a 100 Hz Butterworth filter and an ANN (150 hidden neurons, Levenberg–Marquardt) to automatically tune stimulation frequency (~100 Hz) and pulse width (0.1–2.0 ms).',
   'm7.s6.h': '6. Real-World (IRL) Clinical & Industrial Translation',
   'm7.s6.p': 'Microscale electrodes and picoampere-noise CMOS potentiostats are actively deployed across six real-world domains: (1) Awake human DBS surgery for real-time striatal dopamine mapping within 15–60 min IRB windows; (2) Adaptive closed-loop DBS (Neurochemostat / WINCS Harmoni / MAVEN) acting as a neurochemical thermostat to extend battery life and reduce dyskinesia and speech side effects; (3) Psychiatric & addiction drug R&D using 128-channel arrays and MAVEN to quantify Escitalopram (+42% 5-HT), cocaine, fentanyl, and oxycodone responses within minutes; (4) Soft NeuroString bioelectronics (SEBS/Polyimide <30 kPa) measuring real-time serotonin in the peristaltic gut–brain axis for IBS and depression; (5) MRI-compatible WINCS + BOLD fMRI linking nanomolar dopamine release to whole-brain network connectivity; and (6) Next-gen dual-mode neurochemical BCIs (PEDOT/CNT + PSB) recording motor spikes alongside emotional/motivational neurochemistry.',
-  'm7.ref.h': '7. Primary References & Literature',
+  'm7.meth.h': '7. Methodology, Scope & Limitations',
+  'm7.meth.p': 'Quantitative metrics across this dashboard are synthesized from peer-reviewed literature (2005–2026). The three interactive tools—the FSCV Physics Simulator (Module 2), the Hall et al. Noise Calculator (Module 4), and the DBS ANN Parameter Explorer (Module 5)—use analytical physics equations and phenomenological models calibrated to published values for educational and engineering comparison only; they are not clinical diagnostic or stimulation-prescribing instruments.',
+  'm7.ref.h': '8. Primary References & Literature (27 Citations)',
+  'gl.title': '📖 Glossary & Abbreviations',
 
   'footer.title': 'Electrochemical Biosensors & CMOS Potentiostats for Neurotransmitter Monitoring'
 };

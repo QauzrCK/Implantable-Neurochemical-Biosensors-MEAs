@@ -102,14 +102,19 @@ Or using **VS Code Live Server** (`Right-click index.html` → `Open with Live S
 - **Keithley, Heien & Wightman** — [PCR Rank Estimation & Malinowski's F-test for In Vivo FSCV (PubMed)](https://pubmed.ncbi.nlm.nih.gov/20527815/)
 - **DPV, SWV & FSCV Review** — [Comparative Review on Carbon-Fiber Microelectrodes — PMC7922317](https://pmc.ncbi.nlm.nih.gov/articles/PMC7922317/)
 
-### Implantable Electrode Materials, Coatings & Stability
+### Implantable Electrode Materials, Coatings & Flexible Probes
+- **Taylor, Cui et al. (Analytical Chemistry, 2019)** — [PEDOT-CNT SWV Resting Dopamine Detection (2.03 nM LoD)](https://doi.org/10.1021/acs.analchem.9b02904)
+- **Vreeland, Heien et al. (Analytical Chemistry, 2015)** — [Biocompatible PEDOT:Nafion Coatings (46 nA/µM, 1540× AA Selectivity)](https://doi.org/10.1021/ac502165f)
+- **Li, Bao et al. (Nature, 2022)** — [NeuroString: Tissue-Like Neurotransmitter Sensor for Brain & Gut](https://doi.org/10.1038/s41586-022-04615-2)
 - **B-NCD on CFMEs** — [Boron-Doped Nanocrystalline Diamond Characterization (PubMed)](https://pubmed.ncbi.nlm.nih.gov/41409014/)
 - **BDD Neurointerfaces** — [Boron-Doped Diamond Biotechnology — PMC9855027](https://pmc.ncbi.nlm.nih.gov/articles/PMC9855027/)
 - **Puthongkham & Venton (2019)** — [Carboxylated Nanodiamond (ND-COOH) Coatings on CFMEs (ACS)](https://pubs.acs.org/ascefj/article/4/9/2403/504275/Nanodiamond-Coating-Improves-the-Sensitivity-and)
 - **PSB Antifouling Coatings (2026)** — [PSB-Coated Ag/AgCl Reference & PEDOT/CNT Flexible MEAs — PMC12918813](https://pmc.ncbi.nlm.nih.gov/articles/PMC12918813/)
 - **Antifouling Carbon Nanofibers** — [Porous Carbon-Nanofiber Electrodes & >+1.3 V Oxidation (ChemRxiv)](https://chemrxiv.org/doi/10.26434/chemrxiv.10002065)
 
-### Translational Neuroscience, M-CSWV, MAVEN & Closed-Loop DBS
+### Translational Neuroscience, Human DBS, M-CSWV & Closed-Loop Systems
+- **Kishida, Montague et al. (PNAS, 2016)** — [Subsecond Dopamine in Human Striatum Encodes Actual & Counterfactual RPEs](https://doi.org/10.1073/pnas.1513619112)
+- **Lee et al. (Scientific Reports, 2017)** — [WINCS Harmoni: Closed-Loop Dynamic Neurochemical Control](https://doi.org/10.1038/srep46675)
 - **Yuen et al. (2021)** — [M-CSWV for Tonic & Phasic NAcc Dopamine Under Cocaine — PMC8290896](https://pmc.ncbi.nlm.nih.gov/articles/PMC8290896/)
 - **Yuen et al. (2023)** — [High-Frequency DBS & M-CSWV Tonic Dopamine in Rat NAcc (Frontiers in Neuroscience)](https://www.frontiersin.org/journals/neuroscience/articles/10.3389/fnins.2023.1061578/full)
 - **Oxycodone N-MCSWV & MAVEN** — [Tonic & Phasic Serotonin in Rat NAcc — PMC13110376](https://pmc.ncbi.nlm.nih.gov/articles/PMC13110376/)
